@@ -30,6 +30,9 @@ sml_value *sml_value_parse(sml_buffer *buf) {
 	unsigned char byte = sml_buf_get_current_byte(buf);
 
 	sml_value *value = sml_value_init();
+	if (value == NULL) {
+		return 0;
+	}
 	value->type = type;
 
 	switch (type) {
@@ -83,9 +86,7 @@ void sml_value_write(sml_value *value, sml_buffer *buf) {
 }
 
 sml_value *sml_value_init() {
-	sml_value *value = (sml_value *) malloc(sizeof(sml_value));
-	memset(value, 0, sizeof(value));
-
+	sml_value *value = calloc(1, sizeof(sml_value));
 	return value;
 }
 
