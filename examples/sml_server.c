@@ -44,18 +44,19 @@ int serial_port_open(const char* device) {
 	bits |= TIOCM_RTS;
 	ioctl(fd, TIOCMSET, &bits);
 
-	tcgetattr( fd, &config ) ;
+	tcgetattr(fd, &config);
 
 	// set 8-N-1
-	config.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
+	config.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR
+			| ICRNL | IXON);
 	config.c_oflag &= ~OPOST;
 	config.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
 	config.c_cflag &= ~(CSIZE | PARENB | PARODD | CSTOPB);
 	config.c_cflag |= CS8;
 
 	// set speed to 9600 baud
-	cfsetispeed( &config, B9600);
-	cfsetospeed( &config, B9600);
+	cfsetispeed(&config, B9600);
+	cfsetospeed(&config, B9600);
 
 	tcsetattr(fd, TCSANOW, &config);
 	return fd;
@@ -76,18 +77,28 @@ void transport_receiver(unsigned char *buffer, size_t buffer_len) {
 	sml_file_free(file);
 }
 
-int main(void) {
-	// this example assumes that a EDL21 meter sending SML messages via a
-	// serial device. Adjust as needed.
-	char *device = "/dev/cu.usbserial";
-	int fd = serial_port_open(device);
+int main(int argc, char *argv[]) {
 
-	if (fd > 0) {
-		// listen on the serial device, this call is blocking.
-		sml_transport_listen(fd, &transport_receiver);
-		close(fd);
+	if (argc < 2) {
+		printf("Usage: ./sml_server <dev>\n");
+		exit(1);
 	}
 
+	// check for serial port
+	if (access(argv[1], F_OK) == -1) {
+		printf("Error: no such device (%s)\n", argv[1]);
+		exit(2);
+	}
+
+	// open serial port
+	int fd = serial_port_open(argv[1]);
+	if (!fd) {
+		printf("Error: can''t open device (%s)\n", argv[1]);
+		exit(3);
+	}
+
+	// listen on the serial device, this call is blocking.
+	sml_transport_listen(fd, &transport_receiver);
+	close(fd);
 	return 0;
 }
-
