@@ -10,3 +10,6 @@ clean :
 	@$(MAKE) -C examples clean
 	@$(MAKE) -C test clean
 
+.PHONY: install
+install:
+	@$(MAKE) -C sml install

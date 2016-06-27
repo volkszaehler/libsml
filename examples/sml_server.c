@@ -25,6 +25,8 @@
 #include <string.h>
 #include <sys/ioctl.h>
 
+#include <math.h>
+
 #include <sml/sml_file.h>
 #include <sml/sml_transport.h>
 
@@ -64,21 +66,63 @@ int serial_port_open(const char* device) {
 void transport_receiver(unsigned char *buffer, size_t buffer_len) {
 	// the buffer contains the whole message, with transport escape sequences.
 	// these escape sequences are stripped here.
-	sml_file *file = sml_file_parse(buffer + 8, buffer_len - 16);
+	sml_file *file = sml_file_parse(buffer +8 , buffer_len );
 	// the sml file is parsed now
 
+	sml_get_list_response *body;
+	sml_list *entry;
+	int m=0;
+	int n=32;
+
 	// read here some values ..
+	int i;
+	for (i = 0; i < file->messages_len; i++) {
+		sml_message *message = file->messages[i];
+
+		if (*message->message_body->tag == SML_MESSAGE_GET_LIST_RESPONSE) {
+			body = (sml_get_list_response *) message->message_body->data;
+			entry = body->val_list;
+
+			/* iterating through linked list */
+			for (m = 0; m < n && entry != NULL; m++) {
+				int scaler = (entry->scaler) ? *entry->scaler : 1;
+				double value=(sml_value_to_double(entry->value) * pow(10, scaler));
+				printf("Read value: %d %d %d %d %d %d %f\n",
+						(unsigned char) entry->obj_name->str[0],
+						(unsigned char) entry->obj_name->str[1],
+						(unsigned char) entry->obj_name->str[2],
+						(unsigned char) entry->obj_name->str[3],
+						(unsigned char) entry->obj_name->str[4],
+						(unsigned char) entry->obj_name->str[5]
+						,value);
+				entry = entry->next;
+			}
+		}
+	}
 
 	// this prints some information about the file
-	sml_file_print(file);
+//	sml_file_print(file);
 
 	// free the malloc'd memory
 	sml_file_free(file);
 }
+#define BUFLEN 8096
 
 int main(void) {
 	// this example assumes that a EDL21 meter sending SML messages via a
 	// serial device. Adjust as needed.
+	if(argc > 1 ) {
+		FILE *fp;
+		if((fp=fopen(argv[1],"r")) == NULL) {
+			fprintf(stderr,"Can not open %s",argv[1]);
+			return(1);
+		}
+		unsigned char buffer[BUFLEN];
+		int len=fread(buffer,1,BUFLEN,fp);
+		fclose(fp);
+		printf("read %d bytes from file\n",len);
+		transport_receiver(buffer,len-11);
+	} else {
 	char *device = "/dev/cu.usbserial";
 	int fd = serial_port_open(device);
 
@@ -87,7 +131,7 @@ int main(void) {
 		sml_transport_listen(fd, &transport_receiver);
 		close(fd);
 	}
-
+	}
 	return 0;
 }
 

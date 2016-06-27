@@ -4,7 +4,7 @@ OBJS = sml_server.o
 LIBSML = ../sml/lib/libsml.a
 
 ifeq ($(UNAME), Linux)
-LIBS = -luuid
+LIBS = -luuid -lm
 endif
 
 sml_server : $(OBJS) $(LIBSML)

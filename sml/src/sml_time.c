@@ -51,8 +51,24 @@ sml_time *sml_time_parse(sml_buffer *buf) {
 	tme->tag = sml_u8_parse(buf);
 	if (sml_buf_has_errors(buf)) goto error;
 
-	tme->data.timestamp = sml_u32_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	int type=sml_buf_get_next_type(buf);
+	switch(type) {
+	case SML_TYPE_UNSIGNED:
+		tme->data.timestamp = sml_u32_parse(buf);
+		if (sml_buf_has_errors(buf)) goto error;
+		break;
+	case SML_TYPE_LIST:
+	{
+		int len=sml_buf_get_next_length(buf);
+		u32 *t1=sml_u32_parse(buf);
+		i16 *t2=sml_i16_parse(buf);
+		i16 *t3=sml_i16_parse(buf);
+		printf("sml_time as list[3]: ignoring value[0]=%u value[1]=%d value[2]=%d\n", *t1,*t2,*t3);
+	}
+		break;
+	default:
+		goto error;
+	}
 
 	return tme;
 

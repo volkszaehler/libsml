@@ -67,3 +67,7 @@ clean:
 	@rm -f src/*.o
 	@rm -f $(DYN_LIB) $(OBJ_LIB) $(ST_LIB)
 
+install:
+	@cp lib/libsml.* /usr/lib
+	@cp -r include/sml /usr/include
+	@cp ../sml.pc /usr/lib/pkgconfig
