@@ -1,7 +1,7 @@
 Source: libsml
 Priority: extra
-Maintainer: Steffen Vogel <info@steffenvogel.de>
-Build-Depends: debhelper (>= 7.0.50~), uuid-dev (>= 2.16)
+Maintainer: Andreas Moog <andreas.moog@warperbbs.de>
+Build-Depends: debhelper (>= 10~), uuid-dev (>= 2.16)
 Standards-Version: 3.9.2
 Section: libs
 Homepage: http://github.com/dailab/libsml
