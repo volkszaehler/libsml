@@ -1,4 +1,4 @@
-libsml (0.1.1+git20170608-1) unstable; urgency=medium
+libsml (0.1+git20170608-1) unstable; urgency=medium
 
   * Initial release. (Closes: #864314)
 
