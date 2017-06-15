@@ -3,12 +3,14 @@ Author: Andreas Moog <andreas.moog@warperbbs.de>
 Origin: other
 Last-Update: 2017-06-13
 
---- libsml-0.1.1+git20170608.orig/sml/Makefile
-+++ libsml-0.1.1+git20170608/sml/Makefile
+Index: libsml/sml/Makefile
+===================================================================
+--- libsml.orig/sml/Makefile
++++ libsml/sml/Makefile
 @@ -12,6 +12,8 @@ NAME=libsml
  SOVERSION=1
  SONAME=$(NAME).so.$(SOVERSION)
-
+ 
 +LDFLAGS += -Wl,-soname=$(SONAME) -shared
 +
  LIB_DIR=./lib
@@ -16,10 +18,10 @@ Last-Update: 2017-06-13
  DYN_LIB=$(LIB_DIR)/$(SONAME)
 @@ -54,7 +56,7 @@ libsml: $(ST_LIB) $(OBJ_LIB)
  endif
-
+ 
  $(DYN_LIB): $(OBJS)
--       $(LD) $(LIBS) -shared -soname $(SONAME) -o $@ $^
-+       $(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
-
+-	$(LD) $(LIBS) -shared -soname $(SONAME) -o $@ $^
++	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
+ 
  $(OBJ_LIB): $(OBJS)
-        $(LD) -r -o $@ $^
+ 	$(LD) -r -o $@ $^
