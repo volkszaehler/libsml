@@ -5,8 +5,8 @@ Build-Depends: debhelper (>= 10~), uuid-dev (>= 2.16)
 Standards-Version: 3.9.8
 Section: libs
 Homepage: http://github.com/dailab/libsml
-Vcs-Git: git://github.com/dailab/libsml.git
-Vcs-Browser: http://github.com/dailab/libsml
+Vcs-Git: https://anonscm.debian.org/git/collab-maint/libsml.git
+Vcs-Browser: https://anonscm.debian.org/gitweb/?p=collab-maint/libsml.git;a=summary
 
 Package: libsml-dev
 Section: libdevel
