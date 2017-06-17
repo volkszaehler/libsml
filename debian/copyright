@@ -17,13 +17,13 @@ License: GPL-3+
 
 Files: test/unity/*
 Copyright: 2007 Mike Karlesky, Mark VanderVoord, Greg Williams
-License: MIT with attribution
+License: MIT
 
 Files: test/unity/unity_fixture*
 Copyright: 2010 James Grenning and Contributed to Unity Project
-License: MIT with attribution
+License: MIT
 
-License: MIT with attribution
+License: MIT
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
  files (the "Software"), to deal in the Software without
