@@ -13,6 +13,11 @@ Section: libdevel
 Architecture: any
 Depends: libsml1 (= ${binary:Version}), uuid-dev (>= 2.16), ${misc:Depends}
 Description: Header files for libSML
+ libSML is a library which implements the Smart Messaging Language (SML)
+ protocol specified by VDE's Forum Netztechnik/Netzbetrieb (FNN).
+ It can be utilized to communicate to FNN specified Smart Meters
+ or Smart Meter components (EDL/MUC).
+ .
  This package includes header include files and an example for libSML
 
 Package: libsml1
