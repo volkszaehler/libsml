@@ -1,7 +1,7 @@
 Source: libsml
 Priority: extra
 Maintainer: Andreas Moog <andreas.moog@warperbbs.de>
-Build-Depends: debhelper (>= 10~), uuid-dev (>= 2.16)
+Build-Depends: debhelper (>= 10~), uuid-dev (>= 2.16), dh-exec
 Standards-Version: 3.9.8
 Section: libs
 Homepage: http://github.com/dailab/libsml
@@ -23,6 +23,7 @@ Description: Header files for libSML
 Package: libsml1
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Multi-Arch: same
 Description: Library for the Smart Messaging Language (SML)
  libSML is a library which implements the Smart Messaging Language (SML)
  protocol specified by VDE's Forum Netztechnik/Netzbetrieb (FNN).

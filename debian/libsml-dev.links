@@ -1,1 +1,2 @@
-usr/lib/libsml.so.1 usr/lib/libsml.so
+#! /usr/bin/dh-exec
+usr/lib/${DEB_HOST_MULTIARCH}/libsml.so.1 usr/lib/${DEB_HOST_MULTIARCH}/libsml.so
