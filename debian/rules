@@ -1,6 +1,7 @@
 #!/usr/bin/make -f
 
-UPSTREAM_VERSIONSTRING=$(shell dpkg-parsechangelog | sed -rne 's/^Version: ([0-9.]+.*)[-].*$$/\1/p')
+include /usr/share/dpkg/pkg-info.mk
+
 UPSTREAM_COMMIT='a83ec40d960eb334faf381a9c92aa884da8c3475'
 REPACK_TEMPDIR:=$(shell mktemp -d)
 
@@ -10,9 +11,9 @@ export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 	dh $@
 
 get-orig-source:
-	wget https://github.com/volkszaehler/libsml/archive/a83ec40d960eb334faf381a9c92aa884da8c3475.tar.gz -O $(REPACK_TEMPDIR)/libsml_$(UPSTREAM_VERSIONSTRING).tar.gz
-	mkdir $(REPACK_TEMPDIR)/libsml-$(UPSTREAM_VERSIONSTRING)
-	tar -xvf $(REPACK_TEMPDIR)/libsml_$(UPSTREAM_VERSIONSTRING).tar.gz --strip 1 -C $(REPACK_TEMPDIR)/libsml-$(UPSTREAM_VERSIONSTRING)
-	rm $(REPACK_TEMPDIR)/libsml_$(UPSTREAM_VERSIONSTRING).tar.gz
-	tar -cJf $(REPACK_TEMPDIR)/libsml_$(UPSTREAM_VERSIONSTRING).orig.tar.xz -C $(REPACK_TEMPDIR) libsml-$(UPSTREAM_VERSIONSTRING)
-	mv $(REPACK_TEMPDIR)/libsml_$(UPSTREAM_VERSIONSTRING).orig.tar.xz $(CURDIR)
+	wget https://github.com/volkszaehler/libsml/archive/$(UPSTREAM_COMMIT).tar.gz -O $(REPACK_TEMPDIR)/libsml_$(DEB_VERSION_UPSTREAM).tar.gz
+	mkdir $(REPACK_TEMPDIR)/libsml-$(DEB_VERSION_UPSTREAM)
+	tar -xvf $(REPACK_TEMPDIR)/libsml_$(DEB_VERSION_UPSTREAM).tar.gz --strip 1 -C $(REPACK_TEMPDIR)/libsml-$(DEB_VERSION_UPSTREAM)
+	rm $(REPACK_TEMPDIR)/libsml_$(DEB_VERSION_UPSTREAM).tar.gz
+	tar -czf $(REPACK_TEMPDIR)/libsml_$(DEB_VERSION_UPSTREAM).orig.tar.gz -C $(REPACK_TEMPDIR) libsml-$(DEB_VERSION_UPSTREAM)
+	mv $(REPACK_TEMPDIR)/libsml_$(DEB_VERSION_UPSTREAM).orig.tar.gz $(CURDIR)
