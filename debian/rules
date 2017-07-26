@@ -15,5 +15,5 @@ get-orig-source:
 	mkdir $(REPACK_TEMPDIR)/libsml-$(DEB_VERSION_UPSTREAM)
 	tar -xvf $(REPACK_TEMPDIR)/libsml_$(DEB_VERSION_UPSTREAM).tar.gz --strip 1 -C $(REPACK_TEMPDIR)/libsml-$(DEB_VERSION_UPSTREAM)
 	rm $(REPACK_TEMPDIR)/libsml_$(DEB_VERSION_UPSTREAM).tar.gz
-	tar -czf $(REPACK_TEMPDIR)/libsml_$(DEB_VERSION_UPSTREAM).orig.tar.gz -C $(REPACK_TEMPDIR) libsml-$(DEB_VERSION_UPSTREAM)
+	GZIP="--best --no-name" tar -czf $(REPACK_TEMPDIR)/libsml_$(DEB_VERSION_UPSTREAM).orig.tar.gz --exclude=CONTRIBUTION.pdf -C $(REPACK_TEMPDIR) libsml-$(DEB_VERSION_UPSTREAM)
 	mv $(REPACK_TEMPDIR)/libsml_$(DEB_VERSION_UPSTREAM).orig.tar.gz $(CURDIR)
