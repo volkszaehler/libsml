@@ -1,5 +1,5 @@
 Source: libsml
-Priority: extra
+Priority: optional
 Maintainer: Andreas Moog <andreas.moog@warperbbs.de>
 Build-Depends: debhelper (>= 10~), uuid-dev (>= 2.16), dh-exec
 Standards-Version: 4.0.0
