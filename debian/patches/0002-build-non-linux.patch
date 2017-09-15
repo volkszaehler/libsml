@@ -1,0 +1,59 @@
+Description: Change Makefile to allow building on non-Linux, while still 
+ special-casing Darwin.
+Author: Andreas Moog <andreas.moog@warperbbs.de>
+Origin: other
+Bug-Debian: https://bugs.debian.org/873895
+Last-Update: 2017-09-15
+
+Index: libsml/examples/Makefile
+===================================================================
+--- libsml.orig/examples/Makefile
++++ libsml/examples/Makefile
+@@ -3,7 +3,7 @@ CFLAGS += -I../sml/include/ -g -std=c99
+ OBJS = sml_server.o
+ LIBSML = ../sml/lib/libsml.a
+ 
+-ifeq ($(UNAME), Linux)
++ifneq ($(UNAME), Darwin)
+ LIBS = -luuid
+ endif
+ 
+Index: libsml/sml/Makefile
+===================================================================
+--- libsml.orig/sml/Makefile
++++ libsml/sml/Makefile
+@@ -4,7 +4,7 @@ CFLAGS += -I./include/ -fPIC -fno-stack-
+ # Available Flags:
+ # SML_NO_UUID_LIB - compile without uuid lib
+ 
+-ifeq ($(UNAME), Linux)
++ifneq ($(UNAME), Darwin)
+ LIBS=-luuid
+ endif
+ 
+@@ -48,10 +48,9 @@ OBJS = \
+ 	src/sml_get_profile_list_request.o \
+ 	src/sml_get_profile_list_response.o
+ 
+-ifeq ($(UNAME), Linux)
++ifneq ($(UNAME), Darwin)
+ libsml: $(DYN_LIB) $(ST_LIB) $(OBJ_LIB)
+-endif
+-ifeq ($(UNAME), Darwin)
++else
+ libsml: $(ST_LIB) $(OBJ_LIB)
+ endif
+ 
+Index: libsml/test/Makefile
+===================================================================
+--- libsml.orig/test/Makefile
++++ libsml/test/Makefile
+@@ -2,7 +2,7 @@ UNAME := $(shell uname)
+ CFLAGS += -I../sml/include/ -std=c99 -Wall -Wextra -pedantic
+ LIBSML = ../sml/lib/libsml.a
+ 
+-ifeq ($(UNAME), Linux)
++ifneq ($(UNAME), Darwin)
+ LIBS = -luuid
+ endif
+ 
