@@ -1,0 +1,22 @@
+Description: Use O_NONBLOCK where available
+Author: Andreas Moog <andreas.moog@warperbbs.de>
+Origin: other
+Bug-Debian: https://bugs.debian.org/873894
+Last-Update: 2017-09-16
+
+Index: libsml/examples/sml_server.c
+===================================================================
+--- libsml.orig/examples/sml_server.c
++++ libsml/examples/sml_server.c
+@@ -33,7 +33,11 @@ int serial_port_open(const char* device)
+ 	struct termios config;
+ 	memset(&config, 0, sizeof(config));
+ 
++#ifdef O_NONBLOCK
++	int fd = open(device, O_RDWR | O_NOCTTY | O_NONBLOCK);
++#else
+ 	int fd = open(device, O_RDWR | O_NOCTTY | O_NDELAY);
++#endif
+ 	if (fd < 0) {
+ 		fprintf(stderr,"error: open(%s): %s\n", device, strerror(errno));
+ 		return -1;
