@@ -1,8 +1,9 @@
 libsml (0.1.1+git20170608-2) unstable; urgency=medium
 
   * Add patch to allow building on non-Linux. (Closes: #873895)
+  * Use O_NONBLOCK where available (Closes: #873894)
 
- -- Andreas Moog <andreas.moog@warperbbs.de>  Fri, 15 Sep 2017 21:29:19 +0200
+ -- Andreas Moog <andreas.moog@warperbbs.de>  Sat, 16 Sep 2017 12:57:34 +0200
 
 libsml (0.1.1+git20170608-1) unstable; urgency=medium
 
