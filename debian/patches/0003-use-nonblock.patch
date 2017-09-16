@@ -1,7 +1,9 @@
 Description: Use O_NONBLOCK where available
 Author: Andreas Moog <andreas.moog@warperbbs.de>
 Origin: other
+Bug: https://github.com/volkszaehler/libsml/pull/20
 Bug-Debian: https://bugs.debian.org/873894
+Forwarded: yes, https://github.com/volkszaehler/libsml/pull/20
 Last-Update: 2017-09-16
 
 Index: libsml/examples/sml_server.c

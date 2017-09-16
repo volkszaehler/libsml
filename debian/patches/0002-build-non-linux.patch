@@ -2,7 +2,9 @@ Description: Change Makefile to allow building on non-Linux, while still
  special-casing Darwin.
 Author: Andreas Moog <andreas.moog@warperbbs.de>
 Origin: other
+Bug: https://github.com/volkszaehler/libsml/pull/20
 Bug-Debian: https://bugs.debian.org/873895
+Forwarded: yes, https://github.com/volkszaehler/libsml/pull/20
 Last-Update: 2017-09-15
 
 Index: libsml/examples/Makefile
