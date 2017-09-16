@@ -12,6 +12,8 @@ NAME=libsml
 SOVERSION=1
 SONAME=$(NAME).so.$(SOVERSION)
 
+LDFLAGS += -Wl,-soname=$(SONAME) -shared
+
 LIB_DIR=./lib
 OBJ_LIB=$(LIB_DIR)/$(NAME).o
 DYN_LIB=$(LIB_DIR)/$(SONAME)
@@ -53,7 +55,7 @@ libsml: $(ST_LIB) $(OBJ_LIB)
 endif
 
 $(DYN_LIB): $(OBJS)
-	$(LD) $(LIBS) -shared -soname $(SONAME) -o $@ $^
+	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
 
 $(OBJ_LIB): $(OBJS)
 	$(LD) -r -o $@ $^
