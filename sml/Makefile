@@ -4,7 +4,7 @@ CFLAGS += -I./include/ -fPIC -fno-stack-protector -g -std=c99 -Wall -Wextra -ped
 # Available Flags:
 # SML_NO_UUID_LIB - compile without uuid lib
 
-ifeq ($(UNAME), Linux)
+ifneq ($(UNAME), Darwin)
 LIBS=-luuid
 endif
 
@@ -46,10 +46,9 @@ OBJS = \
 	src/sml_get_profile_list_request.o \
 	src/sml_get_profile_list_response.o
 
-ifeq ($(UNAME), Linux)
+ifneq ($(UNAME), Darwin)
 libsml: $(DYN_LIB) $(ST_LIB) $(OBJ_LIB)
-endif
-ifeq ($(UNAME), Darwin)
+else
 libsml: $(ST_LIB) $(OBJ_LIB)
 endif
 

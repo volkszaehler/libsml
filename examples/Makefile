@@ -3,7 +3,7 @@ CFLAGS += -I../sml/include/ -g -std=c99 -Wall -Wextra -pedantic
 OBJS = sml_server.o
 LIBSML = ../sml/lib/libsml.a
 
-ifeq ($(UNAME), Linux)
+ifneq ($(UNAME), Darwin)
 LIBS = -luuid
 endif
 
