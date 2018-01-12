@@ -13,9 +13,17 @@ SOVERSION=1
 SONAME=$(NAME).so.$(SOVERSION)
 
 LIB_DIR=./lib
+INC_DIR=./include
 OBJ_LIB=$(LIB_DIR)/$(NAME).o
 DYN_LIB=$(LIB_DIR)/$(SONAME)
 ST_LIB=$(LIB_DIR)/$(NAME).a
+
+INSTALL = /usr/bin/install
+prefix = /usr/local
+exec_prefix = ${prefix}
+bindir = ${exec_prefix}/bin
+libdir = ${exec_prefix}/lib
+includedir = ${prefix}/include
 
 OBJS = \
 	src/sml_file.o \
@@ -62,8 +70,16 @@ $(OBJ_LIB): $(OBJS)
 $(ST_LIB): $(OBJS)
 	$(AR) -rs $@ $^
 
-.PHONY: clean
+.PHONY: clean install uninstall
 clean:
 	@rm -f src/*.o
 	@rm -f $(DYN_LIB) $(OBJ_LIB) $(ST_LIB)
 
+install: $(DYN_LIB) $(ST_LIB)
+	$(INSTALL) $(DYN_LIB) $(ST_LIB) $(libdir)
+	@cd $(libdir); ln -sf $(SONAME) $(NAME).so
+	cp -a $(INC_DIR)/* $(includedir)
+
+uninstall:
+	@rm -f $(libdir)/$(SONAME) $(libdir)/$(NAME).so $(libdir)/$(NAME).a
+	@rm -rf $(includedir)/sml
