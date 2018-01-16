@@ -13,6 +13,8 @@ ifneq ($(UNAME), Darwin)
 LIBS = -luuid
 endif
 
+all: sml_server
+
 sml_server: $(OBJS) $(LIBSML)
 	$(CC) $(CFLAGS) $(OBJS) $(LIBS) $(LIBSML) -o sml_server
 

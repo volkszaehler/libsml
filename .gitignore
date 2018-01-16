@@ -27,3 +27,5 @@
 # Editor files
 *~
 *.swp
+.project
+.cproject
