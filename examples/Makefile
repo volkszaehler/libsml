@@ -9,7 +9,7 @@ bindir = ${exec_prefix}/bin
 libdir = ${exec_prefix}/lib
 includedir = ${prefix}/include
 
-ifeq ($(UNAME), Linux)
+ifneq ($(UNAME), Darwin)
 LIBS = -luuid
 endif
 
