@@ -95,7 +95,7 @@ void transport_receiver(unsigned char *buffer, size_t buffer_len) {
 					char *str = malloc(entry->value->data.bytes->len + 1);
 					memcpy(str, entry->value->data.bytes->str, entry->value->data.bytes->len);
 					str[entry->value->data.bytes->len] = 0;
-					printf("%d-%d:%d.%d.%d*%d#%x#\n",
+					printf("%d-%d:%d.%d.%d*%d#%s#\n",
 						entry->obj_name->str[0], entry->obj_name->str[1],
 						entry->obj_name->str[2], entry->obj_name->str[3],
 						entry->obj_name->str[4], entry->obj_name->str[5],
@@ -107,8 +107,8 @@ void transport_receiver(unsigned char *buffer, size_t buffer_len) {
 						entry->obj_name->str[2], entry->obj_name->str[3],
 						entry->obj_name->str[4], entry->obj_name->str[5],
 						entry->value->data.boolean ? "true" : "false");
-				} else if (((entry->value->type & SML_TYPE_INTEGER) == SML_TYPE_INTEGER) ||
-						((entry->value->type & SML_TYPE_INTEGER) == SML_TYPE_INTEGER)) {
+				} else if (((entry->value->type & SML_TYPE_FIELD) == SML_TYPE_INTEGER) ||
+						((entry->value->type & SML_TYPE_FIELD) == SML_TYPE_UNSIGNED)) {
 					double value = sml_value_to_double(entry->value);
 					int scaler = (entry->scaler) ? *entry->scaler : 1;
 					value = value * pow(10, scaler);
