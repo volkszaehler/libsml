@@ -37,7 +37,11 @@ int serial_port_open(const char* device) {
 	struct termios config;
 	memset(&config, 0, sizeof(config));
 
+#ifdef O_NONBLOCK
+	int fd = open(device, O_RDWR | O_NOCTTY | O_NONBLOCK);
+#else
 	int fd = open(device, O_RDWR | O_NOCTTY | O_NDELAY);
+#endif
 	if (fd < 0) {
 		fprintf(stderr,"error: open(%s): %s\n", device, strerror(errno));
 		return -1;

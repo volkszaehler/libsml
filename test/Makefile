@@ -2,7 +2,7 @@ UNAME := $(shell uname)
 CFLAGS += -I../sml/include/ -std=c99 -Wall -Wextra -pedantic
 LIBSML = ../sml/lib/libsml.a
 
-ifeq ($(UNAME), Linux)
+ifneq ($(UNAME), Darwin)
 LIBS = -luuid
 endif
 

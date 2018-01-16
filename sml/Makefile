@@ -4,7 +4,7 @@ CFLAGS += -I./include/ -fPIC -fno-stack-protector -g -std=c99 -Wall -Wextra -ped
 # Available Flags:
 # SML_NO_UUID_LIB - compile without uuid lib
 
-ifeq ($(UNAME), Linux)
+ifneq ($(UNAME), Darwin)
 LIBS=-luuid
 endif
 
@@ -13,9 +13,17 @@ SOVERSION=1
 SONAME=$(NAME).so.$(SOVERSION)
 
 LIB_DIR=./lib
+INC_DIR=./include
 OBJ_LIB=$(LIB_DIR)/$(NAME).o
 DYN_LIB=$(LIB_DIR)/$(SONAME)
 ST_LIB=$(LIB_DIR)/$(NAME).a
+
+INSTALL = /usr/bin/install
+prefix = /usr/local
+exec_prefix = ${prefix}
+bindir = ${exec_prefix}/bin
+libdir = ${exec_prefix}/lib
+includedir = ${prefix}/include
 
 OBJS = \
 	src/sml_file.o \
@@ -46,10 +54,9 @@ OBJS = \
 	src/sml_get_profile_list_request.o \
 	src/sml_get_profile_list_response.o
 
-ifeq ($(UNAME), Linux)
+ifneq ($(UNAME), Darwin)
 libsml: $(DYN_LIB) $(ST_LIB) $(OBJ_LIB)
-endif
-ifeq ($(UNAME), Darwin)
+else
 libsml: $(ST_LIB) $(OBJ_LIB)
 endif
 
@@ -62,8 +69,16 @@ $(OBJ_LIB): $(OBJS)
 $(ST_LIB): $(OBJS)
 	$(AR) -rs $@ $^
 
-.PHONY: clean
+.PHONY: clean install uninstall
 clean:
 	@rm -f src/*.o
 	@rm -f $(DYN_LIB) $(OBJ_LIB) $(ST_LIB)
 
+install: $(DYN_LIB) $(ST_LIB)
+	$(INSTALL) $(DYN_LIB) $(ST_LIB) $(libdir)
+	@cd $(libdir); ln -sf $(SONAME) $(NAME).so
+	cp -a $(INC_DIR)/* $(includedir)
+
+uninstall:
+	@rm -f $(libdir)/$(SONAME) $(libdir)/$(NAME).so $(libdir)/$(NAME).a
+	@rm -rf $(includedir)/sml
