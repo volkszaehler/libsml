@@ -25,6 +25,7 @@
 #include <errno.h>
 #include <termios.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
 #include <math.h>
 #include <sys/ioctl.h>
@@ -91,15 +92,12 @@ void transport_receiver(unsigned char *buffer, size_t buffer_len) {
 			body = (sml_get_list_response *) message->message_body->data;
 			for (entry = body->val_list; entry != NULL; entry = entry->next) {
 				if (entry->value->type == SML_TYPE_OCTET_STRING) {
-					// copy octet bytes to string
-					char *str = malloc(entry->value->data.bytes->len + 1);
-					memcpy(str, entry->value->data.bytes->str, entry->value->data.bytes->len);
-					str[entry->value->data.bytes->len] = 0;
+					char *str;
 					printf("%d-%d:%d.%d.%d*%d#%s#\n",
 						entry->obj_name->str[0], entry->obj_name->str[1],
 						entry->obj_name->str[2], entry->obj_name->str[3],
 						entry->obj_name->str[4], entry->obj_name->str[5],
-						str);
+						sml_value_to_strhex(entry->value, &str, true));
 					free(str);
 				} else if (entry->value->type == SML_TYPE_BOOLEAN) {
 					printf("%d-%d:%d.%d.%d*%d#%s#\n",
