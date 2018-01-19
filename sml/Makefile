@@ -90,5 +90,5 @@ endif
 	cp -a $(INC_DIR)/* $(includedir)
 
 uninstall:
-	@rm -f $(libdir)/$(SONAME) $(libdir)/$(NAME).so $(libdir)/$(NAME).a
+	@rm -f $(libdir)/$(SONAME) $(libdir)/$(NAME).so $(libdir)/$(NAME).dylib $(libdir)/$(NAME).a
 	@rm -rf $(includedir)/sml
