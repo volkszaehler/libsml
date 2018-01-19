@@ -128,12 +128,6 @@ int main(int argc, char *argv[]) {
 		exit(1); // exit here
 	}
 
-	// check for serial port
-	if (access(argv[1], F_OK) == -1) {
-		printf("Error: no such device (%s)\n", argv[1]);
-		exit(2);
-	}
-
 	// open serial port
 	int fd = serial_port_open(argv[1]);
 	if (fd<0) {
