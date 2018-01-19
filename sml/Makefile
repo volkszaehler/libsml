@@ -66,7 +66,7 @@ $(DYN_LIB): $(OBJS)
 ifeq ($(UNAME), Darwin)
 	$(CC) $(LIBS) -dynamiclib -install_name $(SONAME) -o $@ $^
 else
-	$(CC) $(LIBS) -shared -soname $(SONAME) -o $@ $^
+	$(LD) $(LIBS) -shared -soname $(SONAME) -o $@ $^
 endif
 
 $(OBJ_LIB): $(OBJS)
