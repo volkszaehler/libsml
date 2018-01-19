@@ -10,7 +10,11 @@ endif
 
 NAME=libsml
 SOVERSION=1
+ifeq ($(UNAME), Darwin)
+SONAME=$(NAME).$(SOVERSION).dylib
+else
 SONAME=$(NAME).so.$(SOVERSION)
+endif
 
 LIB_DIR=./lib
 INC_DIR=./include
@@ -54,14 +58,16 @@ OBJS = \
 	src/sml_get_profile_list_request.o \
 	src/sml_get_profile_list_response.o
 
-ifneq ($(UNAME), Darwin)
+all: libsml
+
 libsml: $(DYN_LIB) $(ST_LIB) $(OBJ_LIB)
-else
-libsml: $(ST_LIB) $(OBJ_LIB)
-endif
 
 $(DYN_LIB): $(OBJS)
-	$(LD) $(LIBS) -shared -soname $(SONAME) -o $@ $^
+ifeq ($(UNAME), Darwin)
+	$(CC) $(LIBS) -dynamiclib -install_name $(SONAME) -o $@ $^
+else
+	$(CC) $(LIBS) -shared -soname $(SONAME) -o $@ $^
+endif
 
 $(OBJ_LIB): $(OBJS)
 	$(LD) -r -o $@ $^
@@ -76,7 +82,11 @@ clean:
 
 install: $(DYN_LIB) $(ST_LIB)
 	$(INSTALL) $(DYN_LIB) $(ST_LIB) $(libdir)
+ifeq ($(UNAME), Darwin)
+	@cd $(libdir); ln -sf $(SONAME) $(NAME).dylib
+else
 	@cd $(libdir); ln -sf $(SONAME) $(NAME).so
+endif
 	cp -a $(INC_DIR)/* $(includedir)
 
 uninstall:

@@ -17,7 +17,7 @@ endif
 all: sml_server
 
 sml_server: $(OBJS) $(LIBSML)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBSML) $(LIBS) -o sml_server
+	$(CC) $(OBJS) $(LIBSML) $(LIBS) -o sml_server
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $^ -o $@
