@@ -102,7 +102,7 @@ void transport_receiver(unsigned char *buffer, size_t buffer_len) {
 						entry->obj_name->str[0], entry->obj_name->str[1],
 						entry->obj_name->str[2], entry->obj_name->str[3],
 						entry->obj_name->str[4], entry->obj_name->str[5], value);
-					switch (*entry->unit) {
+					if (entry->unit) switch (*entry->unit) {
 					case 0x1B:
 						printf("W");
 						break;
