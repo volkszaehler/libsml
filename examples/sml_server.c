@@ -92,6 +92,7 @@ void transport_receiver(unsigned char *buffer, size_t buffer_len) {
 			sml_get_list_response *body;
 			body = (sml_get_list_response *) message->message_body->data;
 			for (entry = body->val_list; entry != NULL; entry = entry->next) {
+				if (!entry->value) continue; // do not crash on null value
 				value = sml_value_to_double(entry->value);
 				if (value != 0) {
 					int scaler = (entry->scaler) ? *entry->scaler : 1;
