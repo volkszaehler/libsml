@@ -136,7 +136,7 @@ int main(int argc, char *argv[]) {
 
 	// open serial port
 	int fd = serial_port_open(argv[1]);
-	if (!fd) {
+	if (fd<0) {
 		printf("Error: can''t open device (%s)\n", argv[1]);
 		exit(3);
 	}
