@@ -37,6 +37,8 @@ int serial_port_open(const char* device) {
 	struct termios config;
 	memset(&config, 0, sizeof(config));
 
+    if (!strcmp(device,"-")) return 0; // read stdin when "-" is given for the device
+
 #ifdef O_NONBLOCK
 	int fd = open(device, O_RDWR | O_NOCTTY | O_NONBLOCK);
 #else
@@ -124,7 +126,7 @@ int main(int argc, char *argv[]) {
 	// serial device. Adjust as needed.
 	if (argc != 2) {
 		printf("Usage: %s <device>\n", argv[0]);
-		printf("device - serial device of connected power meter e.g. /dev/cu.usbserial\n");
+		printf("device - serial device of connected power meter e.g. /dev/cu.usbserial, or - for stdin\n");
 		exit(1); // exit here
 	}
 
