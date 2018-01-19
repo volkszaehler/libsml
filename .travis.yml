@@ -2,5 +2,10 @@ language: c
 
 sudo: false
 
+addons:
+  apt:
+    packages:
+      - uuid-dev
+
 script:
     - make
