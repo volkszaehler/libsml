@@ -2,6 +2,10 @@ language: c
 
 sudo: false
 
+compiler:
+  - clang
+  - gcc
+
 addons:
   apt:
     packages:
@@ -9,4 +13,4 @@ addons:
       - uuid-runtime
 
 script:
-    - make
+  - make
