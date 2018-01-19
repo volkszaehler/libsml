@@ -19,6 +19,7 @@
 
 #include <sml/sml_value.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 sml_value *sml_value_parse(sml_buffer *buf) {
 	if (sml_buf_optional_is_skipped(buf)) {
@@ -121,8 +122,43 @@ double sml_value_to_double(sml_value *value) {
 		case 0x68: return *value->data.uint64; break;
 
 		default:
-			fprintf(stderr,"libsml: error: unknown type %d in %s\n", value->type, __FUNCTION__);
+			fprintf(stderr, "libsml: error: unknown type %d in %s\n", value->type, __FUNCTION__);
 			return 0;
 	}
 }
 
+/*
+ * Converts SML octet string to a printable hex string.
+ * It allocates memory, don't forget to free the buffer after using.
+ */
+char *sml_value_to_strhex(sml_value *value, char **result, bool mixed) {
+	const char hex_str[] = "0123456789abcdef";
+
+	if (value == NULL || value->data.bytes == NULL ||
+		value->data.bytes->str == NULL)
+		return NULL;
+
+	int len = value->data.bytes->len;
+	unsigned char *str = value->data.bytes->str;
+
+	// allocate 3 bytes per octet string byte (0x0f gets "0f ")
+	*result = malloc(len * 3 + 1);
+	if (*result == NULL)
+		return NULL;
+
+	char *res_ptr = *result;
+	for (int i = 0; i < len; i++) {
+		if (mixed && (str[i] > 0x20 && str[i] < 0x7b)) {
+			*res_ptr++ = (char) str[i];
+		} else {
+			mixed = false;
+			*res_ptr++ = hex_str[(str[i] >> 4) & 0x0F];
+			*res_ptr++ = hex_str[str[i] & 0x0F];
+			*res_ptr++ = ' ';
+		}
+	}
+	// mark end of string
+	*res_ptr = 0;
+
+	return *result;
+}

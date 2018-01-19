@@ -9,8 +9,9 @@ bindir = ${exec_prefix}/bin
 libdir = ${exec_prefix}/lib
 includedir = ${prefix}/include
 
+LIBS = -lm
 ifneq ($(UNAME), Darwin)
-LIBS = -luuid
+LIBS += -luuid
 endif
 
 all: sml_server

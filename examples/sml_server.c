@@ -25,7 +25,9 @@
 #include <errno.h>
 #include <termios.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
+#include <math.h>
 #include <sys/ioctl.h>
 
 #include <sml/sml_file.h>
@@ -37,13 +39,16 @@ int serial_port_open(const char* device) {
 	struct termios config;
 	memset(&config, 0, sizeof(config));
 
+	if (!strcmp(device, "-"))
+		return 0; // read stdin when "-" is given for the device
+
 #ifdef O_NONBLOCK
 	int fd = open(device, O_RDWR | O_NOCTTY | O_NONBLOCK);
 #else
 	int fd = open(device, O_RDWR | O_NOCTTY | O_NDELAY);
 #endif
 	if (fd < 0) {
-		fprintf(stderr,"error: open(%s): %s\n", device, strerror(errno));
+		fprintf(stderr, "error: open(%s): %s\n", device, strerror(errno));
 		return -1;
 	}
 
@@ -85,28 +90,46 @@ void transport_receiver(unsigned char *buffer, size_t buffer_len) {
 	for (i = 0; i < file->messages_len; i++) {
 		sml_message *message = file->messages[i];
 		if (*message->message_body->tag == SML_MESSAGE_GET_LIST_RESPONSE) {
-			double value;
 			sml_list *entry;
 			sml_get_list_response *body;
 			body = (sml_get_list_response *) message->message_body->data;
 			for (entry = body->val_list; entry != NULL; entry = entry->next) {
-				value = sml_value_to_double(entry->value);
-				if (value != 0) {
+				if (!entry->value) { // do not crash on null value
+					fprintf(stderr, "Error in data stream. entry->value should not be NULL. Skipping this.\n");
+					continue;
+				}
+				if (entry->value->type == SML_TYPE_OCTET_STRING) {
+					char *str;
+					printf("%d-%d:%d.%d.%d*%d#%s#\n",
+						entry->obj_name->str[0], entry->obj_name->str[1],
+						entry->obj_name->str[2], entry->obj_name->str[3],
+						entry->obj_name->str[4], entry->obj_name->str[5],
+						sml_value_to_strhex(entry->value, &str, true));
+					free(str);
+				} else if (entry->value->type == SML_TYPE_BOOLEAN) {
+					printf("%d-%d:%d.%d.%d*%d#%s#\n",
+						entry->obj_name->str[0], entry->obj_name->str[1],
+						entry->obj_name->str[2], entry->obj_name->str[3],
+						entry->obj_name->str[4], entry->obj_name->str[5],
+						entry->value->data.boolean ? "true" : "false");
+				} else if (((entry->value->type & SML_TYPE_FIELD) == SML_TYPE_INTEGER) ||
+						((entry->value->type & SML_TYPE_FIELD) == SML_TYPE_UNSIGNED)) {
+					double value = sml_value_to_double(entry->value);
 					int scaler = (entry->scaler) ? *entry->scaler : 1;
-					if (scaler == -1)
-						value *= 0.1;
+					value = value * pow(10, scaler);
 					printf("%d-%d:%d.%d.%d*%d#%.1f#",
 						entry->obj_name->str[0], entry->obj_name->str[1],
 						entry->obj_name->str[2], entry->obj_name->str[3],
 						entry->obj_name->str[4], entry->obj_name->str[5], value);
-					switch (*entry->unit) {
-					case 0x1B:
-						printf("W");
-						break;
-					case 0x1E:
-						printf("Wh");
-						break;
-					}
+					if (entry->unit) // do not crash on null (unit is optional)
+						switch (*entry->unit) {
+						case 0x1B:
+							printf("W");
+							break;
+						case 0x1E:
+							printf("Wh");
+							break;
+						}
 					printf("\n");
 					// flush the stdout puffer, that pipes work without waiting
 					fflush(stdout);
@@ -124,20 +147,14 @@ int main(int argc, char *argv[]) {
 	// serial device. Adjust as needed.
 	if (argc != 2) {
 		printf("Usage: %s <device>\n", argv[0]);
-		printf("device - serial device of connected power meter e.g. /dev/cu.usbserial\n");
+		printf("device - serial device of connected power meter e.g. /dev/cu.usbserial, or - for stdin\n");
 		exit(1); // exit here
-	}
-
-	// check for serial port
-	if (access(argv[1], F_OK) == -1) {
-		printf("Error: no such device (%s)\n", argv[1]);
-		exit(2);
 	}
 
 	// open serial port
 	int fd = serial_port_open(argv[1]);
-	if (!fd) {
-		printf("Error: can''t open device (%s)\n", argv[1]);
+	if (fd < 0) {
+		printf("Error: failed to open device (%s)\n", argv[1]);
 		exit(3);
 	}
 

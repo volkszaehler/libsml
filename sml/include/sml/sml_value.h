@@ -19,6 +19,7 @@
 #ifndef SML_VALUE_H_
 #define	SML_VALUE_H_
 
+#include <stdbool.h>
 #include "sml_shared.h"
 #include "sml_octet_string.h"
 #include "sml_number.h"
@@ -51,6 +52,8 @@ void sml_value_free(sml_value *value);
 
 // Cast arbitrary sized sml_value to double
 double sml_value_to_double(sml_value *value);
+// Converts SML octet string to a printable hex string
+char *sml_value_to_strhex(sml_value *value, char **result, bool mixed);
 
 #ifdef __cplusplus
 }
