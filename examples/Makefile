@@ -9,12 +9,15 @@ bindir = ${exec_prefix}/bin
 libdir = ${exec_prefix}/lib
 includedir = ${prefix}/include
 
+LIBS = -lm
 ifneq ($(UNAME), Darwin)
-LIBS = -luuid
+LIBS += -luuid
 endif
 
+all: sml_server
+
 sml_server: $(OBJS) $(LIBSML)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBS) $(LIBSML) -o sml_server
+	$(CC) $(OBJS) $(LIBSML) $(LIBS) -o sml_server
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $^ -o $@
