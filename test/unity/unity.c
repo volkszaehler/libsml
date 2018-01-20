@@ -14,7 +14,9 @@
 #define UNITY_SKIP_EXECUTION  { if ((Unity.CurrentTestFailed != 0) || (Unity.CurrentTestIgnored != 0)) {return;} }
 #define UNITY_PRINT_EOL       { UNITY_OUTPUT_CHAR('\n'); }
 
-#ifdef _linux
+// jmp_buf (type of AbortFrame) is defined differently depending on operating system
+// right now we know OSX and others like Linux
+#ifdef __APPLE__
 struct _Unity Unity = { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , { 0 } };
 #else
 struct _Unity Unity = { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 
