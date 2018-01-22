@@ -289,7 +289,7 @@ void sml_proc_par_value_write(sml_proc_par_value *value, sml_buffer *buf) {
 			sml_time_write(value->data.time, buf);
 			break;
 		default:
-			printf("error: unknown tag in %s\n", __FUNCTION__);
+			fprintf(stderr,"libsml: error: unknown tag in %s\n", __FUNCTION__);
 	}
 }
 

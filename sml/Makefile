@@ -4,18 +4,30 @@ CFLAGS += -I./include/ -fPIC -fno-stack-protector -g -std=c99 -Wall -Wextra -ped
 # Available Flags:
 # SML_NO_UUID_LIB - compile without uuid lib
 
-ifeq ($(UNAME), Linux)
+ifneq ($(UNAME), Darwin)
 LIBS=-luuid
 endif
 
 NAME=libsml
 SOVERSION=1
+ifeq ($(UNAME), Darwin)
+SONAME=$(NAME).$(SOVERSION).dylib
+else
 SONAME=$(NAME).so.$(SOVERSION)
+endif
 
 LIB_DIR=./lib
+INC_DIR=./include
 OBJ_LIB=$(LIB_DIR)/$(NAME).o
 DYN_LIB=$(LIB_DIR)/$(SONAME)
 ST_LIB=$(LIB_DIR)/$(NAME).a
+
+INSTALL = /usr/bin/install
+prefix = /usr/local
+exec_prefix = ${prefix}
+bindir = ${exec_prefix}/bin
+libdir = ${exec_prefix}/lib
+includedir = ${prefix}/include
 
 OBJS = \
 	src/sml_file.o \
@@ -46,15 +58,16 @@ OBJS = \
 	src/sml_get_profile_list_request.o \
 	src/sml_get_profile_list_response.o
 
-ifeq ($(UNAME), Linux)
+all: libsml
+
 libsml: $(DYN_LIB) $(ST_LIB) $(OBJ_LIB)
-endif
-ifeq ($(UNAME), Darwin)
-libsml: $(ST_LIB) $(OBJ_LIB)
-endif
 
 $(DYN_LIB): $(OBJS)
+ifeq ($(UNAME), Darwin)
+	$(CC) $(LIBS) -dynamiclib -install_name $(SONAME) -o $@ $^
+else
 	$(LD) $(LIBS) -shared -soname $(SONAME) -o $@ $^
+endif
 
 $(OBJ_LIB): $(OBJS)
 	$(LD) -r -o $@ $^
@@ -62,8 +75,20 @@ $(OBJ_LIB): $(OBJS)
 $(ST_LIB): $(OBJS)
 	$(AR) -rs $@ $^
 
-.PHONY: clean
+.PHONY: clean install uninstall
 clean:
 	@rm -f src/*.o
 	@rm -f $(DYN_LIB) $(OBJ_LIB) $(ST_LIB)
 
+install: $(DYN_LIB) $(ST_LIB)
+	$(INSTALL) $(DYN_LIB) $(ST_LIB) $(libdir)
+ifeq ($(UNAME), Darwin)
+	@cd $(libdir); ln -sf $(SONAME) $(NAME).dylib
+else
+	@cd $(libdir); ln -sf $(SONAME) $(NAME).so
+endif
+	cp -a $(INC_DIR)/* $(includedir)
+
+uninstall:
+	@rm -f $(libdir)/$(SONAME) $(libdir)/$(NAME).so $(libdir)/$(NAME).dylib $(libdir)/$(NAME).a
+	@rm -rf $(includedir)/sml

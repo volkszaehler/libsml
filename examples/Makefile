@@ -2,18 +2,33 @@ UNAME := $(shell uname)
 CFLAGS += -I../sml/include/ -g -std=c99 -Wall -Wextra -pedantic
 OBJS = sml_server.o
 LIBSML = ../sml/lib/libsml.a
+INSTALL = /usr/bin/install
+prefix = /usr/local
+exec_prefix = ${prefix}
+bindir = ${exec_prefix}/bin
+libdir = ${exec_prefix}/lib
+includedir = ${prefix}/include
 
-ifeq ($(UNAME), Linux)
-LIBS = -luuid
+LIBS = -lm
+ifneq ($(UNAME), Darwin)
+LIBS += -luuid
 endif
 
-sml_server : $(OBJS) $(LIBSML)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBS) $(LIBSML) -o sml_server $(LIBS)
+all: sml_server
 
-%.o : %.c
+sml_server: $(OBJS) $(LIBSML)
+	$(CC) $(OBJS) $(LIBSML) $(LIBS) -o sml_server
+
+%.o: %.c
 	$(CC) $(CFLAGS) -c $^ -o $@
 
-.PHONY: clean
+.PHONY: clean install uninstall
 clean:
 	@rm -f *.o
 	@rm -f sml_server
+
+install: sml_server
+	$(INSTALL) sml_server $(bindir)
+
+uninstall:
+	@rm -f $(bindir)/sml_server
