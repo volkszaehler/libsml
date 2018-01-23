@@ -34,6 +34,8 @@
 #include <sml/sml_transport.h>
 #include <sml/sml_value.h>
 
+#include "unit.h"
+
 int serial_port_open(const char* device) {
 	int bits;
 	struct termios config;
@@ -121,15 +123,10 @@ void transport_receiver(unsigned char *buffer, size_t buffer_len) {
 						entry->obj_name->str[0], entry->obj_name->str[1],
 						entry->obj_name->str[2], entry->obj_name->str[3],
 						entry->obj_name->str[4], entry->obj_name->str[5], value);
-					if (entry->unit) // do not crash on null (unit is optional)
-						switch (*entry->unit) {
-						case 0x1B:
-							printf("W");
-							break;
-						case 0x1E:
-							printf("Wh");
-							break;
-						}
+					char *unit = NULL;
+					if (entry->unit &&  // do not crash on null (unit is optional)
+						(unit = dlms_get_unit((unsigned char) *entry->unit)) != NULL)
+						printf("%s", unit);
 					printf("\n");
 					// flush the stdout puffer, that pipes work without waiting
 					fflush(stdout);
