@@ -117,7 +117,7 @@ void transport_receiver(unsigned char *buffer, size_t buffer_len) {
 				} else if (((entry->value->type & SML_TYPE_FIELD) == SML_TYPE_INTEGER) ||
 						((entry->value->type & SML_TYPE_FIELD) == SML_TYPE_UNSIGNED)) {
 					double value = sml_value_to_double(entry->value);
-					int scaler = (entry->scaler) ? *entry->scaler : 1;
+					int scaler = (entry->scaler) ? *entry->scaler : 0;
 					value = value * pow(10, scaler);
 					printf("%d-%d:%d.%d.%d*%d#%.1f#",
 						entry->obj_name->str[0], entry->obj_name->str[1],
