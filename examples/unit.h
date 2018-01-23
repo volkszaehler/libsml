@@ -1,7 +1,7 @@
 /**
  * DLMS Units as specified in ISO EN 62056-62 and used by SML
  *
- * @package vzlogger
+ * @package libsml
  * @copyright Copyright (c) 2011, The volkszaehler.org project
  * @license http://www.gnu.org/licenses/gpl.txt GNU Public License
  * @author Steffen Vogel <info@steffenvogel.de>
@@ -100,16 +100,16 @@ dlms_unit_t dlms_units[] = {
 {253, "(reserved)"},	// reserved
 {254, "(other)"},	// other unit
 {255, "(unitless)"},	// no unit, unitless, count
-{0, ""}			// stop condition for iterator
+{0, ""}		// stop condition for iterator
 };
 	
 char * dlms_get_unit(unsigned char code) {
 	dlms_unit_t *it = dlms_units;
-	do { /* linear search */
+	do { // linear search
 		if (it->code == code) {
 			return it->unit;
 		}
 	} while ((++it)->code);
 	
-	return NULL; /* not found */
+	return NULL; // not found
 }
