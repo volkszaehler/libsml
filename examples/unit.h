@@ -24,7 +24,7 @@
  */
 
 typedef struct {
-	char code;
+	unsigned char code;
 	char *unit;
 } dlms_unit_t;
 
