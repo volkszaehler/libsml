@@ -41,9 +41,6 @@ int serial_port_open(const char* device) {
 	struct termios config;
 	memset(&config, 0, sizeof(config));
 
-	if (!strcmp(device, "-"))
-		return 0; // read stdin when "-" is given for the device
-
 #ifdef O_NONBLOCK
 	int fd = open(device, O_RDWR | O_NOCTTY | O_NONBLOCK);
 #else
@@ -94,7 +91,9 @@ void transport_receiver(unsigned char *buffer, size_t buffer_len) {
 		if (*message->message_body->tag == SML_MESSAGE_GET_LIST_RESPONSE) {
 			sml_list *entry;
 			sml_get_list_response *body;
+
 			body = (sml_get_list_response *) message->message_body->data;
+			
 			for (entry = body->val_list; entry != NULL; entry = entry->next) {
 				if (!entry->value) { // do not crash on null value
 					fprintf(stderr, "Error in data stream. entry->value should not be NULL. Skipping this.\n");
@@ -140,19 +139,26 @@ void transport_receiver(unsigned char *buffer, size_t buffer_len) {
 }
 
 int main(int argc, char *argv[]) {
-	// this example assumes that a EDL21 meter sending SML messages via a
-	// serial device. Adjust as needed.
+	int fd;
+
+	// assume meter sending SML messages via serial device
 	if (argc != 2) {
 		printf("Usage: %s <device>\n", argv[0]);
-		printf("device - serial device of connected power meter e.g. /dev/cu.usbserial, or - for stdin\n");
+		printf("device - serial device of connected power meter e.g. /dev/cu.usbserial, or - for STDIN\n");
 		exit(1); // exit here
 	}
 
-	// open serial port
-	int fd = serial_port_open(argv[1]);
-	if (fd < 0) {
-		printf("Error: failed to open device (%s)\n", argv[1]);
-		exit(3);
+	if (!strcmp(argv[1], "-")) {
+		// read stdin when "-" is given for the device
+		fd = 0;
+	}
+	else {
+		// open serial port
+		fd = serial_port_open(argv[1]);
+		if (fd < 0) {
+			printf("Error: failed to open device (%s)\n", argv[1]);
+			exit(3);
+		}
 	}
 
 	// listen on the serial device, this call is blocking.
