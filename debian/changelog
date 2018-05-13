@@ -1,5 +1,6 @@
-libsml (0.1.1+git20170608-3) unstable; urgency=medium
+libsml (0.1.1+git20180125-1) unstable; urgency=medium
 
+  * New upstream release
   * Update VCS-Uri to salsa
   * Install pkg-config file to multiarch directory
   * Use dh-compat level 11
