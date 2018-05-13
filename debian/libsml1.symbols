@@ -165,5 +165,6 @@ libsml.so.1 libsml1 #MINVER#
  sml_value_init@Base 0.1.1
  sml_value_parse@Base 0.1.1
  sml_value_to_double@Base 0.1.1
+ sml_value_to_strhex@Base 0.1.1+git20180125
  sml_value_write@Base 0.1.1
  start_seq@Base 0.1.1
