@@ -1,0 +1,15 @@
+build:
+  stage: build
+  
+  before_script:
+    - apt update
+    - apt upgrade -y
+    - apt -y install devscripts git-buildpackage
+    - mk-build-deps --tool "apt -y -o Debug::pkgProblemResolver=yes --no-install-recommends" --install -r debian/control 
+  script: 
+    - git checkout pristine-tar 
+    - git pull
+    - git checkout master
+    - git pull
+    - gbp buildpackage -uc -us
+
