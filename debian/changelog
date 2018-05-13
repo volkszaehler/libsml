@@ -1,3 +1,15 @@
+libsml (0.1.1+git20170608-3) unstable; urgency=medium
+
+  * Update VCS-Uri to salsa
+  * Install pkg-config file to multiarch directory
+  * Use dh-compat level 11
+  * Declare compliance with Policy 4.1.4
+  * Update copyright years
+  * Use uscan and Files-Excluded instead of get-orig-source
+  * Add gitlab CI
+
+ -- Andreas Moog <andreas.moog@warperbbs.de>  Sun, 13 May 2018 10:27:20 +0200
+
 libsml (0.1.1+git20170608-2) unstable; urgency=medium
 
   * Add patch to allow building on non-Linux. (Closes: #873895)
