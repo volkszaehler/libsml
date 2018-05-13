@@ -9,8 +9,6 @@ build:
   script: 
     - git checkout pristine-tar 
     - git pull
-    - git checkout upstream
-    - git pull
     - git checkout master
     - git pull
     - gbp buildpackage -uc -us
