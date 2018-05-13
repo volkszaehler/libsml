@@ -1,19 +1,7 @@
 #!/usr/bin/make -f
 
-include /usr/share/dpkg/pkg-info.mk
-
-UPSTREAM_COMMIT='a83ec40d960eb334faf381a9c92aa884da8c3475'
-REPACK_TEMPDIR:=$(shell mktemp -d)
-
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
 %:
 	dh $@
 
-get-orig-source:
-	wget https://github.com/volkszaehler/libsml/archive/$(UPSTREAM_COMMIT).tar.gz -O $(REPACK_TEMPDIR)/libsml_$(DEB_VERSION_UPSTREAM).tar.gz
-	mkdir $(REPACK_TEMPDIR)/libsml-$(DEB_VERSION_UPSTREAM)
-	tar -xvf $(REPACK_TEMPDIR)/libsml_$(DEB_VERSION_UPSTREAM).tar.gz --strip 1 -C $(REPACK_TEMPDIR)/libsml-$(DEB_VERSION_UPSTREAM)
-	rm $(REPACK_TEMPDIR)/libsml_$(DEB_VERSION_UPSTREAM).tar.gz
-	GZIP="--best --no-name" tar -czf $(REPACK_TEMPDIR)/libsml_$(DEB_VERSION_UPSTREAM).orig.tar.gz --exclude=CONTRIBUTION.pdf -C $(REPACK_TEMPDIR) libsml-$(DEB_VERSION_UPSTREAM)
-	mv $(REPACK_TEMPDIR)/libsml_$(DEB_VERSION_UPSTREAM).orig.tar.gz $(CURDIR)
