@@ -34,3 +34,5 @@ override_dh_installppp:
 override_dh_installudev:
 override_dh_perl:
 
+override_dh_auto_install:
+	dh_auto_install -- prefix=/usr
