@@ -28,7 +28,8 @@ clean:
 	@rm -f sml_server
 
 install: sml_server
-	$(INSTALL) sml_server $(bindir)
+	$(INSTALL) -d $(DESTDIR)$(bindir)
+	$(INSTALL) sml_server $(DESTDIR)$(bindir)
 
 uninstall:
-	@rm -f $(bindir)/sml_server
+	@rm -f $(DESTDIR)$(bindir)/sml_server
