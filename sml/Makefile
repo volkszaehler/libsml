@@ -81,14 +81,16 @@ clean:
 	@rm -f $(DYN_LIB) $(OBJ_LIB) $(ST_LIB)
 
 install: $(DYN_LIB) $(ST_LIB)
-	$(INSTALL) $(DYN_LIB) $(ST_LIB) $(libdir)
+	install -d $(DESTDIR)$(libdir)
+	$(INSTALL) $(DYN_LIB) $(ST_LIB) $(DESTDIR)$(libdir)
 ifeq ($(UNAME), Darwin)
-	@cd $(libdir); ln -sf $(SONAME) $(NAME).dylib
+	@cd $(DESTDIR)$(libdir); ln -sf $(SONAME) $(NAME).dylib
 else
-	@cd $(libdir); ln -sf $(SONAME) $(NAME).so
+	@cd $(DESTDIR)$(libdir); ln -sf $(SONAME) $(NAME).so
 endif
-	cp -a $(INC_DIR)/* $(includedir)
+	install -d $(DESTDIR)$(includedir)
+	cp -a $(INC_DIR)/* $(DESTDIR)$(includedir)
 
 uninstall:
-	@rm -f $(libdir)/$(SONAME) $(libdir)/$(NAME).so $(libdir)/$(NAME).dylib $(libdir)/$(NAME).a
-	@rm -rf $(includedir)/sml
+	@rm -f $(DESTDIR)$(libdir)/$(SONAME) $(DESTDIR)$(libdir)/$(NAME).so $(DESTDIR)$(libdir)/$(NAME).dylib $(DESTDIR)$(libdir)/$(NAME).a
+	@rm -rf $(DESTDIR)$(includedir)/sml
