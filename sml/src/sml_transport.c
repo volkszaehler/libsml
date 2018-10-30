@@ -43,7 +43,7 @@ size_t sml_read(int fd, fd_set *set, unsigned char *buffer, size_t len) {
 		if (FD_ISSET(fd, set)) {
 
 			r = read(fd, &(buffer[tr]), len - tr);
-			if (r == 0) return 0;
+			if (r == 0) return 0; // EOF
 			if (r < 0) continue;
 
 			tr += r;
@@ -64,7 +64,7 @@ size_t sml_transport_read(int fd, unsigned char *buffer, size_t max_len) {
 
 	if (max_len < 8) {
 		// prevent buffer overflow
-		fprintf(stderr, "libsml: error: sml_transport_read buffer overflow\n");
+		fprintf(stderr, "libsml: error: sml_transport_read(): passed buffer too small!\n");
 		return 0;
 	}
 
@@ -116,10 +116,8 @@ void sml_transport_listen(int fd, void (*sml_transport_receiver)(unsigned char *
 	unsigned char buffer[MC_SML_BUFFER_LEN];
 	size_t bytes;
 
-	bytes = sml_transport_read(fd, buffer, MC_SML_BUFFER_LEN);
-	while (bytes > 0) {
+	while ((bytes = sml_transport_read(fd, buffer, MC_SML_BUFFER_LEN)) > 0) {
 		sml_transport_receiver(buffer, bytes);
-		bytes = sml_transport_read(fd, buffer, MC_SML_BUFFER_LEN);
 	}
 }
 
