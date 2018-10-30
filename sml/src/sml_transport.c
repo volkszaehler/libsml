@@ -25,6 +25,7 @@
 #include <sys/types.h>
 #include <string.h>
 #include <unistd.h>
+#include <errno.h>
 
 #define MC_SML_BUFFER_LEN 8096
 
@@ -44,8 +45,11 @@ size_t sml_read(int fd, fd_set *set, unsigned char *buffer, size_t len) {
 
 			r = read(fd, &(buffer[tr]), len - tr);
 			if (r == 0) return 0; // EOF
-			if (r < 0) continue;
-
+			if (r == EINTR || r == EAGAIN) continue; // should be ignored
+			if (r < 0) {
+				fprintf(stderr, "libsml: sml_read(): read error\n");
+				return 0;
+			}
 			tr += r;
 		}
 	}
