@@ -158,7 +158,7 @@ int main(int argc, char *argv[]) {
 	while ((c = getopt(argc, argv, "+hsv")) != -1) {
 		switch (c) {
 		case 'h':
-			printf("Usage: %s [-h] [-s] [-v] <device>\n", argv[0]);
+			printf("usage: %s [-h] [-s] [-v] device\n", argv[0]);
 			printf("device - serial device of connected power meter e.g. /dev/cu.usbserial, or - for stdin\n");
 			printf("-h - help\n");
 			printf("-s - process only one OBIS data stream (single)\n");
@@ -172,11 +172,8 @@ int main(int argc, char *argv[]) {
 			vflag = true;
 			break;
 		case '?':
-			if (isprint(optopt))
-				fprintf(stderr, "Error: Unknown option `-%c'.\n", optopt);
-			else
-				fprintf(stderr,
-						"Error: Unknown option character `\\x%x'.\n", optopt);
+			// get a not specified switch, error message is printed by getopt()
+			printf("Use %s -h for help.\n", argv[0]);
 			exit(1); // exit here
 			break;
 		default:
@@ -184,15 +181,15 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	if (argc <= optind) {
-		printf("Error: Not enough arguments. Use %s -h for help.\n", argv[0]);
+	if (argc - optind != 1) {
+		printf("error: Arguments mismatch.\nUse %s -h for help.\n", argv[0]);
 		exit(1); // exit here
 	}
 
 	// open serial port
 	int fd = serial_port_open(argv[optind]);
 	if (fd < 0) {
-		printf("Error: failed to open device (%s)\n", argv[optind]);
+		// error message is printed by serial_port_open()
 		exit(1);
 	}
 
