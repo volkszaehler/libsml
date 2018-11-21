@@ -35,9 +35,10 @@ uint8_t test_helper_ctoi(uint8_t c){
     return ret;
 }
 
-static inline uint8_t test_helper_c2toi(uint8_t c1, uint8_t c2){
-    return test_helper_ctoi(c1) << 4 | test_helper_ctoi(c2);
-}
+// fix compiler warning - uncomment if needed
+// static inline uint8_t test_helper_c2toi(uint8_t c1, uint8_t c2){
+//     return test_helper_ctoi(c1) << 4 | test_helper_ctoi(c2);
+// }
 
 static inline uint8_t test_helper_c2ptoi(char* c){
     return test_helper_ctoi((uint8_t)c[0]) << 4 | test_helper_ctoi((uint8_t)c[1]);
