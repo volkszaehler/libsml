@@ -22,8 +22,19 @@ The resulting binaries are located in sml/lib
 
 ### License
 Copyright 2011 Juri Glass, Mathias Runge, Nadim El Sayed - DAI-Labor, TU-Berlin
+Copyright 2014-2018 libSML contributors
 
-libSML is licensed with the GPL, other licenses are available.
+libSML is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+libSML is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+See the file LICENSE for the full license text.
 
 ### Thanks
 Steffen Vogel, Thorben Thuermer, Daniel Pauli, He Bowei
