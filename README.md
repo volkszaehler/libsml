@@ -22,8 +22,9 @@ The resulting binaries are located in sml/lib
 
 ### License
 Copyright 2011 Juri Glass, Mathias Runge, Nadim El Sayed - DAI-Labor, TU-Berlin
+Copyright 2014-2018 libSML contributors
 
-libSML is licensed with the GPL, other licenses are available.
+libSML is licensed under the GPL version 3, see LICENSE.
 
 ### Thanks
 Steffen Vogel, Thorben Thuermer, Daniel Pauli, He Bowei
