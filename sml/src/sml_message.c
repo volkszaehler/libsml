@@ -39,6 +39,8 @@ sml_message *sml_message_parse(sml_buffer *buf) {
 		.message_body = NULL,
 		.crc = NULL
 	};
+	int msg_start = buf->cursor;
+	int len;
 
 	if (sml_buf_get_next_type(buf) != SML_TYPE_LIST) {
 		buf->error = 1;
@@ -62,8 +64,12 @@ sml_message *sml_message_parse(sml_buffer *buf) {
 	msg->message_body = sml_message_body_parse(buf);
 	if (sml_buf_has_errors(buf)) goto error;
 
+	len = buf->cursor - msg_start;
+
 	msg->crc = sml_u16_parse(buf);
 	if (sml_buf_has_errors(buf)) goto error;
+	if (*msg->crc != sml_crc16_calculate(&(buf->buffer[msg_start]), len))
+		goto error;
 
 	if (sml_buf_get_current_byte(buf) == SML_MESSAGE_END) {
 		sml_buf_update_bytes_read(buf, 1);

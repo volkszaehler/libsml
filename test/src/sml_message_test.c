@@ -54,9 +54,17 @@ TEST(sml_message, parse) {
 	sml_message_free( msg );
 }
 
+TEST(sml_message, crc_error) {
+	hex2binary("7607003800003FB662006200736301017601010700380042153D0B06454D48010271533BCD010163820800", sml_buf_get_current_buf(buf));
+	//                                   ^ 1 bit corrupted here
+	sml_message *msg = sml_message_parse(buf);
+	TEST_ASSERT_NULL(msg);
+}
+
 TEST_GROUP_RUNNER(sml_message) {
 	RUN_TEST_CASE(sml_message, init);
 	RUN_TEST_CASE(sml_message, init_unique_transaction_id);
 	RUN_TEST_CASE(sml_message, parse);
+	RUN_TEST_CASE(sml_message, crc_error);
 }
 
