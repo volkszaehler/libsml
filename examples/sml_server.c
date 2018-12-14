@@ -127,11 +127,14 @@ void transport_receiver(unsigned char *buffer, size_t buffer_len) {
 						((entry->value->type & SML_TYPE_FIELD) == SML_TYPE_UNSIGNED)) {
 					double value = sml_value_to_double(entry->value);
 					int scaler = (entry->scaler) ? *entry->scaler : 0;
+					int prec = -scaler;
+					if (prec < 0)
+						prec = 0;
 					value = value * pow(10, scaler);
-					printf("%d-%d:%d.%d.%d*%d#%.1f#",
+					printf("%d-%d:%d.%d.%d*%d#%.*f#",
 						entry->obj_name->str[0], entry->obj_name->str[1],
 						entry->obj_name->str[2], entry->obj_name->str[3],
-						entry->obj_name->str[4], entry->obj_name->str[5], value);
+						entry->obj_name->str[4], entry->obj_name->str[5], prec, value);
 					char *unit = NULL;
 					if (entry->unit &&  // do not crash on null (unit is optional)
 						(unit = dlms_get_unit((unsigned char) *entry->unit)) != NULL)
