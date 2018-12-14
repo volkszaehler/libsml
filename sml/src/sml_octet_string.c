@@ -51,7 +51,7 @@ octet_string *sml_octet_string_init(unsigned char *str, int length) {
 octet_string *sml_octet_string_init_from_hex(char *str) {
 	int i, len = strlen(str);
 	if (len % 2 != 0) {
-		return 0;
+		return NULL;
 	}
 	unsigned char bytes[len / 2];
 	for (i = 0; i < (len / 2); i++) {
@@ -71,19 +71,19 @@ void sml_octet_string_free(octet_string *str) {
 
 octet_string *sml_octet_string_parse(sml_buffer *buf) {
 	if (sml_buf_optional_is_skipped(buf)) {
-		return 0;
+		return NULL;
 	}
 
 	int l;
 	if (sml_buf_get_next_type(buf) != SML_TYPE_OCTET_STRING) {
 		buf->error = 1;
-		return 0;
+		return NULL;
 	}
 
 	l = sml_buf_get_next_length(buf);
 	if (l < 0) {
 		buf->error = 1;
-		return 0;
+		return NULL;
 	}
 
 	octet_string *str = sml_octet_string_init(sml_buf_get_current_buf(buf), l);

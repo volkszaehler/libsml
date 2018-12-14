@@ -90,7 +90,7 @@ sml_get_profile_list_response *sml_get_profile_list_response_parse(sml_buffer *b
 error:
 	buf->error = 1;
 	sml_get_profile_list_response_free(msg);
-	return 0;
+	return NULL;
 }
 
 static void sml_period_entry_write_( void * p, sml_buffer * buf ) {

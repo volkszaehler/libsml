@@ -64,7 +64,7 @@ static void * sml_prof_obj_period_entry_parse_(sml_buffer *buf) {
 error:
 	buf->error = 1;
 	sml_prof_obj_period_entry_free(entry);
-	return 0;
+	return NULL;
 }
 
 static void sml_prof_obj_period_entry_free_( void * p ) {
@@ -123,7 +123,7 @@ static void * sml_value_entry_parse_(sml_buffer *buf) {
 error:
 	buf->error = 1;
 	sml_value_entry_free(entry);
-	return 0;
+	return NULL;
 }
 
 static void sml_value_entry_write_( void * p, sml_buffer *buf) {
@@ -205,7 +205,7 @@ sml_get_profile_pack_response *sml_get_profile_pack_response_parse(sml_buffer *b
 error:
 	buf->error = 1;
 	sml_get_profile_pack_response_free(msg);
-	return 0;
+	return NULL;
 }
 
 void sml_get_profile_pack_response_write(sml_get_profile_pack_response *msg, sml_buffer *buf) {
@@ -273,7 +273,7 @@ static void * sml_prof_obj_header_entry_parse_(sml_buffer *buf) {
 error:
 	buf->error = 1;
 	sml_prof_obj_header_entry_free(entry);
-	return 0;
+	return NULL;
 }
 
 sml_prof_obj_header_entry * sml_prof_obj_header_entry_parse( sml_buffer * buf ) {

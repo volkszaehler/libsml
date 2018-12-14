@@ -60,7 +60,7 @@ haserrors:
 	sml_sequence_free(seq);
 error:
 	buf->error = 1;
-	return 0;
+	return NULL;
 }
 
 void sml_sequence_write(sml_sequence *seq, sml_buffer *buf, void (*elem_write) (void *elem, sml_buffer *buf)) {
@@ -159,17 +159,17 @@ sml_list *sml_list_entry_parse(sml_buffer *buf) {
 // this is done in sml_list_parse.
 error:
 	buf->error = 1;
-	return 0;
+	return NULL;
 }
 
 sml_list *sml_list_parse(sml_buffer *buf) {
 	if (sml_buf_optional_is_skipped(buf)) {
-		return 0;
+		return NULL;
 	}
 
 	if (sml_buf_get_next_type(buf) != SML_TYPE_LIST) {
 		buf->error = 1;
-		return 0;
+		return NULL;
 	}
 
 	sml_list *first = 0;
@@ -197,7 +197,7 @@ sml_list *sml_list_parse(sml_buffer *buf) {
 error:
 	buf->error = 1;
 	sml_list_free(first);
-	return 0;
+	return NULL;
 }
 
 

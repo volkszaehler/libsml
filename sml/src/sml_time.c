@@ -33,7 +33,7 @@ sml_time *sml_time_init() {
 
 sml_time *sml_time_parse(sml_buffer *buf) {
 	if (sml_buf_optional_is_skipped(buf)) {
-		return 0;
+		return NULL;
 	}
 
 	sml_time *tme = sml_time_init();
@@ -80,7 +80,7 @@ sml_time *sml_time_parse(sml_buffer *buf) {
 
 error:
 	sml_time_free(tme);
-	return 0;
+	return NULL;
 }
 
 void sml_time_write(sml_time *t, sml_buffer *buf) {

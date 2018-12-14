@@ -83,7 +83,7 @@ sml_get_list_request *sml_get_list_request_parse(sml_buffer *buf) {
 
 error:
 	sml_get_list_request_free(msg);
-	return 0;
+	return NULL;
 }
 
 

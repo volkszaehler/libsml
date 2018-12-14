@@ -73,7 +73,7 @@ sml_message *sml_message_parse(sml_buffer *buf) {
 
 error:
 	sml_message_free(msg);
-	return 0;
+	return NULL;
 }
 
 sml_message *sml_message_init() {
@@ -191,7 +191,7 @@ sml_message_body *sml_message_body_parse(sml_buffer *buf) {
 
 error:
 	free(msg_body);
-	return 0;
+	return NULL;
 }
 
 sml_message_body *sml_message_body_init(u32 tag, void *data) {

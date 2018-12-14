@@ -64,7 +64,7 @@ sml_set_proc_parameter_request *sml_set_proc_parameter_request_parse(sml_buffer 
 
 error:
 	sml_set_proc_parameter_request_free(msg);
-	return 0;
+	return NULL;
 }
 
 void sml_set_proc_parameter_request_write(sml_set_proc_parameter_request *msg, sml_buffer *buf) {

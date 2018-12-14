@@ -72,7 +72,7 @@ sml_get_list_response *sml_get_list_response_parse(sml_buffer *buf) {
 
 error:
 	sml_get_list_response_free(msg);
-	return 0;
+	return NULL;
 }
 
 void sml_get_list_response_write(sml_get_list_response *msg, sml_buffer *buf) {

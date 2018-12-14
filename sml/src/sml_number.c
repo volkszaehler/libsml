@@ -51,7 +51,7 @@ error:
 
 void *sml_number_parse(sml_buffer *buf, unsigned char type, int max_size) {
 	if (sml_buf_optional_is_skipped(buf)) {
-		return 0;
+		return NULL;
 	}
 
 	int l, i;
@@ -60,13 +60,13 @@ void *sml_number_parse(sml_buffer *buf, unsigned char type, int max_size) {
 
 	if (sml_buf_get_next_type(buf) != type) {
 		buf->error = 1;
-		return 0;
+		return NULL;
 	}
 
 	l = sml_buf_get_next_length(buf);
 	if (l < 0 || l > max_size) {
 		buf->error = 1;
-		return 0;
+		return NULL;
 	}
 
 	unsigned char *np = malloc(max_size);
