@@ -302,7 +302,7 @@ void sml_message_body_free(sml_message_body *message_body) {
 				sml_attention_response_free((sml_attention_response *) message_body->data);
 				break;
 			default:
-				fprintf(stderr,"libsml: NYI: %s for message type %04X\n", __FUNCTION__, *(message_body->tag));
+				fprintf(stderr,"libsml: NYI: %s for message type %04X\n", __func__, *(message_body->tag));
 				break;
 		}
 		sml_number_free(message_body->tag);
