@@ -1,3 +1,12 @@
+libsml (0.1.1+git20190102-1) unstable; urgency=medium
+
+  * New upstream snapshot
+  * Change to correct github upstream project in debian/copyright
+  * Update copyright years
+  * Update gitlab CI
+
+ -- Andreas Moog <andreas.moog@warperbbs.de>  Sun, 17 Feb 2019 13:00:21 +0100
+
 libsml (0.1.1+git20180125-1) unstable; urgency=medium
 
   * New upstream release

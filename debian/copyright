@@ -1,7 +1,7 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: libsml
 Upstream-Contact: Steffen Vogel <info@steffenvogel.de>
-Source: https://github.com/dailab/libsml
+Source: https://github.com/volkszaehler/libsml
 Files-Excluded: CONTRIBUTION.pdf
 
 Files: *
@@ -12,7 +12,7 @@ Copyright: 2011 Juri Glass
 License: GPL-3+
 
 Files: debian/*
-Copyright: 2017,2018 Andreas Moog <andreas.moog@warperbbs.de>
+Copyright: 2017-2019 Andreas Moog <andreas.moog@warperbbs.de>
            2011 Steffen Vogel <info@steffenvogel.de>
 License: GPL-3+
 
