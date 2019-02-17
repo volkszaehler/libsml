@@ -1,15 +1,17 @@
+include: https://salsa.debian.org/salsa-ci-team/pipeline/raw/master/salsa-ci.yml
+
 build:
-  stage: build
-  
-  before_script:
-    - apt update
-    - apt upgrade -y
-    - apt -y install devscripts git-buildpackage
-    - mk-build-deps --tool "apt -y -o Debug::pkgProblemResolver=yes --no-install-recommends" --install -r debian/control 
-  script: 
-    - git checkout pristine-tar 
-    - git pull
-    - git checkout master
-    - git pull
-    - gbp buildpackage -uc -us
+    extends: .build-unstable
+
+reprotest:
+    extends: .test-reprotest
+
+lintian:
+    extends: .test-lintian
+
+autopkgtest:
+    extends: .test-autopkgtest
+
+piuparts:
+    extends: .test-piuparts
 
