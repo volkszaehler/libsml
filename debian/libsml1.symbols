@@ -84,8 +84,6 @@ libsml.so.1 libsml1 #MINVER#
  sml_message_init@Base 0.1.1
  sml_message_parse@Base 0.1.1
  sml_message_write@Base 0.1.1
- sml_number_byte_swap@Base 0.1.1
- sml_number_endian@Base 0.1.1
  sml_number_free@Base 0.1.1
  sml_number_init@Base 0.1.1
  sml_number_parse@Base 0.1.1
