@@ -20,6 +20,9 @@ Ubuntu
 
 The resulting binaries are located in sml/lib
 
+#### Testing
+For testing data have a look at https://github.com/devZer0/libsml-testing
+
 ### License
 Copyright 2011 Juri Glass, Mathias Runge, Nadim El Sayed - DAI-Labor, TU-Berlin
 
