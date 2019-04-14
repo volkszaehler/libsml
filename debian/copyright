@@ -2,7 +2,6 @@ Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: libsml
 Upstream-Contact: Steffen Vogel <info@steffenvogel.de>
 Source: https://github.com/volkszaehler/libsml
-Files-Excluded: CONTRIBUTION.pdf
 
 Files: *
 Copyright: 2011 Juri Glass
