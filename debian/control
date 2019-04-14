@@ -4,7 +4,7 @@ Maintainer: Andreas Moog <andreas.moog@warperbbs.de>
 Build-Depends: debhelper (>= 11~), uuid-dev (>= 2.16), dh-exec
 Standards-Version: 4.1.4
 Section: libs
-Homepage: https://github.com/dailab/libsml
+Homepage: https://github.com/volkszaehler/libsml
 Vcs-Git: https://salsa.debian.org/amoog-guest/libsml.git
 Vcs-Browser: https://salsa.debian.org/amoog-guest/libsml
 
