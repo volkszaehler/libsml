@@ -1,4 +1,4 @@
-libsml (0.1.1+git20190410-1) experimental; urgency=medium
+libsml (0.1.1+git20190410-1) unstable; urgency=medium
 
   * New upstream snapshot
   * Change to correct github upstream project in debian/copyright
@@ -6,6 +6,7 @@ libsml (0.1.1+git20190410-1) experimental; urgency=medium
   * Update symbols file
   * Update copyright years
   * Update gitlab CI
+  * Update standards version
 
  -- Andreas Moog <andreas.moog@warperbbs.de>  Sun, 17 Feb 2019 13:00:21 +0100
 
