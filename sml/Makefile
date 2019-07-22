@@ -16,6 +16,8 @@ else
 SONAME=$(NAME).so.$(SOVERSION)
 endif
 
+LDFLAGS += -Wl,-soname=$(SONAME) -shared
+
 LIB_DIR=./lib
 INC_DIR=./include
 OBJ_LIB=$(LIB_DIR)/$(NAME).o
@@ -66,7 +68,7 @@ $(DYN_LIB): $(OBJS)
 ifeq ($(UNAME), Darwin)
 	$(CC) $(LIBS) -dynamiclib -install_name $(SONAME) -o $@ $^
 else
-	$(LD) $(LIBS) -shared -soname $(SONAME) -o $@ $^
+	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
 endif
 
 $(OBJ_LIB): $(OBJS)
