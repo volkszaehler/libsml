@@ -28,6 +28,9 @@ extern "C" {
 // CRC16 FSC implementation based on DIN 62056-46
 u16 sml_crc16_calculate(unsigned char *cp, int len) ;
 
+// CRC-16/CCITT(Kermit) implementation poly=0x1021 init=0x0000 refin=true refout=true xorout=0x0000
+u16 sml_crc16kermit_calculate(unsigned char *cp, int len) ;
+
 #ifdef __cplusplus
 }
 #endif
