@@ -45,8 +45,8 @@ sml_time *sml_time_parse(sml_buffer *buf) {
     // instead, the DTZ541 starts with 0x65 + 4 bytes secIndex
     // the workaround will add this information during parsing
     if (sml_buf_get_current_byte(buf) == (SML_TYPE_UNSIGNED | 5)) {
-        u8 *tag = malloc(sizeof(u8));
-        *tag = SML_TIME_SEC_INDEX;
+        tme->tag = malloc(sizeof(u8));
+        *tme->tag = SML_TIME_SEC_INDEX;
     } else {
         if (sml_buf_get_next_type(buf) != SML_TYPE_LIST) {
             buf->error = 1;
