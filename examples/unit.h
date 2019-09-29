@@ -25,7 +25,7 @@
 
 typedef struct {
 	unsigned char code;
-	char *unit;
+	const char *unit;
 } dlms_unit_t;
 
 /**
@@ -103,7 +103,7 @@ dlms_unit_t dlms_units[] = {
 {0, ""}		// stop condition for iterator
 };
 	
-char * dlms_get_unit(unsigned char code) {
+const char * dlms_get_unit(unsigned char code) {
 	dlms_unit_t *it = dlms_units;
 	do { // linear search
 		if (it->code == code) {

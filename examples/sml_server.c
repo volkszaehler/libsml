@@ -135,7 +135,7 @@ void transport_receiver(unsigned char *buffer, size_t buffer_len) {
 						entry->obj_name->str[0], entry->obj_name->str[1],
 						entry->obj_name->str[2], entry->obj_name->str[3],
 						entry->obj_name->str[4], entry->obj_name->str[5], prec, value);
-					char *unit = NULL;
+					const char *unit = NULL;
 					if (entry->unit &&  // do not crash on null (unit is optional)
 						(unit = dlms_get_unit((unsigned char) *entry->unit)) != NULL)
 						printf("%s", unit);
