@@ -24,8 +24,25 @@
 #define SML_BIG_ENDIAN 1
 #define SML_LITTLE_ENDIAN 0
 
-int sml_number_endian();
-void sml_number_byte_swap(unsigned char *bytes, int bytes_len);
+static void sml_number_byte_swap(unsigned char *bytes, int bytes_len) {
+	int i;
+	unsigned char ob[bytes_len];
+
+	memcpy(&ob, bytes, bytes_len);
+
+	for (i = 0; i < bytes_len; i++)
+		bytes[i] = ob[bytes_len - (i + 1)];
+}
+
+static int sml_number_endian() {
+	int i = 1;
+	char *p = (char *)&i;
+
+	if (p[0] == 1)
+		return SML_LITTLE_ENDIAN;
+	else
+		return SML_BIG_ENDIAN;
+}
 
 void *sml_number_init(u64 number, unsigned char type __attribute__ ((unused)), int size) {
 	
@@ -51,7 +68,7 @@ error:
 
 void *sml_number_parse(sml_buffer *buf, unsigned char type, int max_size) {
 	if (sml_buf_optional_is_skipped(buf)) {
-		return 0;
+		return NULL;
 	}
 
 	int l, i;
@@ -60,13 +77,13 @@ void *sml_number_parse(sml_buffer *buf, unsigned char type, int max_size) {
 
 	if (sml_buf_get_next_type(buf) != type) {
 		buf->error = 1;
-		return 0;
+		return NULL;
 	}
 
 	l = sml_buf_get_next_length(buf);
 	if (l < 0 || l > max_size) {
 		buf->error = 1;
-		return 0;
+		return NULL;
 	}
 
 	unsigned char *np = malloc(max_size);
@@ -108,26 +125,6 @@ void sml_number_write(void *np, unsigned char type, int size, sml_buffer *buf) {
 	}
 
 	sml_buf_update_bytes_read(buf, size);
-}
-
-void sml_number_byte_swap(unsigned char *bytes, int bytes_len) {
-	int i;
-	unsigned char ob[bytes_len];
-	memcpy(&ob, bytes, bytes_len);
-	
-	for (i = 0; i < bytes_len; i++) {
-		bytes[i] = ob[bytes_len - (i + 1)];
-	}
-}
-
-int sml_number_endian() {
-	int i = 1;
-	char *p = (char *)&i;
-
-	if (p[0] == 1)
-		return SML_LITTLE_ENDIAN;
-	else
-		return SML_BIG_ENDIAN;
 }
 
 void sml_number_free(void *np) {

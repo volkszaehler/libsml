@@ -68,7 +68,7 @@ sml_open_response *sml_open_response_parse(sml_buffer *buf) {
 	return msg;
 error:
 	sml_open_response_free(msg);
-	return 0;
+	return NULL;
 }
 
 void sml_open_response_write(sml_open_response *msg, sml_buffer *buf) {

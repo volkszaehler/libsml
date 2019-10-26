@@ -61,7 +61,7 @@ sml_attention_response *sml_attention_response_parse(sml_buffer *buf){
 
 	error:
 		sml_attention_response_free(msg);
-		return 0;
+		return NULL;
 }
 
 void sml_attention_response_write(sml_attention_response *msg, sml_buffer *buf) {

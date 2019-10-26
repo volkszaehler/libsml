@@ -10,14 +10,28 @@ endif
 
 NAME=libsml
 SOVERSION=1
+ifeq ($(UNAME), Darwin)
+SONAME=$(NAME).$(SOVERSION).dylib
+else
 SONAME=$(NAME).so.$(SOVERSION)
+endif
+
+LDFLAGS += -Wl,-soname=$(SONAME) -shared
 
 LDFLAGS += -Wl,-soname=$(SONAME) -shared
 
 LIB_DIR=./lib
+INC_DIR=./include
 OBJ_LIB=$(LIB_DIR)/$(NAME).o
 DYN_LIB=$(LIB_DIR)/$(SONAME)
 ST_LIB=$(LIB_DIR)/$(NAME).a
+
+INSTALL = /usr/bin/install
+prefix = /usr/local
+exec_prefix = ${prefix}
+bindir = ${exec_prefix}/bin
+libdir = ${exec_prefix}/lib
+includedir = ${prefix}/include
 
 OBJS = \
 	src/sml_file.o \
@@ -48,14 +62,16 @@ OBJS = \
 	src/sml_get_profile_list_request.o \
 	src/sml_get_profile_list_response.o
 
-ifneq ($(UNAME), Darwin)
+all: libsml
+
 libsml: $(DYN_LIB) $(ST_LIB) $(OBJ_LIB)
-else
-libsml: $(ST_LIB) $(OBJ_LIB)
-endif
 
 $(DYN_LIB): $(OBJS)
+ifeq ($(UNAME), Darwin)
+	$(CC) $(LIBS) -dynamiclib -install_name $(SONAME) -o $@ $^
+else
 	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
+endif
 
 $(OBJ_LIB): $(OBJS)
 	$(LD) -r -o $@ $^
@@ -63,8 +79,22 @@ $(OBJ_LIB): $(OBJS)
 $(ST_LIB): $(OBJS)
 	$(AR) -rs $@ $^
 
-.PHONY: clean
+.PHONY: clean install uninstall
 clean:
 	@rm -f src/*.o
 	@rm -f $(DYN_LIB) $(OBJ_LIB) $(ST_LIB)
 
+install: $(DYN_LIB) $(ST_LIB)
+	install -d $(DESTDIR)$(libdir)
+	$(INSTALL) $(DYN_LIB) $(ST_LIB) $(DESTDIR)$(libdir)
+ifeq ($(UNAME), Darwin)
+	@cd $(DESTDIR)$(libdir); ln -sf $(SONAME) $(NAME).dylib
+else
+	@cd $(DESTDIR)$(libdir); ln -sf $(SONAME) $(NAME).so
+endif
+	install -d $(DESTDIR)$(includedir)
+	cp -a $(INC_DIR)/* $(DESTDIR)$(includedir)
+
+uninstall:
+	@rm -f $(DESTDIR)$(libdir)/$(SONAME) $(DESTDIR)$(libdir)/$(NAME).so $(DESTDIR)$(libdir)/$(NAME).dylib $(DESTDIR)$(libdir)/$(NAME).a
+	@rm -rf $(DESTDIR)$(includedir)/sml

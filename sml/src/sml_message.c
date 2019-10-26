@@ -39,6 +39,8 @@ sml_message *sml_message_parse(sml_buffer *buf) {
 		.message_body = NULL,
 		.crc = NULL
 	};
+	int msg_start = buf->cursor;
+	int len;
 
 	if (sml_buf_get_next_type(buf) != SML_TYPE_LIST) {
 		buf->error = 1;
@@ -62,8 +64,12 @@ sml_message *sml_message_parse(sml_buffer *buf) {
 	msg->message_body = sml_message_body_parse(buf);
 	if (sml_buf_has_errors(buf)) goto error;
 
+	len = buf->cursor - msg_start;
+
 	msg->crc = sml_u16_parse(buf);
 	if (sml_buf_has_errors(buf)) goto error;
+	if (*msg->crc != sml_crc16_calculate(&(buf->buffer[msg_start]), len))
+		goto error;
 
 	if (sml_buf_get_current_byte(buf) == SML_MESSAGE_END) {
 		sml_buf_update_bytes_read(buf, 1);
@@ -73,7 +79,7 @@ sml_message *sml_message_parse(sml_buffer *buf) {
 
 error:
 	sml_message_free(msg);
-	return 0;
+	return NULL;
 }
 
 sml_message *sml_message_init() {
@@ -191,7 +197,7 @@ sml_message_body *sml_message_body_parse(sml_buffer *buf) {
 
 error:
 	free(msg_body);
-	return 0;
+	return NULL;
 }
 
 sml_message_body *sml_message_body_init(u32 tag, void *data) {
@@ -302,7 +308,7 @@ void sml_message_body_free(sml_message_body *message_body) {
 				sml_attention_response_free((sml_attention_response *) message_body->data);
 				break;
 			default:
-				fprintf(stderr,"libsml: NYI: %s for message type %04X\n", __FUNCTION__, *(message_body->tag));
+				fprintf(stderr,"libsml: NYI: %s for message type %04X\n", __func__, *(message_body->tag));
 				break;
 		}
 		sml_number_free(message_body->tag);

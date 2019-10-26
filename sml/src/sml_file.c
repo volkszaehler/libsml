@@ -58,7 +58,8 @@ sml_file *sml_file_parse(unsigned char *buffer, size_t buffer_len) {
 			break;
 		}
 
-		sml_file_add_message(file, msg);
+		if (msg)
+			sml_file_add_message(file, msg);
 
 	}
 

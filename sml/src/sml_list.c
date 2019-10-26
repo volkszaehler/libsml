@@ -60,7 +60,7 @@ haserrors:
 	sml_sequence_free(seq);
 error:
 	buf->error = 1;
-	return 0;
+	return NULL;
 }
 
 void sml_sequence_write(sml_sequence *seq, sml_buffer *buf, void (*elem_write) (void *elem, sml_buffer *buf)) {
@@ -120,7 +120,16 @@ void sml_list_add(sml_list *list, sml_list *new_entry) {
 	list->next = new_entry;
 }
 
-sml_list *sml_list_entry_parse(sml_buffer *buf) {
+struct workarounds {
+	unsigned int dzg_meter : 1;
+};
+
+sml_list *sml_list_entry_parse(sml_buffer *buf, struct workarounds *workarounds) {
+	static const unsigned char dzg_serial_name[] = { 1, 0, 96, 1, 0, 255 };
+	static const unsigned char dzg_serial_start[] = { 0x0a, 0x01, 'D', 'Z', 'G', 0x00 };
+	static const unsigned char dzg_power_name[] = { 1, 0, 16, 7, 0, 255 };
+	u8 value_tl, value_len_more;
+
 	if (sml_buf_get_next_type(buf) != SML_TYPE_LIST) {
 		buf->error = 1;
 		goto error;
@@ -147,11 +156,56 @@ sml_list *sml_list_entry_parse(sml_buffer *buf) {
 	l->scaler = sml_i8_parse(buf);
 	if (sml_buf_has_errors(buf)) goto error;
 
+	value_tl = sml_buf_get_current_byte(buf);
+	value_len_more = value_tl & (SML_ANOTHER_TL | SML_LENGTH_FIELD);
 	l->value = sml_value_parse(buf);
 	if (sml_buf_has_errors(buf)) goto error;
 
 	l->value_signature = sml_octet_string_parse(buf);
 	if (sml_buf_has_errors(buf)) goto error;
+
+	/*
+	 * Work around DZG meter - it encodes the consumption wrong:
+	 * The value uses a scaler of -2, so e.g. 328.05 should be
+	 * encoded as an unsigned int:
+	 *   63 80 25 (0x8025 == 32805 corresponds to 328.05W)
+	 * or as a signed int:
+	 *   64 00 80 25
+	 * but they encode it as
+	 *   53 80 25
+	 * which reads as -32731 corresponding to -327.31W.
+	 *
+	 * Luckily, it doesn't attempt to do any compression on
+	 * negative values, they're always encoded as, e.g.
+	 *   55 ff fe 13 93 (== -126061 -> -1260.61W)
+	 *
+	 * Since we cannot have positive values >= 0x80000000
+	 * (that would be 21474836.48 W, yes, >21MW), we can
+	 * assume that for 1, 2, 3 bytes, if they look signed,
+	 * they really were intended to be unsigned.
+	 *
+	 * Note that this will NOT work if a meter outputs negative
+	 * values compressed as well - but mine doesn't.
+	 */
+	if (l->obj_name && l->obj_name->len == sizeof(dzg_serial_name) &&
+	    memcmp(l->obj_name->str, dzg_serial_name,
+		   sizeof(dzg_serial_name)) == 0 &&
+	    l->value && l->value->type == SML_TYPE_OCTET_STRING &&
+	    l->value->data.bytes->len >= (int)sizeof(dzg_serial_start) &&
+	    memcmp(l->value->data.bytes->str, dzg_serial_start,
+		   sizeof(dzg_serial_start)) == 0) {
+		workarounds->dzg_meter = 1;
+	} else if (workarounds->dzg_meter &&
+		   l->obj_name && l->obj_name->len == sizeof(dzg_power_name) &&
+		   memcmp(l->obj_name->str, dzg_power_name,
+			  sizeof(dzg_power_name)) == 0 &&
+		   l->value &&
+		   (value_len_more == 1 ||
+		    value_len_more == 2 ||
+		    value_len_more == 3)) {
+		l->value->type &= ~SML_TYPE_FIELD;
+		l->value->type |= SML_TYPE_UNSIGNED;
+	}
 
 	return l;
 
@@ -159,45 +213,38 @@ sml_list *sml_list_entry_parse(sml_buffer *buf) {
 // this is done in sml_list_parse.
 error:
 	buf->error = 1;
-	return 0;
+	return NULL;
 }
 
 sml_list *sml_list_parse(sml_buffer *buf) {
+	struct workarounds workarounds = {0};
+	sml_list *ret = NULL, **pos = &ret;
+	int elems;
+
 	if (sml_buf_optional_is_skipped(buf)) {
-		return 0;
+		return NULL;
 	}
 
 	if (sml_buf_get_next_type(buf) != SML_TYPE_LIST) {
 		buf->error = 1;
-		return 0;
+		return NULL;
 	}
-
-	sml_list *first = 0;
-	sml_list *last = 0;
-	int elems;
 
 	elems = sml_buf_get_next_length(buf);
 
-	if (elems > 0) {
-		first = sml_list_entry_parse(buf);
+	while (elems > 0) {
+		*pos = sml_list_entry_parse(buf, &workarounds);
 		if (sml_buf_has_errors(buf)) goto error;
-		last = first;
+		pos = &(*pos)->next;
 		elems--;
 	}
 
-	while(elems > 0) {
-		last->next = sml_list_entry_parse(buf);
-		if (sml_buf_has_errors(buf)) goto error;
-		last = last->next;
-		elems--;
-	}
-
-	return first;
+	return ret;
 
 error:
 	buf->error = 1;
-	sml_list_free(first);
-	return 0;
+	sml_list_free(ret);
+	return NULL;
 }
 
 

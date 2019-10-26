@@ -179,7 +179,7 @@ void * unity_malloc(size_t size)
     if (malloc_fail_countdown != MALLOC_DONT_FAIL)
     {
         if (malloc_fail_countdown == 0)
-            return 0;
+            return NULL;
         malloc_fail_countdown--;
     }
 
@@ -247,7 +247,7 @@ void* unity_realloc(void * oldMem, size_t size)
     if (size == 0)
     {
         release_memory(oldMem);
-        return 0;
+        return NULL;
     }
 
     if (guard->size >= size)

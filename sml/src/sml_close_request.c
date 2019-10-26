@@ -49,7 +49,7 @@ sml_close_request * sml_close_request_parse(sml_buffer *buf) {
 
 error:
 	sml_close_request_free(msg);
-	return 0;
+	return NULL;
 }
 
 void sml_close_request_write(sml_close_request *msg, sml_buffer *buf) {

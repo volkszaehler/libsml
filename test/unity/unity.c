@@ -14,7 +14,15 @@
 #define UNITY_SKIP_EXECUTION  { if ((Unity.CurrentTestFailed != 0) || (Unity.CurrentTestIgnored != 0)) {return;} }
 #define UNITY_PRINT_EOL       { UNITY_OUTPUT_CHAR('\n'); }
 
-struct _Unity Unity = { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , { 0 } };
+// jmp_buf (type of AbortFrame) is defined differently depending on operating system
+// right now we know OSX and others like Linux
+#ifdef __APPLE__
+struct _Unity Unity = { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , { 0 } };        
+#else
+struct _Unity Unity = { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 
+  .AbortFrame = { {.__jmpbuf = {0}, .__mask_was_saved = 0, .__saved_mask = {{0}} } }
+};
+#endif
 
 const char* UnityStrNull     = "NULL";
 const char* UnityStrSpacer   = ". ";

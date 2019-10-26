@@ -137,7 +137,7 @@ sml_get_profile_pack_request *sml_get_profile_pack_request_parse(sml_buffer *buf
 
 error:
 	sml_get_profile_pack_request_free(msg);
-	return 0;
+	return NULL;
 }
 
 void sml_get_profile_pack_request_free(sml_get_profile_pack_request *msg){

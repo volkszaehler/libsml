@@ -31,7 +31,7 @@ sml_status *sml_status_init() {
 
 sml_status *sml_status_parse(sml_buffer *buf) {
 	if (sml_buf_optional_is_skipped(buf)) {
-		return 0;
+		return NULL;
 	}
 
 	int max = 1;
@@ -56,7 +56,7 @@ sml_status *sml_status_parse(sml_buffer *buf) {
 	}
 	if (sml_buf_has_errors(buf)) {
 		sml_status_free(status);
-		return 0;
+		return NULL;
 	}
 
 	return status;

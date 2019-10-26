@@ -73,7 +73,7 @@ sml_open_request *sml_open_request_parse(sml_buffer *buf) {
 
 error:
 	sml_open_request_free(msg);
-	return 0;
+	return NULL;
 }
 
 void sml_open_request_write(sml_open_request *msg, sml_buffer *buf) {

@@ -25,6 +25,7 @@
 #include <sys/types.h>
 #include <string.h>
 #include <unistd.h>
+#include <errno.h>  // for errno
 
 #define MC_SML_BUFFER_LEN 8096
 
@@ -34,17 +35,21 @@ unsigned char end_seq[] = {0x1b, 0x1b, 0x1b, 0x1b, 0x1a};
 
 
 size_t sml_read(int fd, fd_set *set, unsigned char *buffer, size_t len) {
-	
+
 	ssize_t r = 0;
 	size_t tr = 0;
 
 	while (tr < len) {
 		select(fd + 1, set, 0, 0, 0);
 		if (FD_ISSET(fd, set)) {
-			
-			r = read(fd, &(buffer[tr]), len - tr);
-			if (r < 0) continue;
 
+			r = read(fd, &(buffer[tr]), len - tr);
+			if (r == 0) return 0; // EOF
+			if (r < 0) {
+				if (errno == EINTR || errno == EAGAIN) continue; // should be ignored
+				fprintf(stderr, "libsml: sml_read(): read error\n");
+				return 0;
+			}
 			tr += r;
 		}
 	}
@@ -60,9 +65,17 @@ size_t sml_transport_read(int fd, unsigned char *buffer, size_t max_len) {
 	unsigned char buf[max_len];
 	memset(buf, 0, max_len);
 	unsigned int len = 0;
-	
+
+	if (max_len < 8) {
+		// prevent buffer overflow
+		fprintf(stderr, "libsml: error: sml_transport_read(): passed buffer too small!\n");
+		return 0;
+	}
+
 	while (len < 8) {
-		sml_read(fd, &readfds, &(buf[len]), 1);
+		if (sml_read(fd, &readfds, &(buf[len]), 1) == 0) {
+			return 0;
+		}
 
 		if ((buf[len] == 0x1b && len < 4) || (buf[len] == 0x01 && len >= 4)) {
 			len++;
@@ -73,32 +86,31 @@ size_t sml_transport_read(int fd, unsigned char *buffer, size_t max_len) {
 	}
 
 	// found start sequence
-
 	while ((len+8) < max_len) {
-		
-		sml_read(fd, &readfds, &(buf[len]), 4);
-			
+		if (sml_read(fd, &readfds, &(buf[len]), 4) == 0) {
+			return 0;
+		}
+
 		if (memcmp(&buf[len], esc_seq, 4) == 0) {
-			
 			// found esc sequence
 			len += 4;
-			sml_read(fd, &readfds, &(buf[len]), 4);
-			
+			if (sml_read(fd, &readfds, &(buf[len]), 4) == 0) {
+				return 0;
+			}
+
 			if (buf[len] == 0x1a) {
-				
 				// found end sequence
 				len += 4;
 				memcpy(buffer, &(buf[0]), len);
 				return len;
 			}
 			else {
-				// dont read other escaped sequences yet
+				// don't read other escaped sequences yet
 				fprintf(stderr,"libsml: error: unrecognized sequence\n");
 				return 0;
 			}
 		}
 		len += 4;
-
 	}
 
 	return 0;
@@ -108,12 +120,8 @@ void sml_transport_listen(int fd, void (*sml_transport_receiver)(unsigned char *
 	unsigned char buffer[MC_SML_BUFFER_LEN];
 	size_t bytes;
 
-	while (1) {
-		bytes = sml_transport_read(fd, buffer, MC_SML_BUFFER_LEN);
-
-		if (bytes > 0) {
-			sml_transport_receiver(buffer, bytes);
-		}
+	while ((bytes = sml_transport_read(fd, buffer, MC_SML_BUFFER_LEN)) > 0) {
+		sml_transport_receiver(buffer, bytes);
 	}
 }
 
@@ -155,4 +163,3 @@ int sml_transport_write(int fd, sml_file *file) {
 
 	return 0;
 }
-

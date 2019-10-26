@@ -49,7 +49,7 @@ sml_close_response *sml_close_response_parse(sml_buffer *buf) {
 
 error:
 	sml_close_response_free(msg);
-	return 0;
+	return NULL;
 }
 
 void sml_close_response_write(sml_close_response *msg, sml_buffer *buf) {

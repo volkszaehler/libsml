@@ -35,14 +35,14 @@ sml_tree_path *sml_tree_path_init() {
 
 sml_tree_path *sml_tree_path_parse(sml_buffer *buf) {
 	if (sml_buf_optional_is_skipped(buf)) {
-		return 0;
+		return NULL;
 	}
 
 	sml_tree_path *tree_path = sml_tree_path_init();
 
 	if (sml_buf_get_next_type(buf) != SML_TYPE_LIST) {
 		buf->error = 1;
-		return 0;
+		return NULL;
 	}
 
 	octet_string *s;
@@ -60,7 +60,7 @@ sml_tree_path *sml_tree_path_parse(sml_buffer *buf) {
 error:
 	buf->error = 1;
 	sml_tree_path_free(tree_path);
-	return 0;
+	return NULL;
 }
 
 void sml_tree_path_add_path_entry(sml_tree_path *tree_path, octet_string *entry) {
@@ -119,7 +119,7 @@ sml_tree *sml_tree_init() {
 
 sml_tree *sml_tree_parse(sml_buffer *buf) {
 	if (sml_buf_optional_is_skipped(buf)) {
-		return 0;
+		return NULL;
 	}
 
 	sml_tree *tree = sml_tree_init();
@@ -161,7 +161,7 @@ sml_tree *sml_tree_parse(sml_buffer *buf) {
 
 error:
 	sml_tree_free(tree);
-	return 0;
+	return NULL;
 }
 
 void sml_tree_add_tree(sml_tree *base_tree, sml_tree *tree) {
@@ -223,7 +223,7 @@ sml_proc_par_value *sml_proc_par_value_init() {
 
 sml_proc_par_value *sml_proc_par_value_parse(sml_buffer *buf) {
 	if (sml_buf_optional_is_skipped(buf)) {
-		return 0;
+		return NULL;
 	}
 
 	sml_proc_par_value *ppv = sml_proc_par_value_init();
@@ -263,7 +263,7 @@ sml_proc_par_value *sml_proc_par_value_parse(sml_buffer *buf) {
 
 error:
 	sml_proc_par_value_free(ppv);
-	return 0;
+	return NULL;
 }
 
 void sml_proc_par_value_write(sml_proc_par_value *value, sml_buffer *buf) {
@@ -289,7 +289,7 @@ void sml_proc_par_value_write(sml_proc_par_value *value, sml_buffer *buf) {
 			sml_time_write(value->data.time, buf);
 			break;
 		default:
-			fprintf(stderr,"libsml: error: unknown tag in %s\n", __FUNCTION__);
+			fprintf(stderr,"libsml: error: unknown tag in %s\n", __func__);
 	}
 }
 
@@ -363,7 +363,7 @@ sml_tupel_entry *sml_tupel_entry_init() {
 
 sml_tupel_entry *sml_tupel_entry_parse(sml_buffer *buf) {
 	if (sml_buf_optional_is_skipped(buf)) {
-		return 0;
+		return NULL;
 	}
 
 	sml_tupel_entry *tupel = sml_tupel_entry_init();
@@ -437,7 +437,7 @@ sml_tupel_entry *sml_tupel_entry_parse(sml_buffer *buf) {
 
 error:
 	sml_tupel_entry_free(tupel);
-	return 0;
+	return NULL;
 }
 
 void sml_tupel_entry_write(sml_tupel_entry *tupel, sml_buffer *buf) {
@@ -538,7 +538,7 @@ sml_period_entry *sml_period_entry_init() {
 
 static void * sml_period_entry_parse_(sml_buffer *buf) {
 	if (sml_buf_optional_is_skipped(buf)) {
-		return 0;
+		return NULL;
 	}
 
 	sml_period_entry *period = sml_period_entry_init();
@@ -572,7 +572,7 @@ static void * sml_period_entry_parse_(sml_buffer *buf) {
 
 error:
 	sml_period_entry_free(period);
-	return 0;
+	return NULL;
 }
 
 sml_period_entry * sml_period_entry_parse( sml_buffer * buf ) {
