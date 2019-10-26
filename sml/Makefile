@@ -18,8 +18,6 @@ endif
 
 LDFLAGS += -Wl,-soname=$(SONAME) -shared
 
-LDFLAGS += -Wl,-soname=$(SONAME) -shared
-
 LIB_DIR=./lib
 INC_DIR=./include
 OBJ_LIB=$(LIB_DIR)/$(NAME).o
