@@ -53,13 +53,13 @@ sml_time *sml_time_parse(sml_buffer *buf) {
             goto error;
         }
 
-        if (sml_buf_get_next_length(buf) != 2) {
-            buf->error = 1;
-            goto error;
-        }
+		if (sml_buf_get_next_length(buf) != 2) {
+			buf->error = 1;
+			goto error;
+		}
 
-        tme->tag = sml_u8_parse(buf);
-        if (sml_buf_has_errors(buf)) goto error;
+		tme->tag = sml_u8_parse(buf);
+		if (sml_buf_has_errors(buf)) goto error;
     }
 
 	int type = sml_buf_get_next_type(buf);
@@ -89,26 +89,26 @@ sml_time *sml_time_parse(sml_buffer *buf) {
 
 	return tme;
 
-    error:
-    sml_time_free(tme);
-    return NULL;
+error:
+	sml_time_free(tme);
+	return NULL;
 }
 
 void sml_time_write(sml_time *t, sml_buffer *buf) {
-    if (t == 0) {
-        sml_buf_optional_write(buf);
-        return;
-    }
+	if (t == 0) {
+		sml_buf_optional_write(buf);
+		return;
+	}
 
-    sml_buf_set_type_and_length(buf, SML_TYPE_LIST, 2);
-    sml_u8_write(t->tag, buf);
-    sml_u32_write(t->data.timestamp, buf);
+	sml_buf_set_type_and_length(buf, SML_TYPE_LIST, 2);
+	sml_u8_write(t->tag, buf);
+	sml_u32_write(t->data.timestamp, buf);
 }
 
 void sml_time_free(sml_time *tme) {
     if (tme) {
-        sml_number_free(tme->tag);
-        sml_number_free(tme->data.timestamp);
+		sml_number_free(tme->tag);
+		sml_number_free(tme->data.timestamp);
         free(tme);
     }
 }
