@@ -28,10 +28,12 @@
 extern "C" {
 #endif
 
-#define SML_PROC_PAR_VALUE_TAG_VALUE 0x01
+// clang-format off
+#define SML_PROC_PAR_VALUE_TAG_VALUE        0x01
 #define SML_PROC_PAR_VALUE_TAG_PERIOD_ENTRY 0x02
-#define SML_PROC_PAR_VALUE_TAG_TUPEL_ENTRY 0x03
-#define SML_PROC_PAR_VALUE_TAG_TIME 0x04
+#define SML_PROC_PAR_VALUE_TAG_TUPEL_ENTRY  0x03
+#define SML_PROC_PAR_VALUE_TAG_TIME         0x04
+// clang-format on
 
 // what a messy tupel ...
 typedef struct {

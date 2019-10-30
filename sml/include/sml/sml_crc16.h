@@ -29,7 +29,7 @@ extern "C" {
 u16 sml_crc16_calculate(unsigned char *cp, int len);
 
 // CRC-16/CCITT(Kermit) implementation poly=0x1021 init=0x0000 refin=true refout=true xorout=0x0000
-u16 sml_crc16kermit_calculate(unsigned char *cp, int len) ;
+u16 sml_crc16kermit_calculate(unsigned char *cp, int len);
 
 #ifdef __cplusplus
 }
