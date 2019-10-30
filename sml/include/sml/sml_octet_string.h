@@ -17,10 +17,10 @@
 // along with libSML.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef SML_OCTET_STRING_H_
-#define	SML_OCTET_STRING_H_
+#define SML_OCTET_STRING_H_
 
-#include <string.h>
 #include "sml_shared.h"
+#include <string.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -51,6 +51,4 @@ typedef octet_string sml_signature;
 }
 #endif
 
-
 #endif /* SML_OCTET_STRING_H_ */
-

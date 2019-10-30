@@ -16,10 +16,9 @@
 // You should have received a copy of the GNU General Public License
 // along with libSML.  If not, see <http://www.gnu.org/licenses/>.
 
-
 #include <sml/sml_value.h>
-#include <stdio.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 sml_value *sml_value_parse(sml_buffer *buf) {
 	if (sml_buf_optional_is_skipped(buf)) {
@@ -34,25 +33,25 @@ sml_value *sml_value_parse(sml_buffer *buf) {
 	value->type = type;
 
 	switch (type) {
-		case SML_TYPE_OCTET_STRING:
-			value->data.bytes = sml_octet_string_parse(buf);
-			break;
-		case SML_TYPE_BOOLEAN:
-			value->data.boolean = sml_boolean_parse(buf);
-			break;
-		case SML_TYPE_UNSIGNED:
-		case SML_TYPE_INTEGER:
-			// get maximal size, if not all bytes are used (example: only 6 bytes for a u64)
-			while (max < ((byte & SML_LENGTH_FIELD) - 1)) {
-				max <<= 1;
-			}
+	case SML_TYPE_OCTET_STRING:
+		value->data.bytes = sml_octet_string_parse(buf);
+		break;
+	case SML_TYPE_BOOLEAN:
+		value->data.boolean = sml_boolean_parse(buf);
+		break;
+	case SML_TYPE_UNSIGNED:
+	case SML_TYPE_INTEGER:
+		// get maximal size, if not all bytes are used (example: only 6 bytes for a u64)
+		while (max < ((byte & SML_LENGTH_FIELD) - 1)) {
+			max <<= 1;
+		}
 
-			value->data.uint8 = sml_number_parse(buf, type, max);
-			value->type |= max;
-			break;
-		default:
-			buf->error = 1;
-			break;
+		value->data.uint8 = sml_number_parse(buf, type, max);
+		value->type |= max;
+		break;
+	default:
+		buf->error = 1;
+		break;
 	}
 	if (sml_buf_has_errors(buf)) {
 		sml_value_free(value);
@@ -69,26 +68,23 @@ void sml_value_write(sml_value *value, sml_buffer *buf) {
 	}
 
 	switch (value->type & SML_TYPE_FIELD) {
-		case SML_TYPE_OCTET_STRING:
-			sml_octet_string_write(value->data.bytes, buf);
-			break;
-		case SML_TYPE_BOOLEAN:
-			sml_boolean_write(value->data.boolean, buf);
-			break;
-		case SML_TYPE_UNSIGNED:
-		case SML_TYPE_INTEGER:
-			sml_number_write(value->data.uint8, (value->type & SML_TYPE_FIELD),
-				(value->type & SML_LENGTH_FIELD), buf);
-			break;
+	case SML_TYPE_OCTET_STRING:
+		sml_octet_string_write(value->data.bytes, buf);
+		break;
+	case SML_TYPE_BOOLEAN:
+		sml_boolean_write(value->data.boolean, buf);
+		break;
+	case SML_TYPE_UNSIGNED:
+	case SML_TYPE_INTEGER:
+		sml_number_write(value->data.uint8, (value->type & SML_TYPE_FIELD),
+						 (value->type & SML_LENGTH_FIELD), buf);
+		break;
 	}
 }
 
 sml_value *sml_value_init() {
-	sml_value *value = (sml_value *) malloc(sizeof(sml_value));
-	*value = ( sml_value ) {
-		.type = SML_TYPE_OCTET_STRING,
-		.data.bytes = NULL
-	};
+	sml_value *value = (sml_value *)malloc(sizeof(sml_value));
+	*value = (sml_value){.type = SML_TYPE_OCTET_STRING, .data.bytes = NULL};
 
 	return value;
 }
@@ -96,15 +92,15 @@ sml_value *sml_value_init() {
 void sml_value_free(sml_value *value) {
 	if (value) {
 		switch (value->type) {
-			case SML_TYPE_OCTET_STRING:
-				sml_octet_string_free(value->data.bytes);
-				break;
-			case SML_TYPE_BOOLEAN:
-				sml_boolean_free(value->data.boolean);
-				break;
-			default:
-				sml_number_free(value->data.int8);
-				break;
+		case SML_TYPE_OCTET_STRING:
+			sml_octet_string_free(value->data.bytes);
+			break;
+		case SML_TYPE_BOOLEAN:
+			sml_boolean_free(value->data.boolean);
+			break;
+		default:
+			sml_number_free(value->data.int8);
+			break;
 		}
 		free(value);
 	}
@@ -112,18 +108,34 @@ void sml_value_free(sml_value *value) {
 
 double sml_value_to_double(sml_value *value) {
 	switch (value->type) {
-		case 0x51: return *value->data.int8;   break;
-		case 0x52: return *value->data.int16;  break;
-		case 0x54: return *value->data.int32;  break;
-		case 0x58: return *value->data.int64;  break;
-		case 0x61: return *value->data.uint8;  break;
-		case 0x62: return *value->data.uint16; break;
-		case 0x64: return *value->data.uint32; break;
-		case 0x68: return *value->data.uint64; break;
+	case 0x51:
+		return *value->data.int8;
+		break;
+	case 0x52:
+		return *value->data.int16;
+		break;
+	case 0x54:
+		return *value->data.int32;
+		break;
+	case 0x58:
+		return *value->data.int64;
+		break;
+	case 0x61:
+		return *value->data.uint8;
+		break;
+	case 0x62:
+		return *value->data.uint16;
+		break;
+	case 0x64:
+		return *value->data.uint32;
+		break;
+	case 0x68:
+		return *value->data.uint64;
+		break;
 
-		default:
-			fprintf(stderr, "libsml: error: unknown type %d in %s\n", value->type, __func__);
-			return 0;
+	default:
+		fprintf(stderr, "libsml: error: unknown type %d in %s\n", value->type, __func__);
+		return 0;
 	}
 }
 
@@ -134,8 +146,7 @@ double sml_value_to_double(sml_value *value) {
 char *sml_value_to_strhex(sml_value *value, char **result, bool mixed) {
 	const char hex_str[] = "0123456789abcdef";
 
-	if (value == NULL || value->data.bytes == NULL ||
-		value->data.bytes->str == NULL)
+	if (value == NULL || value->data.bytes == NULL || value->data.bytes->str == NULL)
 		return NULL;
 
 	int len = value->data.bytes->len;
@@ -149,7 +160,7 @@ char *sml_value_to_strhex(sml_value *value, char **result, bool mixed) {
 	char *res_ptr = *result;
 	for (int i = 0; i < len; i++) {
 		if (mixed && (str[i] > 0x20 && str[i] < 0x7b)) {
-			*res_ptr++ = (char) str[i];
+			*res_ptr++ = (char)str[i];
 		} else {
 			mixed = false;
 			*res_ptr++ = hex_str[(str[i] >> 4) & 0x0F];

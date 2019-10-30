@@ -36,6 +36,4 @@ void sml_close_response_free(sml_close_response *msg);
 }
 #endif
 
-
 #endif /* SML_CLOSE_RESPONSE_H_ */
-

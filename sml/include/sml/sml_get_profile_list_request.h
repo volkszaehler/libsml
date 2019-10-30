@@ -37,6 +37,4 @@ typedef sml_get_profile_pack_request sml_get_profile_list_request;
 }
 #endif
 
-
 #endif /* SML_GET_PROFILE_LIST_REQUEST_H_ */
-

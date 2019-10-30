@@ -16,21 +16,18 @@
 // You should have received a copy of the GNU General Public License
 // along with libSML.  If not, see <http://www.gnu.org/licenses/>.
 
-
 #include <sml/sml_get_list_response.h>
 
 sml_get_list_response *sml_get_list_response_init() {
-	sml_get_list_response *msg = (sml_get_list_response *) malloc(sizeof(sml_get_list_response));
-	*msg = ( sml_get_list_response ) {
-		.client_id = NULL,
-		.server_id = NULL,
-		.list_name = NULL,
-		.act_sensor_time = NULL,
-		.val_list = NULL,
-		.list_signature = NULL,
-		.act_gateway_time = NULL
-	};
-	
+	sml_get_list_response *msg = (sml_get_list_response *)malloc(sizeof(sml_get_list_response));
+	*msg = (sml_get_list_response){.client_id = NULL,
+								   .server_id = NULL,
+								   .list_name = NULL,
+								   .act_sensor_time = NULL,
+								   .val_list = NULL,
+								   .list_signature = NULL,
+								   .act_gateway_time = NULL};
+
 	return msg;
 }
 
@@ -48,25 +45,32 @@ sml_get_list_response *sml_get_list_response_parse(sml_buffer *buf) {
 	}
 
 	msg->client_id = sml_octet_string_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	msg->server_id = sml_octet_string_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	msg->list_name = sml_octet_string_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	msg->act_sensor_time = sml_time_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	msg->val_list = sml_list_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	msg->list_signature = sml_octet_string_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	msg->act_gateway_time = sml_time_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	return msg;
 
@@ -100,4 +104,3 @@ void sml_get_list_response_free(sml_get_list_response *msg) {
 		free(msg);
 	}
 }
-

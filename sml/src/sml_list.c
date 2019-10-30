@@ -16,29 +16,25 @@
 // You should have received a copy of the GNU General Public License
 // along with libSML.  If not, see <http://www.gnu.org/licenses/>.
 
-
 #include <sml/sml_list.h>
-#include <sml/sml_shared.h>
-#include <sml/sml_time.h>
 #include <sml/sml_octet_string.h>
+#include <sml/sml_shared.h>
 #include <sml/sml_status.h>
+#include <sml/sml_time.h>
 #include <sml/sml_value.h>
 #include <stdio.h>
 
 // sml_sequence;
 
-sml_sequence *sml_sequence_init(void (*elem_free) (void *elem)) {
-	sml_sequence *seq = (sml_sequence *) malloc(sizeof(sml_sequence));
-	*seq = ( sml_sequence ) {
-		.elems = NULL,
-		.elems_len = 0,
-		.elem_free = elem_free
-	};
+sml_sequence *sml_sequence_init(void (*elem_free)(void *elem)) {
+	sml_sequence *seq = (sml_sequence *)malloc(sizeof(sml_sequence));
+	*seq = (sml_sequence){.elems = NULL, .elems_len = 0, .elem_free = elem_free};
 
 	return seq;
 }
 
-sml_sequence *sml_sequence_parse(sml_buffer *buf, void *(*elem_parse) (sml_buffer *buf), void (*elem_free) (void *elem)) {
+sml_sequence *sml_sequence_parse(sml_buffer *buf, void *(*elem_parse)(sml_buffer *buf),
+								 void (*elem_free)(void *elem)) {
 	if (sml_buf_get_next_type(buf) != SML_TYPE_LIST) {
 		goto error;
 	}
@@ -63,7 +59,8 @@ error:
 	return NULL;
 }
 
-void sml_sequence_write(sml_sequence *seq, sml_buffer *buf, void (*elem_write) (void *elem, sml_buffer *buf)) {
+void sml_sequence_write(sml_sequence *seq, sml_buffer *buf,
+						void (*elem_write)(void *elem, sml_buffer *buf)) {
 	if (seq == 0) {
 		sml_buf_optional_write(buf);
 		return;
@@ -83,51 +80,46 @@ void sml_sequence_free(sml_sequence *seq) {
 		for (i = 0; i < seq->elems_len; i++) {
 			seq->elem_free((seq->elems)[i]);
 		}
-		
+
 		if (seq->elems != 0) {
 			free(seq->elems);
 		}
-		
+
 		free(seq);
 	}
 }
 
 void sml_sequence_add(sml_sequence *seq, void *new_entry) {
 	seq->elems_len++;
-	seq->elems = (void **) realloc(seq->elems, sizeof(void *) * seq->elems_len);
+	seq->elems = (void **)realloc(seq->elems, sizeof(void *) * seq->elems_len);
 	seq->elems[seq->elems_len - 1] = new_entry;
 }
 
-
 // sml_list;
 
-sml_list *sml_list_init(){
+sml_list *sml_list_init() {
 	sml_list *s = (sml_list *)malloc(sizeof(sml_list));
-	*s = ( sml_list ) {
-		.obj_name = NULL,
-		.status = NULL,
-		.val_time = NULL,
-		.unit = NULL,
-		.scaler = NULL,
-		.value = NULL,
-		.value_signature = NULL,
-		.next = NULL
-	};
+	*s = (sml_list){.obj_name = NULL,
+					.status = NULL,
+					.val_time = NULL,
+					.unit = NULL,
+					.scaler = NULL,
+					.value = NULL,
+					.value_signature = NULL,
+					.next = NULL};
 	return s;
 }
 
-void sml_list_add(sml_list *list, sml_list *new_entry) {
-	list->next = new_entry;
-}
+void sml_list_add(sml_list *list, sml_list *new_entry) { list->next = new_entry; }
 
 struct workarounds {
 	unsigned int dzg_meter : 1;
 };
 
 sml_list *sml_list_entry_parse(sml_buffer *buf, struct workarounds *workarounds) {
-	static const unsigned char dzg_serial_name[] = { 1, 0, 96, 1, 0, 255 };
-	static const unsigned char dzg_serial_start[] = { 0x0a, 0x01, 'D', 'Z', 'G', 0x00 };
-	static const unsigned char dzg_power_name[] = { 1, 0, 16, 7, 0, 255 };
+	static const unsigned char dzg_serial_name[] = {1, 0, 96, 1, 0, 255};
+	static const unsigned char dzg_serial_start[] = {0x0a, 0x01, 'D', 'Z', 'G', 0x00};
+	static const unsigned char dzg_power_name[] = {1, 0, 16, 7, 0, 255};
 	u8 value_tl, value_len_more;
 
 	if (sml_buf_get_next_type(buf) != SML_TYPE_LIST) {
@@ -142,27 +134,34 @@ sml_list *sml_list_entry_parse(sml_buffer *buf, struct workarounds *workarounds)
 	sml_list *l = sml_list_init();
 
 	l->obj_name = sml_octet_string_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	l->status = sml_status_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	l->val_time = sml_time_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	l->unit = sml_u8_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	l->scaler = sml_i8_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	value_tl = sml_buf_get_current_byte(buf);
 	value_len_more = value_tl & (SML_ANOTHER_TL | SML_LENGTH_FIELD);
 	l->value = sml_value_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	l->value_signature = sml_octet_string_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	/*
 	 * Work around DZG meter - it encodes the consumption wrong:
@@ -188,21 +187,15 @@ sml_list *sml_list_entry_parse(sml_buffer *buf, struct workarounds *workarounds)
 	 * values compressed as well - but mine doesn't.
 	 */
 	if (l->obj_name && l->obj_name->len == sizeof(dzg_serial_name) &&
-	    memcmp(l->obj_name->str, dzg_serial_name,
-		   sizeof(dzg_serial_name)) == 0 &&
-	    l->value && l->value->type == SML_TYPE_OCTET_STRING &&
-	    l->value->data.bytes->len >= (int)sizeof(dzg_serial_start) &&
-	    memcmp(l->value->data.bytes->str, dzg_serial_start,
-		   sizeof(dzg_serial_start)) == 0) {
+		memcmp(l->obj_name->str, dzg_serial_name, sizeof(dzg_serial_name)) == 0 && l->value &&
+		l->value->type == SML_TYPE_OCTET_STRING &&
+		l->value->data.bytes->len >= (int)sizeof(dzg_serial_start) &&
+		memcmp(l->value->data.bytes->str, dzg_serial_start, sizeof(dzg_serial_start)) == 0) {
 		workarounds->dzg_meter = 1;
-	} else if (workarounds->dzg_meter &&
-		   l->obj_name && l->obj_name->len == sizeof(dzg_power_name) &&
-		   memcmp(l->obj_name->str, dzg_power_name,
-			  sizeof(dzg_power_name)) == 0 &&
-		   l->value &&
-		   (value_len_more == 1 ||
-		    value_len_more == 2 ||
-		    value_len_more == 3)) {
+	} else if (workarounds->dzg_meter && l->obj_name &&
+			   l->obj_name->len == sizeof(dzg_power_name) &&
+			   memcmp(l->obj_name->str, dzg_power_name, sizeof(dzg_power_name)) == 0 && l->value &&
+			   (value_len_more == 1 || value_len_more == 2 || value_len_more == 3)) {
 		l->value->type &= ~SML_TYPE_FIELD;
 		l->value->type |= SML_TYPE_UNSIGNED;
 	}
@@ -234,7 +227,8 @@ sml_list *sml_list_parse(sml_buffer *buf) {
 
 	while (elems > 0) {
 		*pos = sml_list_entry_parse(buf, &workarounds);
-		if (sml_buf_has_errors(buf)) goto error;
+		if (sml_buf_has_errors(buf))
+			goto error;
 		pos = &(*pos)->next;
 		elems--;
 	}
@@ -247,7 +241,6 @@ error:
 	return NULL;
 }
 
-
 void sml_list_entry_write(sml_list *list, sml_buffer *buf) {
 	sml_buf_set_type_and_length(buf, SML_TYPE_LIST, 7);
 	sml_octet_string_write(list->obj_name, buf);
@@ -259,7 +252,7 @@ void sml_list_entry_write(sml_list *list, sml_buffer *buf) {
 	sml_octet_string_write(list->value_signature, buf);
 }
 
-void sml_list_write(sml_list *list, sml_buffer *buf){
+void sml_list_write(sml_list *list, sml_buffer *buf) {
 	if (list == 0) {
 		sml_buf_optional_write(buf);
 		return;
@@ -267,7 +260,7 @@ void sml_list_write(sml_list *list, sml_buffer *buf){
 
 	sml_list *i = list;
 	int len = 0;
-	while(i) {
+	while (i) {
 		i = i->next;
 		len++;
 	}
@@ -275,7 +268,7 @@ void sml_list_write(sml_list *list, sml_buffer *buf){
 	sml_buf_set_type_and_length(buf, SML_TYPE_LIST, len);
 
 	i = list;
-	while(i) {
+	while (i) {
 		sml_list_entry_write(i, buf);
 		i = i->next;
 	}
@@ -290,7 +283,7 @@ void sml_list_entry_free(sml_list *list) {
 		sml_number_free(list->scaler);
 		sml_value_free(list->value);
 		sml_octet_string_free(list->value_signature);
-		
+
 		free(list);
 	}
 }
@@ -300,7 +293,7 @@ void sml_list_free(sml_list *list) {
 		sml_list *f = list;
 		sml_list *n = list->next;
 
-		while(f) {
+		while (f) {
 			sml_list_entry_free(f);
 			f = n;
 			if (f) {
@@ -309,4 +302,3 @@ void sml_list_free(sml_list *list) {
 		}
 	}
 }
-

@@ -16,15 +16,12 @@
 // You should have received a copy of the GNU General Public License
 // along with libSML.  If not, see <http://www.gnu.org/licenses/>.
 
-
 #include <sml/sml_close_response.h>
 #include <stdio.h>
 
 sml_close_response *sml_close_response_init() {
-	sml_close_response *msg = (sml_close_response *) malloc(sizeof(sml_close_response));
-	*msg = ( sml_close_response ) {
-		.global_signature = NULL
-	};
+	sml_close_response *msg = (sml_close_response *)malloc(sizeof(sml_close_response));
+	*msg = (sml_close_response){.global_signature = NULL};
 
 	return msg;
 }
@@ -43,7 +40,8 @@ sml_close_response *sml_close_response_parse(sml_buffer *buf) {
 	}
 
 	msg->global_signature = sml_octet_string_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	return msg;
 
@@ -54,7 +52,7 @@ error:
 
 void sml_close_response_write(sml_close_response *msg, sml_buffer *buf) {
 	sml_buf_set_type_and_length(buf, SML_TYPE_LIST, 1);
-	sml_octet_string_write(msg->global_signature,buf);
+	sml_octet_string_write(msg->global_signature, buf);
 }
 
 void sml_close_response_free(sml_close_response *msg) {
@@ -64,4 +62,3 @@ void sml_close_response_free(sml_close_response *msg) {
 		free(msg);
 	}
 }
-

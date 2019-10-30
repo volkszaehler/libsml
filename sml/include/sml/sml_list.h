@@ -17,12 +17,12 @@
 // along with libSML.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef SML_LIST_H_
-#define	SML_LIST_H_
+#define SML_LIST_H_
 
-#include "sml_time.h"
-#include "sml_octet_string.h"
 #include "sml_number.h"
+#include "sml_octet_string.h"
 #include "sml_status.h"
+#include "sml_time.h"
 #include "sml_value.h"
 
 #ifdef __cplusplus
@@ -32,12 +32,14 @@ extern "C" {
 typedef struct {
 	void **elems;
 	int elems_len;
-	void (*elem_free) (void *elem);
+	void (*elem_free)(void *elem);
 } sml_sequence;
 
-sml_sequence *sml_sequence_init(void (*elem_free) (void *elem));
-sml_sequence *sml_sequence_parse(sml_buffer *buf, void *(*elem_parse) (sml_buffer *buf), void (*elem_free) (void *elem));
-void sml_sequence_write(sml_sequence *seq, sml_buffer *buf, void (*elem_write) (void *elem, sml_buffer *buf));
+sml_sequence *sml_sequence_init(void (*elem_free)(void *elem));
+sml_sequence *sml_sequence_parse(sml_buffer *buf, void *(*elem_parse)(sml_buffer *buf),
+								 void (*elem_free)(void *elem));
+void sml_sequence_write(sml_sequence *seq, sml_buffer *buf,
+						void (*elem_write)(void *elem, sml_buffer *buf));
 void sml_sequence_free(sml_sequence *seq);
 void sml_sequence_add(sml_sequence *list, void *new_entry);
 
@@ -45,8 +47,8 @@ typedef struct sml_list_entry {
 	octet_string *obj_name;
 	sml_status *status; // optional
 	sml_time *val_time; // optional
-	sml_unit *unit; // optional
-	i8 *scaler; // optional
+	sml_unit *unit;		// optional
+	i8 *scaler;			// optional
 	sml_value *value;
 	sml_signature *value_signature; // optional
 
@@ -64,6 +66,4 @@ void sml_list_free(sml_list *list);
 }
 #endif
 
-
 #endif /* SML_LIST_H_ */
-

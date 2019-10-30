@@ -19,23 +19,23 @@
 #ifndef SML_GET_LIST_RESPONSE_H_
 #define SML_GET_LIST_RESPONSE_H_
 
-#include "sml_shared.h"
-#include "sml_octet_string.h"
-#include "sml_time.h"
 #include "sml_list.h"
+#include "sml_octet_string.h"
+#include "sml_shared.h"
+#include "sml_time.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 typedef struct {
-	octet_string *client_id;  // optional
+	octet_string *client_id; // optional
 	octet_string *server_id;
-	octet_string *list_name; //  optional
+	octet_string *list_name;   //  optional
 	sml_time *act_sensor_time; // optional
 	sml_list *val_list;
 	sml_signature *list_signature; // optional
-	sml_time *act_gateway_time; // optional
+	sml_time *act_gateway_time;	   // optional
 } sml_get_list_response;
 
 sml_get_list_response *sml_get_list_response_init();
@@ -47,6 +47,4 @@ void sml_get_list_response_free(sml_get_list_response *msg);
 }
 #endif
 
-
 #endif /* SML_GET_LIST_RESPONSE_H_ */
-

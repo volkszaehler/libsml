@@ -16,18 +16,14 @@
 // You should have received a copy of the GNU General Public License
 // along with libSML.  If not, see <http://www.gnu.org/licenses/>.
 
-
-#include <sml/sml_time.h>
-#include <sml/sml_shared.h>
 #include <sml/sml_number.h>
+#include <sml/sml_shared.h>
+#include <sml/sml_time.h>
 #include <stdio.h>
 
 sml_time *sml_time_init() {
-	sml_time *t = (sml_time *) malloc(sizeof(sml_time));
-	*t = ( sml_time ) {
-		.tag = NULL,
-		.data.sec_index = NULL
-	};
+	sml_time *t = (sml_time *)malloc(sizeof(sml_time));
+	*t = (sml_time){.tag = NULL, .data.sec_index = NULL};
 	return t;
 }
 
@@ -38,20 +34,20 @@ sml_time *sml_time_parse(sml_buffer *buf) {
 
 	sml_time *tme = sml_time_init();
 
-    // workaround Holley DTZ541
-    // if SML_ListEntry valTime (SML_Time) is given there are missing bytes:
-    // 0x72: indicate a list for SML_Time with 2 entries
-    // 0x62 0x01: indicate secIndex
-    // instead, the DTZ541 starts with 0x65 + 4 bytes secIndex
-    // the workaround will add this information during parsing
-    if (sml_buf_get_current_byte(buf) == (SML_TYPE_UNSIGNED | 5)) {
-        tme->tag = malloc(sizeof(u8));
-        *(tme->tag) = SML_TIME_SEC_INDEX;
-    } else {
-        if (sml_buf_get_next_type(buf) != SML_TYPE_LIST) {
-            buf->error = 1;
-            goto error;
-        }
+	// workaround Holley DTZ541
+	// if SML_ListEntry valTime (SML_Time) is given there are missing bytes:
+	// 0x72: indicate a list for SML_Time with 2 entries
+	// 0x62 0x01: indicate secIndex
+	// instead, the DTZ541 starts with 0x65 + 4 bytes secIndex
+	// the workaround will add this information during parsing
+	if (sml_buf_get_current_byte(buf) == (SML_TYPE_UNSIGNED | 5)) {
+		tme->tag = malloc(sizeof(u8));
+		*(tme->tag) = SML_TIME_SEC_INDEX;
+	} else {
+		if (sml_buf_get_next_type(buf) != SML_TYPE_LIST) {
+			buf->error = 1;
+			goto error;
+		}
 
 		if (sml_buf_get_next_length(buf) != 2) {
 			buf->error = 1;
@@ -59,14 +55,16 @@ sml_time *sml_time_parse(sml_buffer *buf) {
 		}
 
 		tme->tag = sml_u8_parse(buf);
-		if (sml_buf_has_errors(buf)) goto error;
-    }
+		if (sml_buf_has_errors(buf))
+			goto error;
+	}
 
 	int type = sml_buf_get_next_type(buf);
 	switch (type) {
 	case SML_TYPE_UNSIGNED:
 		tme->data.timestamp = sml_u32_parse(buf);
-		if (sml_buf_has_errors(buf)) goto error;
+		if (sml_buf_has_errors(buf))
+			goto error;
 		break;
 	case SML_TYPE_LIST:
 		// Some meters (e.g. FROETEC Multiflex ZG22) giving not one uint32
@@ -74,12 +72,16 @@ sml_time *sml_time_parse(sml_buffer *buf) {
 		// Ignoring these values, so that parsing does not fail.
 		sml_buf_get_next_length(buf); // should we check the length here?
 		u32 *t1 = sml_u32_parse(buf);
-		if (sml_buf_has_errors(buf)) goto error;
+		if (sml_buf_has_errors(buf))
+			goto error;
 		i16 *t2 = sml_i16_parse(buf);
-		if (sml_buf_has_errors(buf)) goto error;
+		if (sml_buf_has_errors(buf))
+			goto error;
 		i16 *t3 = sml_i16_parse(buf);
-		if (sml_buf_has_errors(buf)) goto error;
-		fprintf(stderr,
+		if (sml_buf_has_errors(buf))
+			goto error;
+		fprintf(
+			stderr,
 			"libsml: error: sml_time as list[3]: ignoring value[0]=%u value[1]=%d value[2]=%d\n",
 			*t1, *t2, *t3);
 		break;
@@ -106,10 +108,9 @@ void sml_time_write(sml_time *t, sml_buffer *buf) {
 }
 
 void sml_time_free(sml_time *tme) {
-    if (tme) {
+	if (tme) {
 		sml_number_free(tme->tag);
 		sml_number_free(tme->data.timestamp);
-        free(tme);
-    }
+		free(tme);
+	}
 }
-

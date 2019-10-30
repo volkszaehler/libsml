@@ -19,8 +19,8 @@
 #ifndef SML_SET_PROC_PARAMETER_REQUEST_H_
 #define SML_SET_PROC_PARAMETER_REQUEST_H_
 
-#include "sml_shared.h"
 #include "sml_octet_string.h"
+#include "sml_shared.h"
 #include "sml_tree.h"
 
 #ifdef __cplusplus
@@ -29,8 +29,8 @@ extern "C" {
 
 typedef struct {
 	octet_string *server_id; // optional
-	octet_string *username; // optional
-	octet_string *password; // optional
+	octet_string *username;	 // optional
+	octet_string *password;	 // optional
 	sml_tree_path *parameter_tree_path;
 	sml_tree *parameter_tree;
 } sml_set_proc_parameter_request;
@@ -44,6 +44,4 @@ void sml_set_proc_parameter_request_free(sml_set_proc_parameter_request *msg);
 }
 #endif
 
-
 #endif /* SML_SET_PROC_PARAMETER_REQUEST_H_ */
-

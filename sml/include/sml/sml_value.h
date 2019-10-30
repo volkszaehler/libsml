@@ -17,13 +17,13 @@
 // along with libSML.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef SML_VALUE_H_
-#define	SML_VALUE_H_
+#define SML_VALUE_H_
 
-#include <stdbool.h>
-#include "sml_shared.h"
-#include "sml_octet_string.h"
-#include "sml_number.h"
 #include "sml_boolean.h"
+#include "sml_number.h"
+#include "sml_octet_string.h"
+#include "sml_shared.h"
+#include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -59,6 +59,4 @@ char *sml_value_to_strhex(sml_value *value, char **result, bool mixed);
 }
 #endif
 
-
 #endif /* SML_VALUE_H_ */
-

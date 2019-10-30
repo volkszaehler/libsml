@@ -16,10 +16,9 @@
 // You should have received a copy of the GNU General Public License
 // along with libSML.  If not, see <http://www.gnu.org/licenses/>.
 
-
 #include <sml/sml_number.h>
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
 
 #define SML_BIG_ENDIAN 1
 #define SML_LITTLE_ENDIAN 0
@@ -44,18 +43,18 @@ static int sml_number_endian() {
 		return SML_BIG_ENDIAN;
 }
 
-void *sml_number_init(u64 number, unsigned char type __attribute__ ((unused)), int size) {
-	
-	const char * bytes = ( const char * ) &number;
+void *sml_number_init(u64 number, unsigned char type __attribute__((unused)), int size) {
+
+	const char *bytes = (const char *)&number;
 
 	// Swap bytes of big-endian number so that
 	// memcpy copies the right part
 	if (sml_number_endian() == SML_BIG_ENDIAN) {
-		  bytes += sizeof(u64) - size;
+		bytes += sizeof(u64) - size;
 	}
 
-	char * np = malloc( size );
-	if ( np == NULL ) {
+	char *np = malloc(size);
+	if (np == NULL) {
 		goto error;
 	}
 	memcpy(np, bytes, size);
@@ -132,4 +131,3 @@ void sml_number_free(void *np) {
 		free(np);
 	}
 }
-

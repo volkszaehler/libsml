@@ -16,7 +16,6 @@
 // You should have received a copy of the GNU General Public License
 // along with libSML.  If not, see <http://www.gnu.org/licenses/>.
 
-
 #include <sml/sml_tree.h>
 #include <sml/sml_value.h>
 #include <stdio.h>
@@ -24,11 +23,8 @@
 // sml_tree_path;
 
 sml_tree_path *sml_tree_path_init() {
-	sml_tree_path *tree_path = (sml_tree_path *) malloc(sizeof(sml_tree_path));
-	*tree_path = ( sml_tree_path ) {
-		.path_entries_len = 0,
-		.path_entries = NULL
-	};
+	sml_tree_path *tree_path = (sml_tree_path *)malloc(sizeof(sml_tree_path));
+	*tree_path = (sml_tree_path){.path_entries_len = 0, .path_entries = NULL};
 
 	return tree_path;
 }
@@ -49,7 +45,8 @@ sml_tree_path *sml_tree_path_parse(sml_buffer *buf) {
 	int elems;
 	for (elems = sml_buf_get_next_length(buf); elems > 0; elems--) {
 		s = sml_octet_string_parse(buf);
-		if (sml_buf_has_errors(buf)) goto error;
+		if (sml_buf_has_errors(buf))
+			goto error;
 		if (s) {
 			sml_tree_path_add_path_entry(tree_path, s);
 		}
@@ -65,8 +62,8 @@ error:
 
 void sml_tree_path_add_path_entry(sml_tree_path *tree_path, octet_string *entry) {
 	tree_path->path_entries_len++;
-	tree_path->path_entries = (octet_string **) realloc(tree_path->path_entries,
-		sizeof(octet_string *) * tree_path->path_entries_len);
+	tree_path->path_entries = (octet_string **)realloc(
+		tree_path->path_entries, sizeof(octet_string *) * tree_path->path_entries_len);
 
 	tree_path->path_entries[tree_path->path_entries_len - 1] = entry;
 }
@@ -79,7 +76,7 @@ void sml_tree_path_write(sml_tree_path *tree_path, sml_buffer *buf) {
 
 	if (tree_path->path_entries && tree_path->path_entries_len > 0) {
 		sml_buf_set_type_and_length(buf, SML_TYPE_LIST, tree_path->path_entries_len);
-		
+
 		int i;
 		for (i = 0; i < tree_path->path_entries_len; i++) {
 			sml_octet_string_write(tree_path->path_entries[i], buf);
@@ -102,17 +99,12 @@ void sml_tree_path_free(sml_tree_path *tree_path) {
 	}
 }
 
-
 // sml_tree;
 
 sml_tree *sml_tree_init() {
-	sml_tree *tree = (sml_tree *) malloc(sizeof(sml_tree));
-	*tree = ( sml_tree ) {
-		.parameter_name = NULL,
-		.parameter_value = NULL,
-		.child_list = NULL,
-		.child_list_len = 0
-	};
+	sml_tree *tree = (sml_tree *)malloc(sizeof(sml_tree));
+	*tree = (sml_tree){
+		.parameter_name = NULL, .parameter_value = NULL, .child_list = NULL, .child_list_len = 0};
 
 	return tree;
 }
@@ -135,10 +127,12 @@ sml_tree *sml_tree_parse(sml_buffer *buf) {
 	}
 
 	tree->parameter_name = sml_octet_string_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	tree->parameter_value = sml_proc_par_value_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	if (!sml_buf_optional_is_skipped(buf)) {
 		if (sml_buf_get_next_type(buf) != SML_TYPE_LIST) {
@@ -150,7 +144,8 @@ sml_tree *sml_tree_parse(sml_buffer *buf) {
 		int elems;
 		for (elems = sml_buf_get_next_length(buf); elems > 0; elems--) {
 			c = sml_tree_parse(buf);
-			if (sml_buf_has_errors(buf)) goto error;
+			if (sml_buf_has_errors(buf))
+				goto error;
 			if (c) {
 				sml_tree_add_tree(tree, c);
 			}
@@ -166,8 +161,8 @@ error:
 
 void sml_tree_add_tree(sml_tree *base_tree, sml_tree *tree) {
 	base_tree->child_list_len++;
-	base_tree->child_list = (sml_tree **) realloc(base_tree->child_list,
-		sizeof(sml_tree *) * base_tree->child_list_len);
+	base_tree->child_list =
+		(sml_tree **)realloc(base_tree->child_list, sizeof(sml_tree *) * base_tree->child_list_len);
 	base_tree->child_list[base_tree->child_list_len - 1] = tree;
 }
 
@@ -203,21 +198,16 @@ void sml_tree_write(sml_tree *tree, sml_buffer *buf) {
 		for (i = 0; i < tree->child_list_len; i++) {
 			sml_tree_write(tree->child_list[i], buf);
 		}
-	}
-	else {
+	} else {
 		sml_buf_optional_write(buf);
 	}
 }
 
-
 // sml_proc_par_value;
 
 sml_proc_par_value *sml_proc_par_value_init() {
-	sml_proc_par_value *value = (sml_proc_par_value *) malloc(sizeof(sml_proc_par_value));
-	*value = ( sml_proc_par_value ) {
-		.tag = NULL,
-		.data.value = NULL
-	};
+	sml_proc_par_value *value = (sml_proc_par_value *)malloc(sizeof(sml_proc_par_value));
+	*value = (sml_proc_par_value){.tag = NULL, .data.value = NULL};
 	return value;
 }
 
@@ -239,24 +229,25 @@ sml_proc_par_value *sml_proc_par_value_parse(sml_buffer *buf) {
 	}
 
 	ppv->tag = sml_u8_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	switch (*(ppv->tag)) {
-		case SML_PROC_PAR_VALUE_TAG_VALUE:
-			ppv->data.value = sml_value_parse(buf);
-			break;
-		case SML_PROC_PAR_VALUE_TAG_PERIOD_ENTRY:
-			ppv->data.period_entry = sml_period_entry_parse(buf);
-			break;
-		case SML_PROC_PAR_VALUE_TAG_TUPEL_ENTRY:
-			ppv->data.tupel_entry = sml_tupel_entry_parse(buf);
-			break;
-		case SML_PROC_PAR_VALUE_TAG_TIME:
-			ppv->data.time = sml_time_parse(buf);
-			break;
-		default:
-			buf->error = 1;
-			goto error;
+	case SML_PROC_PAR_VALUE_TAG_VALUE:
+		ppv->data.value = sml_value_parse(buf);
+		break;
+	case SML_PROC_PAR_VALUE_TAG_PERIOD_ENTRY:
+		ppv->data.period_entry = sml_period_entry_parse(buf);
+		break;
+	case SML_PROC_PAR_VALUE_TAG_TUPEL_ENTRY:
+		ppv->data.tupel_entry = sml_tupel_entry_parse(buf);
+		break;
+	case SML_PROC_PAR_VALUE_TAG_TIME:
+		ppv->data.time = sml_time_parse(buf);
+		break;
+	default:
+		buf->error = 1;
+		goto error;
 	}
 
 	return ppv;
@@ -276,20 +267,20 @@ void sml_proc_par_value_write(sml_proc_par_value *value, sml_buffer *buf) {
 	sml_u8_write(value->tag, buf);
 
 	switch (*(value->tag)) {
-		case SML_PROC_PAR_VALUE_TAG_VALUE:
-			sml_value_write(value->data.value, buf);
-			break;
-		case SML_PROC_PAR_VALUE_TAG_PERIOD_ENTRY:
-			sml_period_entry_write(value->data.period_entry, buf);
-			break;
-		case SML_PROC_PAR_VALUE_TAG_TUPEL_ENTRY:
-			sml_tupel_entry_write(value->data.tupel_entry, buf);
-			break;
-		case SML_PROC_PAR_VALUE_TAG_TIME:
-			sml_time_write(value->data.time, buf);
-			break;
-		default:
-			fprintf(stderr,"libsml: error: unknown tag in %s\n", __func__);
+	case SML_PROC_PAR_VALUE_TAG_VALUE:
+		sml_value_write(value->data.value, buf);
+		break;
+	case SML_PROC_PAR_VALUE_TAG_PERIOD_ENTRY:
+		sml_period_entry_write(value->data.period_entry, buf);
+		break;
+	case SML_PROC_PAR_VALUE_TAG_TUPEL_ENTRY:
+		sml_tupel_entry_write(value->data.tupel_entry, buf);
+		break;
+	case SML_PROC_PAR_VALUE_TAG_TIME:
+		sml_time_write(value->data.time, buf);
+		break;
+	default:
+		fprintf(stderr, "libsml: error: unknown tag in %s\n", __func__);
 	}
 }
 
@@ -297,26 +288,25 @@ void sml_proc_par_value_free(sml_proc_par_value *ppv) {
 	if (ppv) {
 		if (ppv->tag) {
 			switch (*(ppv->tag)) {
-				case SML_PROC_PAR_VALUE_TAG_VALUE:
-					sml_value_free(ppv->data.value);
-					break;
-				case SML_PROC_PAR_VALUE_TAG_PERIOD_ENTRY:
-					sml_period_entry_free(ppv->data.period_entry);
-					break;
-				case SML_PROC_PAR_VALUE_TAG_TUPEL_ENTRY:
-					sml_tupel_entry_free(ppv->data.tupel_entry);
-					break;
-				case SML_PROC_PAR_VALUE_TAG_TIME:
-					sml_time_free(ppv->data.time);
-					break;
-				default:
-					if (ppv->data.value) {
-						free(ppv->data.value);
-					}
+			case SML_PROC_PAR_VALUE_TAG_VALUE:
+				sml_value_free(ppv->data.value);
+				break;
+			case SML_PROC_PAR_VALUE_TAG_PERIOD_ENTRY:
+				sml_period_entry_free(ppv->data.period_entry);
+				break;
+			case SML_PROC_PAR_VALUE_TAG_TUPEL_ENTRY:
+				sml_tupel_entry_free(ppv->data.tupel_entry);
+				break;
+			case SML_PROC_PAR_VALUE_TAG_TIME:
+				sml_time_free(ppv->data.time);
+				break;
+			default:
+				if (ppv->data.value) {
+					free(ppv->data.value);
+				}
 			}
 			sml_number_free(ppv->tag);
-		}
-		else {
+		} else {
 			// Without the tag, there might be a memory leak.
 			if (ppv->data.value) {
 				free(ppv->data.value);
@@ -327,36 +317,33 @@ void sml_proc_par_value_free(sml_proc_par_value *ppv) {
 	}
 }
 
-
 // sml_tuple_entry;
 
 sml_tupel_entry *sml_tupel_entry_init() {
-	sml_tupel_entry *tupel = (sml_tupel_entry *) malloc(sizeof(sml_tupel_entry));
-	*tupel = ( sml_tupel_entry ) {
-		.server_id = NULL,
-		.sec_index = NULL,
-		.status = NULL,
-		.unit_pA = NULL,
-		.scaler_pA = NULL,
-		.value_pA = NULL,
-		.unit_R1 = NULL,
-		.scaler_R1 = NULL,
-		.value_R1 = NULL,
-		.unit_R4 = NULL,
-		.scaler_R4 = NULL,
-		.value_R4 = NULL,
-		.signature_pA_R1_R4 = NULL,
-		.unit_mA = NULL,
-		.scaler_mA = NULL,
-		.value_mA = NULL,
-		.unit_R2 = NULL,
-		.scaler_R2 = NULL,
-		.value_R2 = NULL,
-		.unit_R3 = NULL,
-		.scaler_R3 = NULL,
-		.value_R3 = NULL,
-		.signature_mA_R2_R3 = NULL
-	};
+	sml_tupel_entry *tupel = (sml_tupel_entry *)malloc(sizeof(sml_tupel_entry));
+	*tupel = (sml_tupel_entry){.server_id = NULL,
+							   .sec_index = NULL,
+							   .status = NULL,
+							   .unit_pA = NULL,
+							   .scaler_pA = NULL,
+							   .value_pA = NULL,
+							   .unit_R1 = NULL,
+							   .scaler_R1 = NULL,
+							   .value_R1 = NULL,
+							   .unit_R4 = NULL,
+							   .scaler_R4 = NULL,
+							   .value_R4 = NULL,
+							   .signature_pA_R1_R4 = NULL,
+							   .unit_mA = NULL,
+							   .scaler_mA = NULL,
+							   .value_mA = NULL,
+							   .unit_R2 = NULL,
+							   .scaler_R2 = NULL,
+							   .value_R2 = NULL,
+							   .unit_R3 = NULL,
+							   .scaler_R3 = NULL,
+							   .value_R3 = NULL,
+							   .signature_mA_R2_R3 = NULL};
 
 	return tupel;
 }
@@ -379,59 +366,82 @@ sml_tupel_entry *sml_tupel_entry_parse(sml_buffer *buf) {
 	}
 
 	tupel->server_id = sml_octet_string_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 	tupel->sec_index = sml_time_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 	tupel->status = sml_u64_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	tupel->unit_pA = sml_unit_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 	tupel->scaler_pA = sml_i8_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 	tupel->value_pA = sml_i64_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	tupel->unit_R1 = sml_unit_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 	tupel->scaler_R1 = sml_i8_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 	tupel->value_R1 = sml_i64_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	tupel->unit_R4 = sml_unit_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 	tupel->scaler_R4 = sml_i8_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 	tupel->value_R4 = sml_i64_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	tupel->signature_pA_R1_R4 = sml_octet_string_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	tupel->unit_mA = sml_unit_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 	tupel->scaler_mA = sml_i8_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 	tupel->value_mA = sml_i64_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	tupel->unit_R2 = sml_unit_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 	tupel->scaler_R2 = sml_i8_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 	tupel->value_R2 = sml_i64_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	tupel->unit_R3 = sml_unit_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 	tupel->scaler_R3 = sml_i8_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 	tupel->value_R3 = sml_i64_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	tupel->signature_mA_R2_R3 = sml_octet_string_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	return tupel;
 
@@ -519,24 +529,17 @@ void sml_tupel_entry_free(sml_tupel_entry *tupel) {
 	}
 }
 
-
-
 // sml_period_entry;
 
 sml_period_entry *sml_period_entry_init() {
-	sml_period_entry *period = (sml_period_entry *) malloc(sizeof(sml_period_entry));
-	*period = ( sml_period_entry ) {
-		.obj_name = NULL,
-		.unit = NULL,
-		.scaler = NULL,
-		.value = NULL,
-		.value_signature = NULL
-	};
+	sml_period_entry *period = (sml_period_entry *)malloc(sizeof(sml_period_entry));
+	*period = (sml_period_entry){
+		.obj_name = NULL, .unit = NULL, .scaler = NULL, .value = NULL, .value_signature = NULL};
 
 	return period;
 }
 
-static void * sml_period_entry_parse_(sml_buffer *buf) {
+static void *sml_period_entry_parse_(sml_buffer *buf) {
 	if (sml_buf_optional_is_skipped(buf)) {
 		return NULL;
 	}
@@ -554,19 +557,24 @@ static void * sml_period_entry_parse_(sml_buffer *buf) {
 	}
 
 	period->obj_name = sml_octet_string_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	period->unit = sml_unit_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	period->scaler = sml_i8_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	period->value = sml_value_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	period->value_signature = sml_octet_string_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	return period;
 
@@ -575,9 +583,7 @@ error:
 	return NULL;
 }
 
-sml_period_entry * sml_period_entry_parse( sml_buffer * buf ) {
-	return sml_period_entry_parse_( buf );
-}
+sml_period_entry *sml_period_entry_parse(sml_buffer *buf) { return sml_period_entry_parse_(buf); }
 
 void sml_period_entry_write(sml_period_entry *period, sml_buffer *buf) {
 	if (period == 0) {
@@ -594,8 +600,8 @@ void sml_period_entry_write(sml_period_entry *period, sml_buffer *buf) {
 	sml_octet_string_write(period->value_signature, buf);
 }
 
-static void sml_period_entry_free_( void * p ) {
-	sml_period_entry * period = p;
+static void sml_period_entry_free_(void *p) {
+	sml_period_entry *period = p;
 
 	if (period) {
 		sml_octet_string_free(period->obj_name);
@@ -608,6 +614,4 @@ static void sml_period_entry_free_( void * p ) {
 	}
 }
 
-void sml_period_entry_free( sml_period_entry * period ) {
-	sml_period_entry_free_( period );
-}
+void sml_period_entry_free(sml_period_entry *period) { sml_period_entry_free_(period); }

@@ -17,23 +17,23 @@
 // along with libSML.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef SML_OPEN_REQUEST_H_
-#define	SML_OPEN_REQUEST_H_
+#define SML_OPEN_REQUEST_H_
 
-#include "sml_shared.h"
 #include "sml_octet_string.h"
+#include "sml_shared.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 typedef struct {
-    octet_string *codepage; // optional
+	octet_string *codepage; // optional
 	octet_string *client_id;
 	octet_string *req_file_id;
 	octet_string *server_id; // optional
-	octet_string *username; // optional
-	octet_string *password; // optional
-	u8 *sml_version; // optional
+	octet_string *username;	 // optional
+	octet_string *password;	 // optional
+	u8 *sml_version;		 // optional
 } sml_open_request;
 
 sml_open_request *sml_open_request_init();
@@ -45,6 +45,4 @@ void sml_open_request_free(sml_open_request *msg);
 }
 #endif
 
-
 #endif /* SML_OPEN_REQUEST_H_ */
-

@@ -16,18 +16,16 @@
 // You should have received a copy of the GNU General Public License
 // along with libSML.  If not, see <http://www.gnu.org/licenses/>.
 
-
 #include <sml/sml_set_proc_parameter_request.h>
 
 sml_set_proc_parameter_request *sml_set_proc_parameter_request_init() {
-	sml_set_proc_parameter_request *msg = (sml_set_proc_parameter_request *) malloc(sizeof (sml_set_proc_parameter_request));
-	*msg = ( sml_set_proc_parameter_request ) {
-		.server_id = NULL,
-		.username = NULL,
-		.password = NULL,
-		.parameter_tree_path = NULL,
-		.parameter_tree = NULL
-	};
+	sml_set_proc_parameter_request *msg =
+		(sml_set_proc_parameter_request *)malloc(sizeof(sml_set_proc_parameter_request));
+	*msg = (sml_set_proc_parameter_request){.server_id = NULL,
+											.username = NULL,
+											.password = NULL,
+											.parameter_tree_path = NULL,
+											.parameter_tree = NULL};
 
 	return msg;
 }
@@ -46,19 +44,24 @@ sml_set_proc_parameter_request *sml_set_proc_parameter_request_parse(sml_buffer 
 	}
 
 	msg->server_id = sml_octet_string_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	msg->username = sml_octet_string_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	msg->password = sml_octet_string_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	msg->parameter_tree_path = sml_tree_path_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	msg->parameter_tree = sml_tree_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	return msg;
 
@@ -87,4 +90,3 @@ void sml_set_proc_parameter_request_free(sml_set_proc_parameter_request *msg) {
 		free(msg);
 	}
 }
-

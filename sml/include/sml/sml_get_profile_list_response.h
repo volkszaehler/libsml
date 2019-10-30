@@ -19,10 +19,10 @@
 #ifndef SML_GET_PROFILE_LIST_RESPONSE_H_
 #define SML_GET_PROFILE_LIST_RESPONSE_H_
 
-#include "sml_shared.h"
-#include "sml_octet_string.h"
-#include "sml_time.h"
 #include "sml_list.h"
+#include "sml_octet_string.h"
+#include "sml_shared.h"
+#include "sml_time.h"
 #include "sml_tree.h"
 
 #ifdef __cplusplus
@@ -50,6 +50,4 @@ void sml_get_profile_list_response_free(sml_get_profile_list_response *msg);
 }
 #endif
 
-
 #endif /* SML_GET_PROFILE_LIST_RESPONSE_H_ */
-

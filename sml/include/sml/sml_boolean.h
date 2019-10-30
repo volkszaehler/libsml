@@ -17,7 +17,7 @@
 // along with libSML.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef SML_BOOLEAN_H_
-#define	SML_BOOLEAN_H_
+#define SML_BOOLEAN_H_
 
 #define SML_BOOLEAN_TRUE 0xFF
 #define SML_BOOLEAN_FALSE 0x00
@@ -39,6 +39,4 @@ void sml_boolean_free(sml_boolean *b);
 }
 #endif
 
-
 #endif /* SML_BOOLEAN_H_ */
-

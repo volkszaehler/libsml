@@ -17,10 +17,10 @@
 // along with libSML.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef SML_SHARED_H_
-#define	SML_SHARED_H_
+#define SML_SHARED_H_
 
-#include <stdlib.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include <string.h>
 
 #ifdef __cplusplus
@@ -37,24 +37,24 @@ typedef int16_t i16;
 typedef int32_t i32;
 typedef int64_t i64;
 
-#define SML_MESSAGE_END				0x0
+#define SML_MESSAGE_END 0x0
 
-#define SML_TYPE_FIELD				0x70
-#define SML_LENGTH_FIELD			0xF
-#define SML_ANOTHER_TL				0x80
+#define SML_TYPE_FIELD 0x70
+#define SML_LENGTH_FIELD 0xF
+#define SML_ANOTHER_TL 0x80
 
-#define SML_TYPE_OCTET_STRING		0x0
-#define SML_TYPE_BOOLEAN			0x40
-#define SML_TYPE_INTEGER			0x50
-#define SML_TYPE_UNSIGNED			0x60
-#define SML_TYPE_LIST				0x70
+#define SML_TYPE_OCTET_STRING 0x0
+#define SML_TYPE_BOOLEAN 0x40
+#define SML_TYPE_INTEGER 0x50
+#define SML_TYPE_UNSIGNED 0x60
+#define SML_TYPE_LIST 0x70
 
-#define SML_OPTIONAL_SKIPPED		0x1
+#define SML_OPTIONAL_SKIPPED 0x1
 
-#define SML_TYPE_NUMBER_8			sizeof(u8)
-#define SML_TYPE_NUMBER_16			sizeof(u16)
-#define SML_TYPE_NUMBER_32			sizeof(u32)
-#define SML_TYPE_NUMBER_64			sizeof(u64)
+#define SML_TYPE_NUMBER_8 sizeof(u8)
+#define SML_TYPE_NUMBER_16 sizeof(u16)
+#define SML_TYPE_NUMBER_32 sizeof(u32)
+#define SML_TYPE_NUMBER_64 sizeof(u64)
 
 // This sml_buffer is used in two different use-cases.
 //
@@ -113,6 +113,4 @@ void hexdump(unsigned char *buffer, size_t buffer_len);
 }
 #endif
 
-
 #endif /* SML_SHARED_H_ */
-

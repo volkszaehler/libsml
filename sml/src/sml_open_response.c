@@ -16,20 +16,17 @@
 // You should have received a copy of the GNU General Public License
 // along with libSML.  If not, see <http://www.gnu.org/licenses/>.
 
-
-#include <sml/sml_open_response.h>
 #include <sml/sml_number.h>
+#include <sml/sml_open_response.h>
 
 sml_open_response *sml_open_response_init() {
-	sml_open_response *msg = (sml_open_response *) malloc(sizeof(sml_open_response));
-	*msg = ( sml_open_response ) {
-		.codepage = NULL,
-		.client_id = NULL,
-		.req_file_id = NULL,
-		.server_id = NULL,
-		.ref_time = NULL,
-		.sml_version = NULL
-	};
+	sml_open_response *msg = (sml_open_response *)malloc(sizeof(sml_open_response));
+	*msg = (sml_open_response){.codepage = NULL,
+							   .client_id = NULL,
+							   .req_file_id = NULL,
+							   .server_id = NULL,
+							   .ref_time = NULL,
+							   .sml_version = NULL};
 
 	return msg;
 }
@@ -48,22 +45,28 @@ sml_open_response *sml_open_response_parse(sml_buffer *buf) {
 	}
 
 	msg->codepage = sml_octet_string_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	msg->client_id = sml_octet_string_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	msg->req_file_id = sml_octet_string_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	msg->server_id = sml_octet_string_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	msg->ref_time = sml_time_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	msg->sml_version = sml_u8_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	return msg;
 error:
@@ -94,4 +97,3 @@ void sml_open_response_free(sml_open_response *msg) {
 		free(msg);
 	}
 }
-

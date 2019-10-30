@@ -16,22 +16,19 @@
 // You should have received a copy of the GNU General Public License
 // along with libSML.  If not, see <http://www.gnu.org/licenses/>.
 
-
-#include <sml/sml_open_request.h>
 #include <sml/sml_number.h>
+#include <sml/sml_open_request.h>
 #include <stdio.h>
 
-sml_open_request *sml_open_request_init(){
-	sml_open_request *open_request = (sml_open_request *) malloc(sizeof(sml_open_request));
-	*open_request = ( sml_open_request ) {
-		.codepage = NULL,
-		.client_id = NULL,
-		.req_file_id = NULL,
-		.server_id = NULL,
-		.username = NULL,
-		.password = NULL,
-		.sml_version = NULL
-	};
+sml_open_request *sml_open_request_init() {
+	sml_open_request *open_request = (sml_open_request *)malloc(sizeof(sml_open_request));
+	*open_request = (sml_open_request){.codepage = NULL,
+									   .client_id = NULL,
+									   .req_file_id = NULL,
+									   .server_id = NULL,
+									   .username = NULL,
+									   .password = NULL,
+									   .sml_version = NULL};
 	return open_request;
 }
 
@@ -49,25 +46,32 @@ sml_open_request *sml_open_request_parse(sml_buffer *buf) {
 	}
 
 	msg->codepage = sml_octet_string_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	msg->client_id = sml_octet_string_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	msg->req_file_id = sml_octet_string_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	msg->server_id = sml_octet_string_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	msg->username = sml_octet_string_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	msg->password = sml_octet_string_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	msg->sml_version = sml_u8_parse(buf);
-	if (sml_buf_has_errors(buf)) goto error;
+	if (sml_buf_has_errors(buf))
+		goto error;
 
 	return msg;
 
@@ -83,8 +87,8 @@ void sml_open_request_write(sml_open_request *msg, sml_buffer *buf) {
 	sml_octet_string_write(msg->client_id, buf);
 	sml_octet_string_write(msg->req_file_id, buf);
 	sml_octet_string_write(msg->server_id, buf);
-	sml_octet_string_write(msg->username,buf);
-	sml_octet_string_write(msg->password,buf);
+	sml_octet_string_write(msg->username, buf);
+	sml_octet_string_write(msg->password, buf);
 	sml_u8_write(msg->sml_version, buf);
 }
 
@@ -97,8 +101,7 @@ void sml_open_request_free(sml_open_request *msg) {
 		sml_octet_string_free(msg->username);
 		sml_octet_string_free(msg->password);
 		sml_number_free(msg->sml_version);
-		
+
 		free(msg);
 	}
 }
-

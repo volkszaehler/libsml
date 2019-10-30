@@ -17,7 +17,7 @@
 // along with libSML.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef SML_FILE_H_
-#define	SML_FILE_H_
+#define SML_FILE_H_
 
 #include "sml_message.h"
 #include "sml_shared.h"
@@ -29,9 +29,9 @@ extern "C" {
 
 // a SML file consist of multiple SML messages
 typedef struct {
-    sml_message **messages;
-    short messages_len;
-    sml_buffer *buf;
+	sml_message **messages;
+	short messages_len;
+	sml_buffer *buf;
 } sml_file;
 
 sml_file *sml_file_init();
@@ -46,6 +46,4 @@ void sml_file_print(sml_file *file);
 }
 #endif
 
-
 #endif /* SML_FILE_H_ */
-

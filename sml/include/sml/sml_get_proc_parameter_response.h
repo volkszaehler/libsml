@@ -19,8 +19,8 @@
 #ifndef SML_GET_PROC_PARAMETER_RESPONSE_H_
 #define SML_GET_PROC_PARAMETER_RESPONSE_H_
 
-#include "sml_shared.h"
 #include "sml_octet_string.h"
+#include "sml_shared.h"
 #include "sml_tree.h"
 
 #ifdef __cplusplus
@@ -42,6 +42,4 @@ void sml_get_proc_parameter_response_free(sml_get_proc_parameter_response *msg);
 }
 #endif
 
-
 #endif /* SML_GET_PROC_PARAMETER_RESPONSE_H_ */
-
