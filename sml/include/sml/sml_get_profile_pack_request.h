@@ -43,8 +43,8 @@ typedef struct sml_obj_req_entry_list_entry {
 
 typedef struct {
 	octet_string *server_id;   // optional
-	octet_string *username;	   //  optional
-	octet_string *password;	   //  optional
+	octet_string *username;	   // optional
+	octet_string *password;	   // optional
 	sml_boolean *with_rawdata; // optional
 	sml_time *begin_time;	   // optional
 	sml_time *end_time;		   // optional
