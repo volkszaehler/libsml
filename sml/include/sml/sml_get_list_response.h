@@ -31,7 +31,7 @@ extern "C" {
 typedef struct {
 	octet_string *client_id; // optional
 	octet_string *server_id;
-	octet_string *list_name;   //  optional
+	octet_string *list_name;   // optional
 	sml_time *act_sensor_time; // optional
 	sml_list *val_list;
 	sml_signature *list_signature; // optional
