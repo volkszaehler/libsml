@@ -1,16 +1,21 @@
 language: c
 
-sudo: false
+sudo: true
 
 compiler:
-  - clang
-  - gcc
+- clang
+- gcc
 
 addons:
   apt:
     packages:
-      - uuid-dev
-      - uuid-runtime
+    - uuid-dev
+    - uuid-runtime
+
+install:
+- sudo apt-get install clang-format
 
 script:
-  - make
+- make
+- clang-format -i sml/include/sml/* sml/src/*
+- test -z "$(git status --porcelain)" || (git status; git diff; false)
