@@ -23,9 +23,9 @@ matrix:
   - env: FORMAT=1
 
 script:
-- if [ "$MAKE" = "1" ]; then make; fi
+- if [ -n "$MAKE" ]; then make; fi
 - |
-  if [ "$FORMAT" = "1" ]; then
+  if [ -n "$FORMAT" ]; then
     clang-format -i sml/include/sml/* sml/src/*
     test -z "$(git status --porcelain)" || (git status; git diff; false)
   fi
