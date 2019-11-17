@@ -1,15 +1,15 @@
 language: c
 
-sudo: true
+sudo: false
 
 addons:
   apt:
     packages:
+    - clang-format-9
     - uuid-dev
     - uuid-runtime
 
-install:
-- sudo apt-get install clang-format
+before_script:
 - clang-format --version
 
 matrix:
