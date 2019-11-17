@@ -4,6 +4,8 @@ sudo: false
 
 addons:
   apt:
+    sources:
+    - llvm-toolchain-trusty
     packages:
     - clang-format-9
     - uuid-dev
@@ -15,13 +17,15 @@ before_script:
 matrix:
   include:
   - compiler: clang
+    env: MAKE=1
   - compiler: gcc
-  - env: RUN=format
+    env: MAKE=1
+  - env: FORMAT=1
 
 script:
 - |
-  if [ "$RUN" = "format" ]; then
+  if [ "$FORMAT" = 1 ]; then
     clang-format -i sml/include/sml/* sml/src/*
     test -z "$(git status --porcelain)" || (git status; git diff; false)
   fi
-- if [ "$RUN" != "format" ]; then make; fi
+- if [ "$MAKE" = 1 ]; then make; fi
