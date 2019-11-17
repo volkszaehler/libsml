@@ -91,7 +91,7 @@ typedef struct {
 typedef struct s_tree {
 	octet_string *parameter_name;
 	sml_proc_par_value *parameter_value; // optional
-	struct s_tree **child_list;			 // optional
+	struct s_tree **child_list;          // optional
 
 	int child_list_len;
 } sml_tree;

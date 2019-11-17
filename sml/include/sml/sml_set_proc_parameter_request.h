@@ -29,8 +29,8 @@ extern "C" {
 
 typedef struct {
 	octet_string *server_id; // optional
-	octet_string *username;	 // optional
-	octet_string *password;	 // optional
+	octet_string *username;  // optional
+	octet_string *password;  // optional
 	sml_tree_path *parameter_tree_path;
 	sml_tree *parameter_tree;
 } sml_set_proc_parameter_request;

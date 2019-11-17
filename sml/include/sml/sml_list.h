@@ -47,8 +47,8 @@ typedef struct sml_list_entry {
 	octet_string *obj_name;
 	sml_status *status; // optional
 	sml_time *val_time; // optional
-	sml_unit *unit;		// optional
-	i8 *scaler;			// optional
+	sml_unit *unit;     // optional
+	i8 *scaler;         // optional
 	sml_value *value;
 	sml_signature *value_signature; // optional
 

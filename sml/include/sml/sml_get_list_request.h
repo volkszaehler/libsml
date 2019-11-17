@@ -31,8 +31,8 @@ extern "C" {
 typedef struct {
 	octet_string *client_id;
 	octet_string *server_id; // optional
-	octet_string *username;	 // optional
-	octet_string *password;	 // optional
+	octet_string *username;  // optional
+	octet_string *password;  // optional
 	octet_string *list_name; // optional
 } sml_get_list_request;
 

@@ -43,14 +43,14 @@ typedef struct sml_obj_req_entry_list_entry {
 
 typedef struct {
 	octet_string *server_id;   // optional
-	octet_string *username;	   // optional
-	octet_string *password;	   // optional
+	octet_string *username;    // optional
+	octet_string *password;    // optional
 	sml_boolean *with_rawdata; // optional
-	sml_time *begin_time;	   // optional
-	sml_time *end_time;		   // optional
+	sml_time *begin_time;      // optional
+	sml_time *end_time;        // optional
 	sml_tree_path *parameter_tree_path;
 	sml_obj_req_entry_list *object_list; // optional
-	sml_tree *das_details;				 // optional
+	sml_tree *das_details;               // optional
 } sml_get_profile_pack_request;
 
 sml_get_profile_pack_request *sml_get_profile_pack_request_parse(sml_buffer *buf);

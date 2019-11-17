@@ -35,7 +35,7 @@ typedef struct {
 	sml_time *act_sensor_time; // optional
 	sml_list *val_list;
 	sml_signature *list_signature; // optional
-	sml_time *act_gateway_time;	   // optional
+	sml_time *act_gateway_time;    // optional
 } sml_get_list_response;
 
 sml_get_list_response *sml_get_list_response_init();

@@ -34,9 +34,9 @@ typedef struct {
 	sml_time *act_time; // specified by germans (current time was meant) ;)
 	u32 *reg_period;
 	sml_tree_path *parameter_tree_path;
-	sml_sequence *header_list;		  // list of sml_prof_obj_header_entry
-	sml_sequence *period_list;		  // list of sml_prof_obj_period_entry
-	octet_string *rawdata;			  // optional
+	sml_sequence *header_list;        // list of sml_prof_obj_header_entry
+	sml_sequence *period_list;        // list of sml_prof_obj_period_entry
+	octet_string *rawdata;            // optional
 	sml_signature *profile_signature; // optional
 
 } sml_get_profile_pack_response;

@@ -31,7 +31,7 @@ typedef struct {
 	octet_string *server_id;
 	octet_string *attention_number;
 	octet_string *attention_message; // optional
-	sml_tree *attention_details;	 // optional
+	sml_tree *attention_details;     // optional
 } sml_attention_response;
 
 sml_attention_response *sml_attention_response_init();
