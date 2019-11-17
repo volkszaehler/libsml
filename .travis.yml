@@ -16,16 +16,17 @@ before_script:
 
 matrix:
   include:
-  - env: MAKE=1
+  - env: BUILD=1
     compiler: clang
-  - env: MAKE=1
+  - env: BUILD=1
     compiler: gcc
   - env: FORMAT=1
 
 script:
-- if [ -n "$MAKE" ]; then make; fi
+- if [ -n "$BUILD" ]; then make; fi
 - |
   if [ -n "$FORMAT" ]; then
     clang-format -i sml/include/sml/* sml/src/*
     test -z "$(git status --porcelain)" || (git status; git diff; false)
   fi
+- make
