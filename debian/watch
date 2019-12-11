@@ -6,7 +6,6 @@
 # Compulsory line, this is a version 3 file
 version=3
 
-# Find new releases on GitHub
-# (uses redirector service from Gunnar Wolf:
-#  http://githubredir.debian.net)
-http://githubredir.debian.net/githubredir.cgi?author=dailab&project=libsml (.*).tar.gz
+# adapted from https://github.com/gwolf/dh-make-drupal/blob/master/debian/watch
+opts="filenamemangle=s/(?:.*)?v?(\d[\d\.]*)\.tar\.gz/libsml-$1.tar.gz/"
+ https://github.com/volkszaehler/libsml/tags (?:.*/)?v?(\d[\d\.]*).tar.gz
