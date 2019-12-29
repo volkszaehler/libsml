@@ -4,7 +4,7 @@ Upstream-Contact: Steffen Vogel <info@steffenvogel.de>
 Source: https://github.com/volkszaehler/libsml
 
 Files: *
-Copyright: 2011 Juri Glass
+Copyright: 2011-2019 Juri Glass
                 Mathias Runge
                 Nadim El Sayed
                 DAI-Labor (TU-Berlin)
