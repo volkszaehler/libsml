@@ -1,9 +1,9 @@
 libsml (0.1.1+git20191213-1) unstable; urgency=medium
 
-  * New patch to re-add lost symbols to public api
+  * New upstream snapshot
+  * Update symbols file, some (erroneously exported) symbols are gone
   * Add comments to rules
   * Update copyright years
-  * New upstream version 0.1.1+git20191213
 
  -- Andreas Moog <andreas.moog@warperbbs.de>  Sun, 29 Dec 2019 22:03:50 +0100
 

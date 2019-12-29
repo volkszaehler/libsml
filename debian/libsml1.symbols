@@ -33,6 +33,7 @@ libsml.so.1 libsml1 #MINVER#
  sml_close_response_parse@Base 0.1.1
  sml_close_response_write@Base 0.1.1
  sml_crc16_calculate@Base 0.1.1
+ sml_crc16kermit_calculate@Base 0.1.1
  sml_file_add_message@Base 0.1.1
  sml_file_free@Base 0.1.1
  sml_file_init@Base 0.1.1
