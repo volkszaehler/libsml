@@ -4,16 +4,8 @@ libsml (0.1.1+git20191213-1) unstable; urgency=medium
   * Update symbols file, some (erroneously exported) symbols are gone
   * Add comments to rules
   * Update copyright years
-
- -- Andreas Moog <andreas.moog@warperbbs.de>  Sun, 29 Dec 2019 22:03:50 +0100
-
-libsml (0.1.1+git20190410-1) unstable; urgency=medium
-
-  * New upstream snapshot
   * Change to correct github upstream project in debian/copyright
-  * Change homepage to volkszaehler/libsml
-  * Update symbols file
-  * Update copyright years
+  * Update homepage to https://github.com/volkszaehler/libsml (Closes: #946525)
   * Update gitlab CI
   * Update standards version
 
