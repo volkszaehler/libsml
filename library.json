@@ -1,0 +1,18 @@
+{
+    "name": "libSML",
+    "keywords": "sml, smartmeter, smart message language, smart meter",
+    "description": "Implementation in C of the Smart Message Language (SML) protocol",
+    "repository":
+    {
+      "type": "git",
+      "url": "https://github.com/volkszaehler/libsml"
+    },
+    "build": {
+        "includeDir": "sml/include",
+        "srcDir": "sml/src",
+        "flags": "-DSML_NO_UUID_LIB"
+    },
+    "version": "1.0",
+    "frameworks": "arduino",
+    "platforms": "*"
+  }
