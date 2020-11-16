@@ -22,7 +22,7 @@
 
 TEST_GROUP(sml_octet_string);
 
-sml_buffer *buf;
+static sml_buffer *buf;
 
 TEST_SETUP(sml_octet_string) {
 	buf = sml_buffer_init(512);

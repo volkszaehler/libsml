@@ -22,7 +22,7 @@
 
 TEST_GROUP(sml_list);
 
-sml_buffer *buf;
+static sml_buffer *buf;
 
 TEST_SETUP(sml_list) {
 	buf = sml_buffer_init(512);
@@ -100,7 +100,7 @@ TEST_GROUP_RUNNER(sml_list) {
 
 TEST_GROUP(sml_sequence);
 
-sml_buffer *buf;
+static sml_buffer *buf;
 
 TEST_SETUP(sml_sequence) {
 	buf = sml_buffer_init(512);

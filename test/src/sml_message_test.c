@@ -22,7 +22,7 @@
 
 TEST_GROUP(sml_message);
 
-sml_buffer *buf;
+static sml_buffer *buf;
 
 TEST_SETUP(sml_message) {
 	buf = sml_buffer_init(512);

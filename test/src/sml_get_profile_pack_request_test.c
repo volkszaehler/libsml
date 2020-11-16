@@ -22,7 +22,7 @@
 
 TEST_GROUP(sml_get_profile_pack_request);
 
-sml_buffer *buf;
+static sml_buffer *buf;
 
 TEST_SETUP(sml_get_profile_pack_request) {
 	buf = sml_buffer_init(512);
