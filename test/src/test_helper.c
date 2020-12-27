@@ -21,6 +21,8 @@
 #include <stdint.h>
 #include <string.h>
 
+sml_buffer *buf; 
+
 uint8_t test_helper_ctoi(uint8_t c){
     uint8_t ret = 0;
 
