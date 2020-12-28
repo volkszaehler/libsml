@@ -17,8 +17,28 @@
 // along with libSML.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <sml/sml_shared.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
+
+void (*sml_error)(const char *format, ...);
+
+void sml_error_default(const char *format, ...) {
+	va_list args;
+	va_start(args, format);
+
+	char *format2 = malloc(9 + strlen(format) + 1 + 1);
+	strcpy(format2, "libsml: ");
+	strcat(format2, format);
+	strcat(format2, "\n");
+
+	vfprintf(stderr, format2, args);
+
+	free(format2);
+}
+
+// http://www.faqs.org/docs/Linux-HOWTO/Program-Library-HOWTO.html#INIT-AND-CLEANUP
+void __attribute__((constructor)) sml_init() { sml_error = *sml_error_default; }
 
 int sml_buf_get_next_length(sml_buffer *buf) {
 	int length = 0;
