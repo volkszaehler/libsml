@@ -47,7 +47,7 @@ size_t sml_read(int fd, fd_set *set, unsigned char *buffer, size_t len) {
 			if (r < 0) {
 				if (errno == EINTR || errno == EAGAIN)
 					continue; // should be ignored
-				fprintf(stderr, "libsml: sml_read(): read error\n");
+				sml_error("sml_read(): read error");
 				return 0;
 			}
 			tr += r;
@@ -68,7 +68,7 @@ size_t sml_transport_read(int fd, unsigned char *buffer, size_t max_len) {
 
 	if (max_len < 8) {
 		// prevent buffer overflow
-		fprintf(stderr, "libsml: error: sml_transport_read(): passed buffer too small!\n");
+		sml_error("error: sml_transport_read(): passed buffer too small!");
 		return 0;
 	}
 
@@ -104,7 +104,7 @@ size_t sml_transport_read(int fd, unsigned char *buffer, size_t max_len) {
 				return len;
 			} else {
 				// don't read other escaped sequences yet
-				fprintf(stderr, "libsml: error: unrecognized sequence\n");
+				sml_error("error: unrecognized sequence");
 				return 0;
 			}
 		}

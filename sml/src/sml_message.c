@@ -209,7 +209,7 @@ sml_message_body *sml_message_body_parse(sml_buffer *buf) {
 		msg_body->data = sml_attention_response_parse(buf);
 		break;
 	default:
-		fprintf(stderr, "libsml: error: message type %04X not yet implemented\n", *(msg_body->tag));
+		sml_error("error: message type %04X not yet implemented", *(msg_body->tag));
 		break;
 	}
 
@@ -279,8 +279,7 @@ void sml_message_body_write(sml_message_body *message_body, sml_buffer *buf) {
 		sml_attention_response_write((sml_attention_response *)message_body->data, buf);
 		break;
 	default:
-		fprintf(stderr, "libsml: error: message type %04X not yet implemented\n",
-				*(message_body->tag));
+		sml_error("error: message type %04X not yet implemented", *(message_body->tag));
 		break;
 	}
 }
@@ -334,8 +333,7 @@ void sml_message_body_free(sml_message_body *message_body) {
 			sml_attention_response_free((sml_attention_response *)message_body->data);
 			break;
 		default:
-			fprintf(stderr, "libsml: NYI: %s for message type %04X\n", __func__,
-					*(message_body->tag));
+			sml_error("NYI: %s for message type %04X", __func__, *(message_body->tag));
 			break;
 		}
 		sml_number_free(message_body->tag);
