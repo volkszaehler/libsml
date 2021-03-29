@@ -1,11 +1,4 @@
-# Example watch control file for uscan
-# Rename this file to "watch" and then you can run the "uscan" command
-# to check for upstream updates and more.
-# See uscan(1) for format
-
-# Compulsory line, this is a version 3 file
-version=3
-
-# adapted from https://github.com/gwolf/dh-make-drupal/blob/master/debian/watch
-opts="filenamemangle=s/(?:.*)?v?(\d[\d\.]*)\.tar\.gz/libsml-$1.tar.gz/"
- https://github.com/volkszaehler/libsml/tags (?:.*/)?v?(\d[\d\.]*).tar.gz
+version=4
+opts="mode=git, pgpmode=none, pretty=0.1.1+git%cd" \
+https://github.com/volkszaehler/libsml \
+HEAD debian uupdate

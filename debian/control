@@ -1,25 +1,29 @@
 Source: libsml
-Priority: extra
-Maintainer: Steffen Vogel <info@steffenvogel.de>
-Build-Depends: debhelper (>= 7.0.50~), uuid-dev (>= 2.16)
-Standards-Version: 3.9.2
+Priority: optional
+Maintainer: Andreas Moog <andreas.moog@warperbbs.de>
+Build-Depends: debhelper (>= 11~), uuid-dev (>= 2.16), dh-exec
+Standards-Version: 4.3.0
 Section: libs
-Homepage: http://github.com/dailab/libsml
-Vcs-Git: git://github.com/dailab/libsml.git
-Vcs-Browser: http://github.com/dailab/libsml
+Homepage: https://github.com/volkszaehler/libsml
+Vcs-Git: https://salsa.debian.org/amoog-guest/libsml.git
+Vcs-Browser: https://salsa.debian.org/amoog-guest/libsml
 
 Package: libsml-dev
 Section: libdevel
 Architecture: any
 Depends: libsml1 (= ${binary:Version}), uuid-dev (>= 2.16), ${misc:Depends}
 Description: Header files for libSML
- This package includes header include files
- and an example for libSML
+ libSML is a library which implements the Smart Messaging Language (SML)
+ protocol specified by VDE's Forum Netztechnik/Netzbetrieb (FNN).
+ It can be utilized to communicate to FNN specified Smart Meters
+ or Smart Meter components (EDL/MUC).
+ .
+ This package includes header include files and an example for libSML
 
 Package: libsml1
-Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Multi-Arch: same
 Description: Library for the Smart Messaging Language (SML)
  libSML is a library which implements the Smart Messaging Language (SML)
  protocol specified by VDE's Forum Netztechnik/Netzbetrieb (FNN).
