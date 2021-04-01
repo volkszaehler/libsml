@@ -28,14 +28,27 @@ extern "C" {
 
 #define SML_TIME_SEC_INDEX 0x01
 #define SML_TIME_TIMESTAMP 0x02
+#define SML_TIME_LOCAL_TIMESTAMP 0x03
+
+typedef struct {
+	u32 *timestamp;
+	i16 *local_offset;
+	i16 *season_time_offset;
+} sml_timestamp_local;
 
 typedef struct {
 	u8 *tag;
 	union {
 		u32 *sec_index;
 		u32 *timestamp;
+		sml_timestamp_local *local_timestamp;
 	} data;
 } sml_time;
+
+sml_timestamp_local *sml_timestamp_local_init();
+sml_timestamp_local *sml_timestamp_local_parse(sml_buffer *buf);
+void sml_timestamp_local_write(sml_timestamp_local *time, sml_buffer *buf);
+void sml_timestamp_local_free(sml_timestamp_local *time);
 
 sml_time *sml_time_init();
 sml_time *sml_time_parse(sml_buffer *buf);
