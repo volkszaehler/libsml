@@ -171,11 +171,13 @@ sml_list *sml_list_entry_parse(sml_buffer *buf, struct workarounds *workarounds)
 	/*
 	 * Work around DZG meter - it encodes the consumption wrong:
 	 * The value uses a scaler of -2, so e.g. 328.05 should be
-	 * encoded as an unsigned int:
+	 * encoded as an unsigned int with 2 bytes (called Unsigned16 in the standard):
 	 *   63 80 25 (0x8025 == 32805 corresponds to 328.05W)
-	 * or as a signed int:
+	 * or as an unsigned int with 3 bytes (not named in the standard):
 	 *   64 00 80 25
-	 * but they encode it as
+	 * or as a signed int with 3 bytes (not named in the standard):
+	 *   54 00 80 25
+	 * but they encode it as a signed int with 2 bytes (called Integer16 in the standard):
 	 *   53 80 25
 	 * which reads as -32731 corresponding to -327.31W.
 	 *
