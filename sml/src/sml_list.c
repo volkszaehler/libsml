@@ -113,12 +113,15 @@ sml_list *sml_list_init() {
 void sml_list_add(sml_list *list, sml_list *new_entry) { list->next = new_entry; }
 
 struct workarounds {
-	unsigned int dzg_meter : 1;
+	unsigned int old_dzg_meter : 1;
 };
 
 sml_list *sml_list_entry_parse(sml_buffer *buf, struct workarounds *workarounds) {
 	static const unsigned char dzg_serial_name[] = {1, 0, 96, 1, 0, 255};
 	static const unsigned char dzg_serial_start[] = {0x0a, 0x01, 'D', 'Z', 'G', 0x00};
+	// this is "1 DZG 00 60000000" in the hex encoding, see comment below
+	static const unsigned char dzg_serial_fixed[] =
+		{0x0a, 0x01, 'D', 'Z', 'G', 0x00, 0x03, 0x93, 0x87, 0x00};
 	static const unsigned char dzg_power_name[] = {1, 0, 16, 7, 0, 255};
 	u8 value_tl, value_len_more;
 	sml_list *l = NULL;
@@ -169,7 +172,8 @@ sml_list *sml_list_entry_parse(sml_buffer *buf, struct workarounds *workarounds)
 		goto error;
 
 	/*
-	 * Work around DZG meter - it encodes the consumption wrong:
+	 * Work around DZG meters before serial numbers starting with
+	 * 6 (in decimal) - they encode the consumption wrongly:
 	 * The value uses a scaler of -2, so e.g. 328.05 should be
 	 * encoded as an unsigned int:
 	 *   63 80 25 (0x8025 == 32805 corresponds to 328.05W)
@@ -195,9 +199,10 @@ sml_list *sml_list_entry_parse(sml_buffer *buf, struct workarounds *workarounds)
 		memcmp(l->obj_name->str, dzg_serial_name, sizeof(dzg_serial_name)) == 0 && l->value &&
 		l->value->type == SML_TYPE_OCTET_STRING &&
 		l->value->data.bytes->len >= (int)sizeof(dzg_serial_start) &&
-		memcmp(l->value->data.bytes->str, dzg_serial_start, sizeof(dzg_serial_start)) == 0) {
-		workarounds->dzg_meter = 1;
-	} else if (workarounds->dzg_meter && l->obj_name &&
+		memcmp(l->value->data.bytes->str, dzg_serial_start, sizeof(dzg_serial_start)) == 0 &&
+		memcmp(l->value->data.bytes->str, dzg_serial_fixed, sizeof(dzg_serial_fixed)) < 0) {
+		workarounds->old_dzg_meter = 1;
+	} else if (workarounds->old_dzg_meter && l->obj_name &&
 			   l->obj_name->len == sizeof(dzg_power_name) &&
 			   memcmp(l->obj_name->str, dzg_power_name, sizeof(dzg_power_name)) == 0 && l->value &&
 			   (value_len_more == 1 || value_len_more == 2 || value_len_more == 3)) {
