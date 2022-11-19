@@ -81,8 +81,10 @@ sml_message *sml_message_parse(sml_buffer *buf) {
 
 	if (*msg->crc != sml_crc16_calculate(&(buf->buffer[msg_start]), len))
 		// Workaround for Holley DTZ541 uses CRC-16/Kermit
-		if (*msg->crc != sml_crc16kermit_calculate(&(buf->buffer[msg_start]), len))
-			goto error;
+		if (*msg->crc != sml_crc16kermit_calculate(&(buf->buffer[msg_start]), len)){
+                        fprintf(stderr, "libsml: error: CRC checksum mismatch\n");
+                        goto error;
+                }
 
 	if (buf->cursor >= buf->buffer_len) {
 		buf->error = 1;
