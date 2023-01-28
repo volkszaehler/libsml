@@ -19,7 +19,7 @@ jobs:
       - name: debuild
         run: debuild
       - name: create release
-      - run: |
+        run: |
           set -x
           assets=()
           for asset in ../libsml*_amd64.deb; do
