@@ -1,33 +1,31 @@
+---
 name: Debuild Release
-on: release
-	types: 
-		- created
+'on':
+  release:
+    types: [published, created]
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   debuild:
     runs-on: ubuntu-latest
     steps:
-    - name: install devscripts
-      run: sudo apt-get install equivs devscripts
-    - uses: actions/checkout@v2
-	- name: install dependencies
-      run: sudo mk-build-deps -ri
-    - name: debuild
-	  run: debuild
-    - name: create release
-    - run: |
-        set -x
-        assets=()
-        for asset in ../libsml*_amd64.deb; do
-          assets+=("-a" "$asset")
-        done
-        tag_name="${GITHUB_REF##*/}"
-        hub release create "${assets[@]}" -m "$tag_name" "$tag_name"
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
-
-
-
-	
+      - name: install devscripts
+        run: sudo apt-get install equivs devscripts
+      - uses: actions/checkout@v2
+      - name: install dependencies
+        run: sudo mk-build-deps -ri
+      - name: debuild
+        run: debuild
+      - name: create release
+      - run: |
+          set -x
+          assets=()
+          for asset in ../libsml*_amd64.deb; do
+            assets+=("-a" "$asset")
+          done
+          tag_name="${GITHUB_REF##*/}"
+          hub release create "${assets[@]}" -m "$tag_name" "$tag_name"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
