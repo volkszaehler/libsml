@@ -1,4 +1,13 @@
 
+VERSION=$(shell dpkg-parsechangelog --show-field Version)
+
+version:
+	sed -i 's#"version":.*#"version": "${VERSION}"#' library.json 
+	sed -i 's#"Version:.*#Version: ${VERSION}#' sml.pc
+	# We set a preliminary tag. Since sml.pc and library.json are not yet 
+	# commited this can not be final  
+	git tag -f "v${VERSION}"
+
 all:
 	@$(MAKE) -C sml
 	@$(MAKE) -C examples

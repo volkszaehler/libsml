@@ -12,7 +12,7 @@
         "srcDir": "sml/src",
         "flags": "-DSML_NO_UUID_LIB"
     },
-    "version": "1.0",
+    "version": "1.0.1"
     "frameworks": "arduino",
     "platforms": "*"
   }
