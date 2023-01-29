@@ -22,7 +22,7 @@ jobs:
         run: |
           set -x
           assets=()
-          for asset in ../libsml*_amd64.deb; do
+          for asset in ../libsml*.{deb,tar.xz,dsc,changes,buildinfo}; do
             assets+=("-a" "$asset")
           done
           tag_name="${GITHUB_REF##*/}"

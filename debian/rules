@@ -3,6 +3,15 @@
 # Build with all available hardening options
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
+VERSION=$(shell dpkg-parsechangelog --show-field Version 2>/dev/null)
+
+before_dh_auto_configure:
+	sed -i 's#"version":.*#"version": "${VERSION}"#' library.json 
+	sed -i 's#"Version:.*#Version: ${VERSION}#' sml.pc
+	# We set a preliminary tag. Since sml.pc and library.json are not yet 
+	# commited this can not be final  
+	command -v git && git tag -f "v${VERSION}"
+
 %:
 	dh $@
 

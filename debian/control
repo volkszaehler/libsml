@@ -1,6 +1,6 @@
 Source: libsml
 Priority: optional
-Maintainer: Andreas Moog <andreas.moog@warperbbs.de>
+Maintainer: Joachim Zobel <jz-autosign@heute-morgen.de>
 Build-Depends: debhelper (>= 11~), uuid-dev (>= 2.16), dh-exec
 Standards-Version: 4.3.0
 Section: libs

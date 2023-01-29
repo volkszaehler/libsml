@@ -3,7 +3,7 @@ libsml (1.0.1) UNRELEASED; urgency=medium
   * Added github release action to build debian packages
   * Use version from debian changelog
 
- -- Joachim Zobel <jz-2017@heute-morgen.de>  Sat, 28 Jan 2023 16:33:37 +0100
+ -- Joachim Zobel <jz-autosign@heute-morgen.de>  Sat, 28 Jan 2023 16:33:37 +0100
 
 libsml (0.1.1+git20220208) unstable; urgency=medium
 
