@@ -10,7 +10,9 @@ execute_before_dh_auto_build:
 	sed -i 's#Version:.*#Version: ${VERSION}#' sml.pc
 	# We set a preliminary tag. Since sml.pc and library.json may not be 
 	# commited this can not be final. We also check for a build tag.
-	command -v git && !$(git tag -l "v$VERSION-build*") && git tag -f "v${VERSION}"
+	command -v git && \
+		test -z $(git tag -l "v$VERSION-build*") && \
+		git tag -f "v${VERSION}"
 
 %:
 	dh $@
