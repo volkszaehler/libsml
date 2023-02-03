@@ -22,7 +22,7 @@ jobs:
         run: |
           set -x
           tag_name="${GITHUB_REF##*/}"
-		  build_tag="$tag_name-build$(date +'%F-%H-%m-%S-%N')"
+          build_tag="$tag_name-build$(date +'%F-%H-%m-%S-%N')"
           git tag $build_tag
           git push origin $build_tag
           assets=()
