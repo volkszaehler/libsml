@@ -22,8 +22,9 @@ jobs:
         run: |
           set -x
           tag_name="${GITHUB_REF##*/}"
-          git tag "$tag_name-build$(date +'%F-%H-%m-%S-%N')"
-          git push --tags
+		  build_tag="$tag_name-build$(date +'%F-%H-%m-%S-%N')"
+          git tag $build_tag
+          git push origin $build_tag
           assets=()
           for asset in ../libsml*.{deb,tar.xz,dsc,changes,buildinfo}; do
             assets+=("-a" "$asset")
