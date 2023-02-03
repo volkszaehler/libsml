@@ -16,15 +16,20 @@ jobs:
       - uses: actions/checkout@v2
       - name: install dependencies
         run: sudo mk-build-deps -ri
+      - name: import GPG key
+        run: |
+          echo -e "$SIGNING_KEY" | gpg --batch --passphrase "SIGNING_PASSPHRASE" --import
+          gpg --list-secret-keys
       - name: debuild
-        run: debuild --no-sign
+        run: debuild -p"gpg --batch --passphrase $SIGNING_PASSPHRASE"
       - name: create release
         run: |
           set -x
           tag_name="${GITHUB_REF##*/}"
           build_tag="$tag_name-build$(date +'%F-%H-%m-%S-%N')"
           git tag $build_tag
-          git push origin $build_tag
+          # https://support.github.com/ticket/personal/0/1996818
+          #git push origin $build_tag
           assets=()
           for asset in ../libsml*.{deb,tar.xz,dsc,changes,buildinfo}; do
             assets+=("-a" "$asset")
@@ -32,3 +37,5 @@ jobs:
           hub release edit "${assets[@]}" -m "$tag_name" "$tag_name"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          SIGNING_PASSPHRASE: ${{ secrets.SIGNING_PASSPHRASE }}
