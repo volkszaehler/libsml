@@ -7,8 +7,9 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
-  debuild:
+  test:
     runs-on: ubuntu-latest
+    environment: main
     steps:
       - name: import GPG key
         run: |
