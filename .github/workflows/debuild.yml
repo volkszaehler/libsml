@@ -34,7 +34,7 @@ jobs:
           debsign -k12672035D0F1058A -p"gpg --batch --pinentry-mode loopback \
               --passphrase $SIGNING_PASSPHRASE"
         env:
-          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          SIGNING_PASSPHRASE: ${{ secrets.SIGNING_PASSPHRASE }}
       - name: upload
         run: |
           set -x
