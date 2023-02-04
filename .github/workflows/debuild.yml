@@ -19,12 +19,12 @@ jobs:
         run: sudo mk-build-deps -ri
       - name: debuild
         run: debuild --no-sign
-        env:
-          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
       - name: import GPG key
+        # A secret passphrase is used because the key is stored on disk where
+        # it may persist while the passphrase is not.
         run: |
           echo -e "$SIGNING_KEY" | \
-              gpg --batch --passphrase "SIGNING_PASSPHRASE" --import
+              gpg --batch --passphrase "$SIGNING_PASSPHRASE" --import
           gpg --list-secret-keys
         env:
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
