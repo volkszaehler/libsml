@@ -31,7 +31,7 @@ jobs:
           SIGNING_PASSPHRASE: ${{ secrets.SIGNING_PASSPHRASE }}
       - name: debsign
         run: |
-          debsign -mjz-autosign@heute-morgen.de -p"gpg --batch --pinentry-mode loopback \
+          debsign -k12672035D0F1058A -p"gpg --batch --pinentry-mode loopback \
               --passphrase $SIGNING_PASSPHRASE"
         env:
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
