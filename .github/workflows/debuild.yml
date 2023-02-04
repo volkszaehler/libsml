@@ -19,11 +19,16 @@ jobs:
         run: sudo mk-build-deps -ri
       - name: import GPG key
         run: |
-          echo -e "$SIGNING_KEY" | gpg --batch --passphrase "SIGNING_PASSPHRASE" --import
+          echo -e "$SIGNING_KEY" | \
+              gpg --batch --passphrase "SIGNING_PASSPHRASE" --import
           gpg --list-secret-keys
+        env:
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          SIGNING_PASSPHRASE: ${{ secrets.SIGNING_PASSPHRASE }}      
       - name: debuild
         run: debuild -p"gpg --batch --passphrase $SIGNING_PASSPHRASE"
-      - name: create release
+        env:
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
         run: |
           set -x
           tag_name="${GITHUB_REF##*/}"
@@ -38,5 +43,3 @@ jobs:
           hub release edit "${assets[@]}" -m "$tag_name" "$tag_name"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-          SIGNING_PASSPHRASE: ${{ secrets.SIGNING_PASSPHRASE }}
