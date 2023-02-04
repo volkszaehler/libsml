@@ -10,6 +10,7 @@ env:
 jobs:
   debuild:
     runs-on: ubuntu-latest
+    environment: main
     steps:
       - name: install devscripts
         run: sudo apt-get install equivs devscripts
