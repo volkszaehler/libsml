@@ -31,10 +31,13 @@ jobs:
           SIGNING_PASSPHRASE: ${{ secrets.SIGNING_PASSPHRASE }}
       - name: debsign
         run: |
-          debsign -k12672035D0F1058A -p"gpg --batch --pinentry-mode loopback \
+          debsign -k"$SIGNING_KEY_ID" -p"gpg --batch --pinentry-mode loopback \
               --passphrase $SIGNING_PASSPHRASE"
         env:
           SIGNING_PASSPHRASE: ${{ secrets.SIGNING_PASSPHRASE }}
+          # This is not a secret, but we want to have all signing 
+          # configuration in one place
+          SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
       - name: upload
         run: |
           set -x
