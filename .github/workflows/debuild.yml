@@ -64,7 +64,7 @@ jobs:
     environment: main
     steps:
       - name: install pbuilder
-        run: sudo apt-get install pbuilder qemu-user-static
+        run: sudo apt-get install pbuilder qemu-user-static debian-archive-keyring
       - name: configure pbuilder
         run: |
           echo "MIRRORSITE=http://ftp2.de.debian.org/debian/
@@ -85,6 +85,7 @@ jobs:
           sudo pbuilder create --architecture ${{ matrix.architecture }} \
                    --distribution ${{ matrix.distribution }} \
                    --debootstrap qemu-debootstrap \
+                   --keyring=/usr/share/keyrings/debian-archive-keyring.gpg \
                    --basetgz /var/cache/pbuilder/current.tgz
       - name: download source release
         run: |
@@ -93,8 +94,9 @@ jobs:
           hub download "$tag_name" -i 'libsml*.{tar.xz,dsc,changes,buildinfo}'
       - name: pbuild ${{ matrix.architecture }} ${{ matrix.distribution }}
         run: |
-          sudo pbuilder build --architecture  ${{ matrix.architecture }} \
-                --basetgz /var/cache/pbuilder/current.tgz libsml*.dsc
+          sudo pbuilder build \
+                   --architecture  ${{ matrix.architecture }} \
+                   --basetgz /var/cache/pbuilder/current.tgz libsml*.dsc
       - name: upload
         run: |
           set -x
