@@ -67,6 +67,7 @@ jobs:
         run: |
           sudo apt-get install pbuilder qemu-user-static \
             debian-archive-keyring
+      - uses: actions/checkout@v2
       - name: configure pbuilder
         run: |
           echo "MIRRORSITE=http://ftp2.de.debian.org/debian/
