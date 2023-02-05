@@ -73,7 +73,7 @@ jobs:
           sudo mkdir -p /var/cache/pbuilder/hooks
           echo "#!/bin/sh
 
-          /usr/bin/apt-get -y install gnupg
+          /usr/bin/apt-get -y install gnupg debian-archive-keyring
           /usr/bin/apt-key adv --keyserver pgp.mit.edu --recv-keys $SIGNING_KEY_ID" | \
             sudo tee /var/cache/pbuilder/hooks/G70Keys
         env:
