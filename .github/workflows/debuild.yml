@@ -67,8 +67,10 @@ jobs:
         run: sudo apt-get install pbuilder qemu-user-static
       - name: configure pbuilder
         run: |
-          echo "MIRRORSITE=http://ftp2.de.debian.org/debian/" | \
+          echo "MIRRORSITE=http://ftp2.de.debian.org/debian/
+          HOOKDIR=/var/cache/pbuilder/hooks" | \
             sudo tee ~/.pbuilderrc
+          sudo mkdir -p /var/cache/pbuilder/hooks
           echo "#!/bin/sh
 
           /usr/bin/apt-get -y install gnupg
