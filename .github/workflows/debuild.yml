@@ -98,9 +98,10 @@ jobs:
                    --debootstrapopts --keyring=/usr/share/keyrings/debian-archive-keyring.gpg
       - name: pbuild ${{ matrix.architecture }} ${{ matrix.distribution }}
         run: |
+          version="${GITHUB_REF##*/v}"
           sudo pbuilder build \
                    --architecture  ${{ matrix.architecture }} \
-                   --basetgz /var/cache/pbuilder/current.tgz libsml*.dsc
+                   --basetgz /var/cache/pbuilder/current.tgz libsml_$version.dsc
       - name: upload
         run: |
           set -x
