@@ -74,6 +74,7 @@ jobs:
           set -x
           tag_name="${GITHUB_REF##*/}"
           hub release download "$tag_name" -i libsml*.{tar.xz,dsc,changes,buildinfo}
+          ls -l
       - name: configure pbuilder
         run: |
           echo "MIRRORSITE=http://ftp2.de.debian.org/debian/
