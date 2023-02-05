@@ -67,7 +67,13 @@ jobs:
         run: |
           sudo apt-get install pbuilder qemu-user-static \
             debian-archive-keyring
+        # Needed for the release download
       - uses: actions/checkout@v2
+      - name: download source release
+        run: |
+          set -x
+          tag_name="${GITHUB_REF##*/}"
+          hub release download "$tag_name" -i libsml*.{tar.xz,dsc,changes,buildinfo}
       - name: configure pbuilder
         run: |
           echo "MIRRORSITE=http://ftp2.de.debian.org/debian/
@@ -90,11 +96,6 @@ jobs:
                    --debootstrap qemu-debootstrap \
                    --basetgz /var/cache/pbuilder/current.tgz \
                    --debootstrapopts --keyring=/usr/share/keyrings/debian-archive-keyring.gpg
-      - name: download source release
-        run: |
-          set -x
-          tag_name="${GITHUB_REF##*/}"
-          hub release download "$tag_name" -i 'libsml*.{tar.xz,dsc,changes,buildinfo}'
       - name: pbuild ${{ matrix.architecture }} ${{ matrix.distribution }}
         run: |
           sudo pbuilder build \
