@@ -58,8 +58,8 @@ jobs:
     needs: debuild
     strategy:
       matrix:
-        architecture: [armhf]
-        distribution: [bullseye]
+        architecture: [armhf,arm64,amd64]
+        distribution: [unstable]
     runs-on: ubuntu-latest
     environment: main
     steps:
