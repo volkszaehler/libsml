@@ -93,7 +93,7 @@ jobs:
         run: |
           set -x
           tag_name="${GITHUB_REF##*/}"
-          hub download "$tag_name" -i 'libsml*.{tar.xz,dsc,changes,buildinfo}'
+          hub release download "$tag_name" -i 'libsml*.{tar.xz,dsc,changes,buildinfo}'
       - name: pbuild ${{ matrix.architecture }} ${{ matrix.distribution }}
         run: |
           sudo pbuilder build \
