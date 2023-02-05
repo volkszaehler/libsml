@@ -87,8 +87,8 @@ jobs:
           sudo pbuilder create --architecture ${{ matrix.architecture }} \
                    --distribution ${{ matrix.distribution }} \
                    --debootstrap qemu-debootstrap \
-                   --keyring=/usr/share/keyrings/debian-archive-keyring.gpg \
-                   --basetgz /var/cache/pbuilder/current.tgz
+                   --basetgz /var/cache/pbuilder/current.tgz \
+                   --debootstrapopts --keyring=/usr/share/keyrings/debian-archive-keyring.gpg
       - name: download source release
         run: |
           set -x
