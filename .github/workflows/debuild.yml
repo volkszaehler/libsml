@@ -73,7 +73,7 @@ jobs:
         run: |
           set -x
           tag_name="${GITHUB_REF##*/}"
-          hub release download "$tag_name" -i libsml*.{tar.xz,dsc,changes,buildinfo}
+          hub release download "$tag_name"
           ls -l
       - name: configure pbuilder
         run: |
