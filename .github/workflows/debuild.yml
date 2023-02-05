@@ -93,17 +93,16 @@ jobs:
       - name: create bootstrap
         run: |
           sudo pbuilder create --architecture ${{ matrix.architecture }} \
-             --distribution ${{ matrix.distribution }} \
-             --debootstrap qemu-debootstrap \
-             --basetgz /var/cache/pbuilder/current.tgz \
-             --debootstrapopts \
-             --keyring=/usr/share/keyrings/debian-archive-keyring.gpg
+                 --distribution ${{ matrix.distribution }} \
+                 --debootstrap qemu-debootstrap \
+                 --basetgz /var/cache/pbuilder/current.tgz \
+                 --debootstrapopts --keyring=/usr/share/keyrings/debian-archive-keyring.gpg
       - name: pbuild ${{ matrix.architecture }} ${{ matrix.distribution }}
         run: |
           version="${GITHUB_REF##*/v}"
           sudo pbuilder build \
-             --architecture  ${{ matrix.architecture }} \
-             --basetgz /var/cache/pbuilder/current.tgz libsml_$version.dsc
+                 --architecture  ${{ matrix.architecture }} \
+                 --basetgz /var/cache/pbuilder/current.tgz libsml_$version.dsc
       - name: upload
         run: |
           set -x
@@ -112,8 +111,10 @@ jobs:
           git tag $build_tag
           # https://support.github.com/ticket/personal/0/1996818
           #git push origin $build_tag
-          mkdir ${{ matrix.distribution }}
-          cp /var/cache/pbuilder/result/libsml*.deb ${{ matrix.distribution }}
-          hub release edit -a ${{ matrix.distribution }} -m "$tag_name" "$tag_name"
+          assets=()
+          for asset in /var/cache/pbuilder/result/libsml*.deb; do
+            assets+=("-a" "$asset")
+          done
+          hub release edit "${assets[@]}" -m "$tag_name" "$tag_name"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
