@@ -79,10 +79,14 @@ sml_message *sml_message_parse(sml_buffer *buf) {
 		goto error;
 	}
 
-	if (*msg->crc != sml_crc16_calculate(&(buf->buffer[msg_start]), len))
+	if (
+		*msg->crc != sml_crc16_calculate(&(buf->buffer[msg_start]), len) &&
 		// Workaround for Holley DTZ541 uses CRC-16/Kermit
-		if (*msg->crc != sml_crc16kermit_calculate(&(buf->buffer[msg_start]), len))
-			goto error;
+		*msg->crc != sml_crc16kermit_calculate(&(buf->buffer[msg_start]), len)
+	){
+		fprintf(stderr, "libsml: sml_message_parse(): crc mismatch, dropping message\n");
+		goto error;
+	}
 
 	if (buf->cursor >= buf->buffer_len) {
 		buf->error = 1;
