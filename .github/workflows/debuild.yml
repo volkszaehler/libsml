@@ -13,15 +13,15 @@ jobs:
     runs-on: ubuntu-latest
     environment: main
     steps:
-      - name: install devscripts
-        run: sudo apt-get install equivs devscripts
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-          token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}        
-        # Here we are setting a variable from an expression.
+          token: ${{ secrets.WORGFLOW_TAGGING }}        
       - name: Set env
+        # Here we are setting a variable from an expression.
         run: echo "TAG_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
+      - name: install devscripts
+        run: sudo apt-get install equivs devscripts
       - name: install dependencies
         run: sudo mk-build-deps -ri
       - name: debuild
@@ -82,8 +82,8 @@ jobs:
             debian-archive-keyring
         # Needed for the release download
       - uses: actions/checkout@v2
-        # Here we are setting a variable from an expression.
       - name: Set env
+        # Here we are setting a variable from an expression.
         run: echo "TAG_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
       - name: download source release
         run: |
