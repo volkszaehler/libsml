@@ -51,7 +51,7 @@ jobs:
           build_tag="$TAG_NAME-build$(date +'%F-%H-%m-%S-%N')"
           git tag $build_tag
           # https://support.github.com/ticket/personal/0/1996818
-          #git push origin $build_tag
+          git push origin $build_tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: upload
@@ -69,7 +69,7 @@ jobs:
     needs: debuild
     strategy:
       matrix:
-        architecture: [armhf,arm64,amd64]
+        architecture: [armhf]
         distribution: [unstable]
     runs-on: ubuntu-latest
     environment: main
