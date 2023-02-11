@@ -16,6 +16,9 @@ jobs:
       - name: install devscripts
         run: sudo apt-get install equivs devscripts
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}        
         # Here we are setting a variable from an expression.
       - name: Set env
         run: echo "TAG_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
