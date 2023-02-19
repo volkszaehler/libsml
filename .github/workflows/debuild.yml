@@ -20,6 +20,15 @@ jobs:
       - name: Set env
         # Here we are setting a variable from an expression.
         run: echo "TAG_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
+      - name: set build tag
+        run: |
+          set -x
+          build_tag="$TAG_NAME-build$(date +'%F-%H-%m-%S-%N')"
+          git tag $build_tag
+          # https://support.github.com/ticket/personal/0/1996818
+          git push origin $build_tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: install devscripts
         run: sudo apt-get install equivs devscripts
       - name: install dependencies
@@ -45,15 +54,6 @@ jobs:
           # This is not a secret, but we want to have all signing
           # configuration in one place
           SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
-      - name: set build tag
-        run: |
-          set -x
-          build_tag="$TAG_NAME-build$(date +'%F-%H-%m-%S-%N')"
-          git tag $build_tag
-          # https://support.github.com/ticket/personal/0/1996818
-          git push origin $build_tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: upload
         run: |
           set -x
@@ -69,7 +69,7 @@ jobs:
     needs: debuild
     strategy:
       matrix:
-        architecture: [armhf]
+        architecture: [armhf,arm64,amd64]
         distribution: [unstable]
     runs-on: ubuntu-latest
     environment: main
