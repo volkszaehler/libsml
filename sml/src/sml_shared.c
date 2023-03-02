@@ -162,7 +162,7 @@ int sml_buf_optional_is_skipped(sml_buffer *buf) {
 	return 0;
 }
 
-void hexdump(unsigned char *buffer, size_t buffer_len) {
+void sml_hexdump(unsigned char *buffer, size_t buffer_len) {
 	for (size_t i = 0; i < buffer_len; i++) {
 		printf("%02X ", (unsigned char)buffer[i]);
 		if ((i + 1) % 8 == 0) {
