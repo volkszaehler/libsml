@@ -107,7 +107,7 @@ void sml_buf_update_bytes_read(sml_buffer *buf, int bytes);
 int sml_buf_optional_is_skipped(sml_buffer *buf);
 
 // Prints arbitrarily byte string to stdout with printf
-void hexdump(unsigned char *buffer, size_t buffer_len);
+void sml_hexdump(unsigned char *buffer, size_t buffer_len);
 
 #ifdef __cplusplus
 }
