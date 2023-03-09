@@ -104,7 +104,7 @@ octet_string *sml_octet_string_generate_uuid() {
 	uuid_t uuid;
 	uuid_generate(uuid);
 #else
-	char uuid[16];
+	unsigned char uuid[16];
 
 // TODO add support for WIN32 systems
 #ifdef __linux__
