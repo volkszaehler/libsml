@@ -17,6 +17,14 @@ libsml (0.1.1+git20200409-1) unstable; urgency=medium
 
  -- Andreas Moog <andreas.moog@warperbbs.de>  Sat, 30 May 2020 15:27:24 +0200
 
+libsml (0.1.1+git20180125-1.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Add patch from Logan Rosen for FTBFS with gcc 10.
+    (Closes: #957478)
+
+ -- Adrian Bunk <bunk@debian.org>  Sun, 07 Feb 2021 00:09:04 +0200
+
 libsml (0.1.1+git20191213-1) unstable; urgency=medium
 
   * New upstream snapshot
