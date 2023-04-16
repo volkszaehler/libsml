@@ -14,7 +14,7 @@ libsml (0.1.1+git20180125-1.1) unstable; urgency=medium
 
  -- Adrian Bunk <bunk@debian.org>  Sun, 07 Feb 2021 00:09:04 +0200
 
-libsml (0.1.1+git20191213-1) unstable; urgency=medium
+libsml (0.1.1+git20191213-1) UNRELEASED; urgency=medium
 
   * New upstream snapshot
   * Update symbols file, some (erroneously exported) symbols are gone
