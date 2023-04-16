@@ -1,6 +1,6 @@
 Source: libsml
 Priority: optional
-Maintainer: Joachim Zobel <jz-autosign@heute-morgen.de>
+Maintainer: Joachim Zobel <jz-2017@heute-morgen.de>
 Build-Depends: debhelper (>= 13~), uuid-dev (>= 2.16), dh-exec
 Standards-Version: 4.6.2
 Section: libs
