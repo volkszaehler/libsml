@@ -1,12 +1,12 @@
 Source: libsml
 Priority: optional
 Maintainer: Joachim Zobel <jz-autosign@heute-morgen.de>
-Build-Depends: debhelper (>= 11~), uuid-dev (>= 2.16), dh-exec
-Standards-Version: 4.3.0
+Build-Depends: debhelper (>= 13~), uuid-dev (>= 2.16), dh-exec
+Standards-Version: 4.6.2
 Section: libs
 Homepage: https://github.com/volkszaehler/libsml
-Vcs-Git: https://salsa.debian.org/amoog-guest/libsml.git
-Vcs-Browser: https://salsa.debian.org/amoog-guest/libsml
+Vcs-Git: https://github.com/volkszaehler/libsml.git
+Vcs-Browser: https://github.com/volkszaehler/libsml
 
 Package: libsml-dev
 Section: libdevel

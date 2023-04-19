@@ -3,7 +3,7 @@
 # Build with all available hardening options
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
-VERSION=$(shell dpkg-parsechangelog --show-field Version 2>/dev/null)
+VERSION=$(shell dpkg-parsechangelog --show-field Version 2>/dev/null | cut -f1 -d-)
 
 execute_before_dh_auto_build:
 	sed -i 's#"version":.*#"version": "${VERSION}",#' library.json 
