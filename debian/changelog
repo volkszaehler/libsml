@@ -4,6 +4,7 @@ libsml (1.0.2-1) unstable; urgency=medium
   * Maintainer changed (Closes: #1034250) 
   * Moved to the volkszaehler repo 
   * Actually releases the fix that (Closes: #946525)
+  * Maintainer changed (Closes: #1034250) 
 
  -- Joachim Zobel <jz-2017@heute-morgen.de>  Mon, 10 Jul 2023 10:44:57 +0200
 
