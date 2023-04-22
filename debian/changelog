@@ -1,18 +1,10 @@
 libsml (1.0.2-1) unstable; urgency=medium
 
-  * Actually releases the fix by A. Moog that (Closes: #946525)
+  * Actually releases the fix that (Closes: #946525), see below.
   * Maintainer changed (Closes: #1034250) 
   * Moved to the volkszaehler repo 
 
  -- Joachim Zobel <jz-2017@heute-morgen.de>  Mon, 10 Jul 2023 10:44:57 +0200
-
-libsml (0.1.1+git20180125-1.1) unstable; urgency=medium
-
-  * Non-maintainer upload.
-  * Add patch from Logan Rosen for FTBFS with gcc 10.
-    (Closes: #957478)
-
- -- Adrian Bunk <bunk@debian.org>  Sun, 07 Feb 2021 00:09:04 +0200
 
 libsml (0.1.1+git20191213-1) UNRELEASED; urgency=medium
 
@@ -26,6 +18,14 @@ libsml (0.1.1+git20191213-1) UNRELEASED; urgency=medium
   * Update standards version
 
  -- Andreas Moog <andreas.moog@warperbbs.de>  Sun, 17 Feb 2019 13:00:21 +0100
+
+libsml (0.1.1+git20180125-1.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Add patch from Logan Rosen for FTBFS with gcc 10.
+    (Closes: #957478)
+
+ -- Adrian Bunk <bunk@debian.org>  Sun, 07 Feb 2021 00:09:04 +0200
 
 libsml (0.1.1+git20180125-1) unstable; urgency=medium
 
