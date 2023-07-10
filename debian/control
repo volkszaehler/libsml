@@ -13,6 +13,7 @@ Package: libsml-dev
 Section: libdevel
 Architecture: any
 Depends: libsml1 (= ${binary:Version}), uuid-dev (>= 2.16), ${misc:Depends}
+Multi-Arch: same
 Description: Header files for libSML
  libSML is a library which implements the Smart Messaging Language (SML)
  protocol specified by VDE's Forum Netztechnik/Netzbetrieb (FNN).
