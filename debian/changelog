@@ -1,43 +1,20 @@
-libsml (1.1.2) unstable; urgency=medium
+libsml (1.0.2-1) unstable; urgency=medium
 
-  * Added the libsml-utils package for sml_server
-
- -- Joachim Zobel <jz-autosign@heute-morgen.de>  Wed, 03 Jan 2024 06:13:18 +0100
-
-libsml (1.1.1) unstable; urgency=medium
-
-  * Added armel as release architecture 
-
- -- Joachim Zobel <jz-autosign@heute-morgen.de>  Tue, 31 Oct 2023 12:01:50 +0100
-
-libsml (1.1.0) unstable; urgency=medium
-
-  * renamed hexdump to sml_hexdump 
-
- -- Joachim Zobel <jz-autosign@heute-morgen.de>  Wed, 02 Aug 2023 18:43:49 +0200
-
-libsml (1.0.2) unstable; urgency=medium
-
-  * Actually releases the fix that (Closes: #946525), see below.
+  * Actually releases the fix by A. Moog that (Closes: #946525)
   * Maintainer changed (Closes: #1034250) 
-
- -- Joachim Zobel <jz-autosign@heute-morgen.de>  Fri, 21 Apr 2023 06:29:38 +0200
-
-libsml (1.0.1) unstable; urgency=medium
-
-  * Added github release action to build debian packages
-  * Use version from debian changelog
   * Moved to the volkszaehler repo 
 
- -- Joachim Zobel <jz-autosign@heute-morgen.de>  Thu, 05 Jan 2023 20:58:31 +0100
+ -- Joachim Zobel <jz-2017@heute-morgen.de>  Mon, 10 Jul 2023 10:44:57 +0200
 
-libsml (0.1.1+git20200409-1) UNRELEASED; urgency=medium
+libsml (0.1.1+git20180125-1.1) unstable; urgency=medium
 
-  * New upstream snapshot
+  * Non-maintainer upload.
+  * Add patch from Logan Rosen for FTBFS with gcc 10.
+    (Closes: #957478)
 
- -- Andreas Moog <andreas.moog@warperbbs.de>  Sat, 30 May 2020 15:27:24 +0200
+ -- Adrian Bunk <bunk@debian.org>  Sun, 07 Feb 2021 00:09:04 +0200
 
-libsml (0.1.1+git20191213-1) UNRELEASED; urgency=medium
+libsml (0.1.1+git20191213-1) unstable; urgency=medium
 
   * New upstream snapshot
   * Update symbols file, some (erroneously exported) symbols are gone
@@ -49,14 +26,6 @@ libsml (0.1.1+git20191213-1) UNRELEASED; urgency=medium
   * Update standards version
 
  -- Andreas Moog <andreas.moog@warperbbs.de>  Sun, 17 Feb 2019 13:00:21 +0100
-
-libsml (0.1.1+git20180125-1.1) unstable; urgency=medium
-
-  * Non-maintainer upload.
-  * Add patch from Logan Rosen for FTBFS with gcc 10.
-    (Closes: #957478)
-
- -- Adrian Bunk <bunk@debian.org>  Sun, 07 Feb 2021 00:09:04 +0200
 
 libsml (0.1.1+git20180125-1) unstable; urgency=medium
 
