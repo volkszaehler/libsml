@@ -1,3 +1,9 @@
+libsml (1.0.2-2) unstable; urgency=medium
+
+  * Added watch file and improved Vcs-* attributes 
+
+ -- Joachim Zobel <jz-2017@heute-morgen.de>  Thu, 13 Jul 2023 12:34:20 +0200
+
 libsml (1.0.2-1) unstable; urgency=medium
 
   * Actually releases the fix that (Closes: #946525), see below.
