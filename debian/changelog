@@ -1,3 +1,9 @@
+libsml (1.0.2-3) unstable; urgency=medium
+
+  * Fixed Vcs-Git branch syntax 
+
+ -- Joachim Zobel <jz-2017@heute-morgen.de>  Fri, 14 Jul 2023 09:31:22 +0200
+
 libsml (1.0.2-2) unstable; urgency=medium
 
   * Added watch file and improved Vcs-* attributes 
