@@ -44,6 +44,11 @@ curl -1sLf "https://dl.cloudsmith.io/public/volkszaehler/volkszaehler-org-projec
 	gpg --dearmor > /usr/share/keyrings/volkszaehler-volkszaehler-org-project-archive-keyring.gpg
 ```
 
+There is also a libsml package that is part of debian. While the version in
+older debian releases is somewhat outdated the version in trixie is recent. 
+Other than our packages the official Debian packages have Debian version 
+postfix separated by a hyphen (e.g. 1.0.2-3).
+
 #### Testing
 For testing data have a look at https://github.com/devZer0/libsml-testing
 
