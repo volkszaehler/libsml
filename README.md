@@ -48,7 +48,7 @@ There is also a libsml package that is part of Debian. While the version in
 older Debian releases is somewhat outdated the version in trixie is recent. 
 Other than the project packages the official Debian package has a version 
 postfix separated by a hyphen (e.g. 1.0.2-3). It has minor differences in 
-packaging and is maintained by us the debian branch.
+packaging and is maintained as part of the project in the debian branch.
 
 #### Testing
 For testing data have a look at https://github.com/devZer0/libsml-testing
