@@ -26,7 +26,7 @@ The resulting binaries are located in sml/lib
 
 [![Hosted By: Cloudsmith](https://img.shields.io/badge/OSS%20hosting%20by-cloudsmith-blue?logo=cloudsmith&style=flat-square)](https://cloudsmith.com)
 
-We now build debian packages for amd64, armhf and arm64 as part of our releases.
+We now build Debian packages for amd64, armhf and arm64 as part of our releases.
 The ones attached to the release are meant for trixie. These and packages for 
 bookworm and bullseye are also provided through a repository graciously provided by 
 [Cloudsmith](https://cloudsmith.com).
@@ -44,10 +44,11 @@ curl -1sLf "https://dl.cloudsmith.io/public/volkszaehler/volkszaehler-org-projec
 	gpg --dearmor > /usr/share/keyrings/volkszaehler-volkszaehler-org-project-archive-keyring.gpg
 ```
 
-There is also a libsml package that is part of debian. While the version in
-older debian releases is somewhat outdated the version in trixie is recent. 
-Other than our packages the official Debian packages have Debian version 
-postfix separated by a hyphen (e.g. 1.0.2-3).
+There is also a libsml package that is part of Debian. While the version in
+older Debian releases is somewhat outdated the version in trixie is recent. 
+Other than the project packages the official Debian package has a version 
+postfix separated by a hyphen (e.g. 1.0.2-3). It has minor differences in 
+packaging and is maintained by us the debian branch.
 
 #### Testing
 For testing data have a look at https://github.com/devZer0/libsml-testing
