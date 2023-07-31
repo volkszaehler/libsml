@@ -1,0 +1,22 @@
+---
+name: Workflow Test
+'on':
+  workflow_dispatch:
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    environment: main
+    steps:
+      - name: import GPG key
+        run: |
+          echo -e "$SIGNING_KEY" | \
+              gpg --batch --passphrase "SIGNING_PASSPHRASE" --import
+          gpg --list-secret-keys
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          SIGNING_PASSPHRASE: ${{ secrets.SIGNING_PASSPHRASE }}

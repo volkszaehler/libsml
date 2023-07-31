@@ -1,0 +1,145 @@
+---
+# Basically this is a fragmented bash script
+name: Debuild Release
+'on':
+  release:
+    types: published
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  debuild:
+    runs-on: ubuntu-latest
+    environment: main
+    env:
+      REPO: volkszaehler/volkszaehler-org-project
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set env
+        # Here we are setting a variable from an expression.
+        run: echo "TAG_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
+      - name: install devscripts
+        run: sudo apt-get install equivs devscripts pipx
+      - name: install dependencies
+        run: sudo mk-build-deps -ri
+      - name: debuild
+        run: debuild --no-sign
+      - name: import GPG key
+        # A secret passphrase is used because the key is stored on disk where
+        # it may persist while the passphrase is not.
+        run: |
+          echo -e "$SIGNING_KEY" | \
+              gpg --batch --passphrase "$SIGNING_PASSPHRASE" --import
+          gpg --list-secret-keys
+        env:
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          SIGNING_PASSPHRASE: ${{ secrets.SIGNING_PASSPHRASE }}
+      - name: debsign
+        run: |
+          debsign -k"$SIGNING_KEY_ID" -p"gpg --batch --pinentry-mode loopback \
+              --passphrase $SIGNING_PASSPHRASE"
+        env:
+          SIGNING_PASSPHRASE: ${{ secrets.SIGNING_PASSPHRASE }}
+          # This is not a secret, but we want to have all signing
+          # configuration in one place
+          SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
+      - name: upload as Release
+        run: |
+          set -x
+          assets=()
+          for asset in ../libsml*.{tar.xz,dsc}; do
+            assets+=("-a" "$asset")
+          done
+          hub release edit "${assets[@]}" -m "$TAG_NAME" "$TAG_NAME"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: upload to Cloudsmith
+        run: |
+            pipx install cloudsmith-cli
+            VERSION="${GITHUB_REF##*/v}"
+            DESCRIPTION_FILE="../libsml_$VERSION.dsc"
+            cloudsmith push deb ${REPO}/debian/any-version "$DESCRIPTION_FILE" \
+                --sources-file=$(dcmd --orig "$DESCRIPTION_FILE")
+        env:
+          CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
+
+  pbuilder:
+    needs: debuild
+    strategy:
+      matrix:
+        architecture: [armhf, arm64, amd64]
+        distribution: [trixie, bookworm, bullseye]
+    runs-on: ubuntu-latest
+    environment: main
+    env:
+      PBRT: /var/cache/pbuilder
+      REPO: volkszaehler/volkszaehler-org-project
+    steps:
+      - name: install pbuilder
+        run: |
+          sudo apt-get install pbuilder qemu-user-static \
+            debian-archive-keyring pipx
+        # Needed for the release download
+      - uses: actions/checkout@v2
+      - name: Set env
+        # Here we are setting a variable from an expression.
+        run: echo "TAG_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
+      - name: download source release
+        run: |
+          set -x
+          hub release download "$TAG_NAME"
+          ls -l
+      - name: configure pbuilder
+        run: |
+          echo "MIRRORSITE=http://ftp2.de.debian.org/debian/
+          HOOKDIR=$PBRT/hooks" | \
+            sudo tee /root/.pbuilderrc
+          sudo mkdir -p $PBRT/hooks
+          echo "#!/bin/sh
+
+          apt-get -y install gnupg debian-archive-keyring
+          apt-key adv --keyserver pgp.mit.edu --recv-keys $SIGNING_KEY_ID" | \
+            sudo tee $PBRT/hooks/G70Keys
+        env:
+          # This is not a secret, but we want to have all signing
+          # configuration in one place
+          SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
+      - name: create bootstrap
+        run: |
+          sudo pbuilder create --architecture ${{ matrix.architecture }} \
+                 --distribution ${{ matrix.distribution }} \
+                 --debootstrap qemu-debootstrap \
+                 --basetgz $PBRT/current.tgz \
+                 --debootstrapopts \
+                     --keyring=/usr/share/keyrings/debian-archive-keyring.gpg
+      - name: pbuild ${{ matrix.architecture }} ${{ matrix.distribution }}
+        run: |
+          VERSION="${GITHUB_REF##*/v}"
+          sudo pbuilder build \
+                 --architecture  ${{ matrix.architecture }} \
+                 --basetgz $PBRT/current.tgz libsml_$VERSION.dsc
+      - name: upload as Release
+        run: |
+          set -x
+          if [[ "${{ matrix.distribution }}" != trixie ]]; then
+            exit
+          fi
+          assets=()
+          for asset in $PBRT/result/libsml*_${{ matrix.architecture }}.{deb,changes,buildinfo}; do
+            assets+=("-a" "$asset")
+          done
+          hub release edit "${assets[@]}" -m "$TAG_NAME" "$TAG_NAME"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: upload to Cloudsmith
+        run: |
+            pipx install cloudsmith-cli
+            VERSION="${GITHUB_REF##*/v}"
+            CHANGES_FILE="$PBRT/result/libsml_${VERSION}_${{ matrix.architecture }}.changes"
+            for DEB in $(dcmd --deb $CHANGES_FILE); do
+                cloudsmith push deb \
+                    ${REPO}/debian/${{ matrix.distribution }} "$DEB"
+            done
+        env:
+          CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}

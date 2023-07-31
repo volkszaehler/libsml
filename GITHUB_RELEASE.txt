@@ -1,0 +1,7 @@
+
+How to do a Github Release
+
+To do a Github release that triggers the debuild action you have to create a
+version tag v<version>. The version must match the version in first line of 
+the debian/changelog. The tag must have a v prefix.
+

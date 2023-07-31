@@ -11,7 +11,8 @@ Copyright: 2011-2019 Juri Glass
 License: GPL-3+
 
 Files: debian/*
-Copyright: 2017-2019 Andreas Moog <andreas.moog@warperbbs.de>
+Copyright: 2023 Joachim Zobel <jz-2017@heute-morgen.de> 
+           2017-2019 Andreas Moog <andreas.moog@warperbbs.de>
            2011 Steffen Vogel <info@steffenvogel.de>
 License: GPL-3+
 
