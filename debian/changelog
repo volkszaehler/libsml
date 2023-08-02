@@ -1,3 +1,9 @@
+libsml (1.1.0) unstable; urgency=medium
+
+  * renamed hexdump to sml_hexdump 
+
+ -- Joachim Zobel <jz-autosign@heute-morgen.de>  Wed, 02 Aug 2023 18:43:49 +0200
+
 libsml (1.0.2) unstable; urgency=medium
 
   * Actually releases the fix that (Closes: #946525), see below.
