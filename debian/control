@@ -3,6 +3,7 @@ Priority: optional
 Maintainer: Joachim Zobel <jz-autosign@heute-morgen.de>
 Build-Depends: debhelper (>= 13~), uuid-dev (>= 2.16), dh-exec
 Standards-Version: 4.6.2
+Rules-Requires-Root: no
 Section: libs
 Homepage: https://github.com/volkszaehler/libsml
 Vcs-Git: https://github.com/volkszaehler/libsml.git
