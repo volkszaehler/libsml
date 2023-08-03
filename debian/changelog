@@ -1,3 +1,10 @@
+libsml (1.1.0-1) unstable; urgency=medium
+
+  * New Upstream release
+  * Changed to not require root during build
+
+ -- Joachim Zobel <jz-2017@heute-morgen.de>  Thu, 03 Aug 2023 06:12:50 +0200
+
 libsml (1.0.2-3) unstable; urgency=medium
 
   * Fixed Vcs-Git branch syntax 

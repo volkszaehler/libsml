@@ -4,7 +4,6 @@ libsml.so.1 libsml1 #MINVER#
  ctoi@Base 0.1.1
  end_seq@Base 0.1.1
  esc_seq@Base 0.1.1
- hexdump@Base 0.1.1
  sml_attention_response_free@Base 0.1.1
  sml_attention_response_init@Base 0.1.1
  sml_attention_response_parse@Base 0.1.1
@@ -69,6 +68,7 @@ libsml.so.1 libsml1 #MINVER#
  sml_get_profile_pack_response_init@Base 0.1.1
  sml_get_profile_pack_response_parse@Base 0.1.1
  sml_get_profile_pack_response_write@Base 0.1.1
+ sml_hexdump@Base 1.1.0
  sml_list_add@Base 0.1.1
  sml_list_entry_free@Base 0.1.1
  sml_list_entry_parse@Base 0.1.1
