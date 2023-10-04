@@ -56,6 +56,43 @@ typedef int64_t i64;
 #define SML_TYPE_NUMBER_32 sizeof(u32)
 #define SML_TYPE_NUMBER_64 sizeof(u64)
 
+// A bitmap to configure workarounds.
+typedef int16_t sml_workarounds;
+
+/*
+ * Workaround for certain DZG meters that encode the consumption wrongly.
+ * Affected:
+ * - Model TODO with serial numbers starting with 6 (in decimal)
+ *
+ * We only get the serial number, not the meter model via SML. Since model
+ * DWSB.2TH (serial starting with 4) does not exhibit this bug, we can't
+ * apply the workaround automatically.
+ *
+ * The value uses a scaler of -2, so e.g. 328.05 should be
+ * encoded as an unsigned int with 2 bytes (called Unsigned16 in the standard):
+ *   63 80 25 (0x8025 == 32805 corresponds to 328.05W)
+ * or as an unsigned int with 3 bytes (not named in the standard):
+ *   64 00 80 25
+ * or as a signed int with 3 bytes (not named in the standard):
+ *   54 00 80 25
+ * but they encode it as a signed int with 2 bytes (called Integer16 in the standard):
+ *   53 80 25
+ * which reads as -32731 corresponding to -327.31W.
+ *
+ * Luckily, it doesn't attempt to do any compression on
+ * negative values, they're always encoded as, e.g.
+ *   55 ff fe 13 93 (== -126061 -> -1260.61W)
+ *
+ * Since we cannot have positive values >= 0x80000000
+ * (that would be 21474836.48 W, yes, >21MW), we can
+ * assume that for 1, 2, 3 bytes, if they look signed,
+ * they really were intended to be unsigned.
+ *
+ * Note that this will NOT work if a meter outputs negative
+ * values compressed as well - but mine doesn't.
+ */
+#define SML_WORKAROUND_DZG_NEGATIVE 0x0001
+
 // This sml_buffer is used in two different use-cases.
 //
 // Parsing: the raw data is in the buffer field,
@@ -74,6 +111,7 @@ typedef struct {
 	size_t cursor;
 	int error;
 	char *error_msg;
+	sml_workarounds workarounds;
 } sml_buffer;
 
 sml_buffer *sml_buffer_init(size_t length);

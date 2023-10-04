@@ -36,7 +36,8 @@ typedef struct {
 
 sml_file *sml_file_init();
 // parses a SML file.
-sml_file *sml_file_parse(unsigned char *buffer, size_t buffer_len);
+sml_file *sml_file_parse(unsigned char *buffer, size_t buffer_len,
+						 const sml_workarounds workarounds);
 void sml_file_add_message(sml_file *file, sml_message *message);
 void sml_file_write(sml_file *file);
 void sml_file_free(sml_file *file);

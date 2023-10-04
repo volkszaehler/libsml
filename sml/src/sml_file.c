@@ -27,11 +27,14 @@
 // EDL meter must provide at least 250 bytes as a receive buffer
 #define SML_FILE_BUFFER_LENGTH 512
 
-sml_file *sml_file_parse(unsigned char *buffer, size_t buffer_len) {
+sml_file *sml_file_parse(unsigned char *buffer, 
+						 size_t buffer_len,
+						 const sml_workarounds workarounds) {
 	sml_file *file = (sml_file *)malloc(sizeof(sml_file));
 	*file = (sml_file){.messages = NULL, .messages_len = 0, .buf = NULL};
 
 	sml_buffer *buf = sml_buffer_init(buffer_len);
+	buf->workarounds = workarounds;
 	memcpy(buf->buffer, buffer, buffer_len);
 	file->buf = buf;
 

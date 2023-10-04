@@ -63,8 +63,9 @@ TEST(sml_file, parse_crash_report1) {
 	// sadly not... just 202 TEST_ASSERT_EQUAL(388, sizeof buffer2);
 	memcpy(buffer, buffer2, sizeof buffer2);
 	size_t bytes = 388;
+	sml_workarounds workarounds = 0;
 	// bytes and buffer like from sml_transport_read
-	sml_file *file = sml_file_parse(buffer + 8, bytes - 16);
+	sml_file *file = sml_file_parse(buffer + 8, bytes - 16, workarounds);
 	TEST_ASSERT_NOT_NULL(file);
 	TEST_ASSERT_EQUAL(1, file->messages_len);
 	sml_file_free(file);

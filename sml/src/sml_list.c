@@ -112,16 +112,7 @@ sml_list *sml_list_init() {
 
 void sml_list_add(sml_list *list, sml_list *new_entry) { list->next = new_entry; }
 
-struct workarounds {
-	unsigned int old_dzg_meter : 1;
-};
-
-sml_list *sml_list_entry_parse(sml_buffer *buf, struct workarounds *workarounds) {
-	static const unsigned char dzg_serial_name[] = {1, 0, 96, 1, 0, 255};
-	static const unsigned char dzg_serial_start[] = {0x0a, 0x01, 'D', 'Z', 'G', 0x00};
-	// this is "1 DZG 00 60000000" in the hex encoding, see comment below
-	static const unsigned char dzg_serial_fixed[] =
-		{0x0a, 0x01, 'D', 'Z', 'G', 0x00, 0x03, 0x93, 0x87, 0x00};
+sml_list *sml_list_entry_parse(sml_buffer *buf) {
 	static const unsigned char dzg_power_name[] = {1, 0, 16, 7, 0, 255};
 	u8 value_tl, value_len_more;
 	sml_list *l = NULL;
@@ -171,43 +162,10 @@ sml_list *sml_list_entry_parse(sml_buffer *buf, struct workarounds *workarounds)
 	if (sml_buf_has_errors(buf))
 		goto error;
 
-	/*
-	 * Work around DZG meters before serial numbers starting with
-	 * 6 (in decimal) - they encode the consumption wrongly:
-	 * The value uses a scaler of -2, so e.g. 328.05 should be
-	 * encoded as an unsigned int with 2 bytes (called Unsigned16 in the standard):
-	 *   63 80 25 (0x8025 == 32805 corresponds to 328.05W)
-	 * or as an unsigned int with 3 bytes (not named in the standard):
-	 *   64 00 80 25
-	 * or as a signed int with 3 bytes (not named in the standard):
-	 *   54 00 80 25
-	 * but they encode it as a signed int with 2 bytes (called Integer16 in the standard):
-	 *   53 80 25
-	 * which reads as -32731 corresponding to -327.31W.
-	 *
-	 * Luckily, it doesn't attempt to do any compression on
-	 * negative values, they're always encoded as, e.g.
-	 *   55 ff fe 13 93 (== -126061 -> -1260.61W)
-	 *
-	 * Since we cannot have positive values >= 0x80000000
-	 * (that would be 21474836.48 W, yes, >21MW), we can
-	 * assume that for 1, 2, 3 bytes, if they look signed,
-	 * they really were intended to be unsigned.
-	 *
-	 * Note that this will NOT work if a meter outputs negative
-	 * values compressed as well - but mine doesn't.
-	 */
-	if (l->obj_name && l->obj_name->len == sizeof(dzg_serial_name) &&
-		memcmp(l->obj_name->str, dzg_serial_name, sizeof(dzg_serial_name)) == 0 && l->value &&
-		l->value->type == SML_TYPE_OCTET_STRING &&
-		l->value->data.bytes->len >= (int)sizeof(dzg_serial_start) &&
-		memcmp(l->value->data.bytes->str, dzg_serial_start, sizeof(dzg_serial_start)) == 0 &&
-		memcmp(l->value->data.bytes->str, dzg_serial_fixed, sizeof(dzg_serial_fixed)) < 0) {
-		workarounds->old_dzg_meter = 1;
-	} else if (workarounds->old_dzg_meter && l->obj_name &&
-			   l->obj_name->len == sizeof(dzg_power_name) &&
-			   memcmp(l->obj_name->str, dzg_power_name, sizeof(dzg_power_name)) == 0 && l->value &&
-			   (value_len_more == 1 || value_len_more == 2 || value_len_more == 3)) {
+	if ((buf->workarounds & SML_WORKAROUND_DZG_NEGATIVE) && l->obj_name &&
+		l->obj_name->len == sizeof(dzg_power_name) &&
+		memcmp(l->obj_name->str, dzg_power_name, sizeof(dzg_power_name)) == 0 && l->value &&
+		(value_len_more == 1 || value_len_more == 2 || value_len_more == 3)) {
 		l->value->type &= ~SML_TYPE_FIELD;
 		l->value->type |= SML_TYPE_UNSIGNED;
 	}
@@ -223,7 +181,6 @@ error:
 }
 
 sml_list *sml_list_parse(sml_buffer *buf) {
-	struct workarounds workarounds = {0};
 	sml_list *ret = NULL, **pos = &ret;
 	int elems;
 
@@ -239,7 +196,7 @@ sml_list *sml_list_parse(sml_buffer *buf) {
 	elems = sml_buf_get_next_length(buf);
 
 	while (elems > 0) {
-		*pos = sml_list_entry_parse(buf, &workarounds);
+		*pos = sml_list_entry_parse(buf);
 		if (sml_buf_has_errors(buf))
 			goto error;
 		pos = &(*pos)->next;

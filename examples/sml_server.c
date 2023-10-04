@@ -41,6 +41,7 @@
 // globals
 int sflag = false; // flag to process only a single OBIS data stream
 int vflag = false; // verbose flag
+sml_workarounds workarounds = 0;
 
 
 int serial_port_open(const char* device) {
@@ -88,7 +89,7 @@ void transport_receiver(unsigned char *buffer, size_t buffer_len) {
 	int i;
 	// the buffer contains the whole message, with transport escape sequences.
 	// these escape sequences are stripped here.
-	sml_file *file = sml_file_parse(buffer + 8, buffer_len - 16);
+	sml_file *file = sml_file_parse(buffer + 8, buffer_len - 16, workarounds);
 	// the sml file is parsed now
 
 	// this prints some information about the file
