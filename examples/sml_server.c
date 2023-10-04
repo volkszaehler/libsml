@@ -162,12 +162,16 @@ int main(int argc, char *argv[]) {
 	while ((c = getopt(argc, argv, "+hsv")) != -1) {
 		switch (c) {
 		case 'h':
-			printf("usage: %s [-h] [-s] [-v] device\n", argv[0]);
+			printf("usage: %s [-d] [-h] [-s] [-v] device\n", argv[0]);
 			printf("device - serial device of connected power meter e.g. /dev/cu.usbserial, or - for stdin\n");
+			printf("-d - Enable negative values workaround for certain DZG meters\n");
 			printf("-h - help\n");
 			printf("-s - process only one OBIS data stream (single)\n");
 			printf("-v - verbose\n");
 			exit(0); // exit here
+			break;
+		case 'd':
+			workarounds |= SML_WORKAROUND_DZG_NEGATIVE;
 			break;
 		case 's':
 			sflag = true;
