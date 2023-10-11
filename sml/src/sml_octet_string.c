@@ -67,11 +67,13 @@ void sml_octet_string_free(octet_string *str) {
 
 octet_string *sml_octet_string_parse(sml_buffer *buf) {
 	if (sml_buf_optional_is_skipped(buf)) {
+		fprintf(stderr, "optional is skipped\n");
 		return NULL;
 	}
 
 	int l;
 	if (sml_buf_get_next_type(buf) != SML_TYPE_OCTET_STRING) {
+		fprintf(stderr, "not a string\n");
 		buf->error = 1;
 		return NULL;
 	}
@@ -79,6 +81,7 @@ octet_string *sml_octet_string_parse(sml_buffer *buf) {
 	l = sml_buf_get_next_length(buf);
 	if (l < 0 || l >= (buf->buffer_len - buf->cursor)) { // sanity check: doesnt fit into buffer...
 		// libFuzzer fix for crash-3b12f21fdd346700ac1a10dfebba7604be8f070c
+		fprintf(stderr, "does not fit\n");
 		buf->error = 1;
 		return NULL;
 	}
