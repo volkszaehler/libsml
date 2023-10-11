@@ -67,6 +67,7 @@ error:
 
 void *sml_number_parse(sml_buffer *buf, unsigned char type, int max_size) {
 	if (sml_buf_optional_is_skipped(buf)) {
+		fprintf(stderr, "skipping optional number\n");
 		return NULL;
 	}
 
@@ -75,17 +76,20 @@ void *sml_number_parse(sml_buffer *buf, unsigned char type, int max_size) {
 	short negative_int = 0;
 
 	if ((buf->cursor + 1) > buf->buffer_len) { // at least 1 byte for type?
+		fprintf(stderr, "at least one byte for type\n");
 		buf->error = 1;
 		return NULL;
 	}
 
 	if (sml_buf_get_next_type(buf) != type) {
+		fprintf(stderr, "what?\n");
 		buf->error = 1;
 		return NULL;
 	}
 
 	l = sml_buf_get_next_length(buf);
 	if (l < 0 || l > max_size) {
+		fprintf(stderr, "length\n");
 		buf->error = 1;
 		return NULL;
 	}
@@ -95,12 +99,14 @@ void *sml_number_parse(sml_buffer *buf, unsigned char type, int max_size) {
 
 	// at least l bytes available?
 	if ((buf->cursor + l) > buf->buffer_len) {
+		fprintf(stderr, "at least one byte available\n");
 		buf->error = 1;
 		free(np);
 		return NULL;
 	}
 
 	if ((buf->cursor + 1) > buf->buffer_len) { // at least 1 byte?
+		fprintf(stderr, "libsml: at least one byte\n");
 		buf->error = 1;
 		free(np);
 		return NULL;
