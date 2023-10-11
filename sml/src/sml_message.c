@@ -40,18 +40,21 @@ sml_message *sml_message_parse(sml_buffer *buf) {
 	int len;
 
 	if (sml_buf_get_next_type(buf) != SML_TYPE_LIST) {
+		fprintf(stderr, "not a list\n");
 		buf->error = 1;
 		goto error;
 	}
 
 	if (sml_buf_get_next_length(buf) != 6) {
+		fprintf(stderr, "length != 6\n");
 		buf->error = 1;
 		goto error;
 	}
 
 	msg->transaction_id = sml_octet_string_parse(buf);
-	if (sml_buf_has_errors(buf))
+	if (sml_buf_has_errors(buf)) {
 		goto error;
+	}
 
 	msg->group_id = sml_u8_parse(buf);
 	if (sml_buf_has_errors(buf))
@@ -89,6 +92,7 @@ sml_message *sml_message_parse(sml_buffer *buf) {
 	}
 
 	if (buf->cursor >= buf->buffer_len) {
+		fprintf(stderr, "buf->cursor >= buf->buffer_len\n");
 		buf->error = 1;
 		goto error;
 	}
