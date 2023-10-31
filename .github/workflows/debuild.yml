@@ -20,7 +20,7 @@ jobs:
         # Here we are setting a variable from an expression.
         run: echo "TAG_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
       - name: install devscripts
-        run: sudo apt-get install equivs devscripts pipx
+        run: sudo apt-get install equivs devscripts pipx hub
       - name: install dependencies
         run: sudo mk-build-deps -ri
       - name: debuild
@@ -79,7 +79,7 @@ jobs:
       - name: install pbuilder
         run: |
           sudo apt-get install pbuilder qemu-user-static \
-            debian-archive-keyring pipx
+            debian-archive-keyring pipx hub
         # Needed for the release download
       - uses: actions/checkout@v2
       - name: Set env
