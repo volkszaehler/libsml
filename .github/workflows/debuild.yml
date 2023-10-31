@@ -68,7 +68,7 @@ jobs:
     needs: debuild
     strategy:
       matrix:
-        architecture: [armhf, arm64, amd64]
+        architecture: [armel, armhf, arm64, amd64]
         distribution: [trixie, bookworm, bullseye]
     runs-on: ubuntu-latest
     environment: main
