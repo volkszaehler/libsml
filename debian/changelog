@@ -1,3 +1,9 @@
+libsml (1.1.1) unstable; urgency=medium
+
+  * Added armel as release architecture 
+
+ -- Joachim Zobel <jz-2017@heute-morgen.de>  Tue, 31 Oct 2023 12:01:50 +0100
+
 libsml (1.1.0) unstable; urgency=medium
 
   * renamed hexdump to sml_hexdump 
