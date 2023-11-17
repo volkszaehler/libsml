@@ -112,16 +112,64 @@ sml_list *sml_list_init() {
 
 void sml_list_add(sml_list *list, sml_list *new_entry) { list->next = new_entry; }
 
+/* Note: this gets invoked for _every_ object seen */
+static bool detect_buggy_dzg_dvs74(sml_list *l)
+{
+#define DZG_SERIAL_LENGTH	10
+	static const unsigned char dzg_serial_oid[] = {1, 0, 96, 1, 0, 255};
+	static const unsigned char dzg_serial_start[] = { 0x0a, 0x01, 'D', 'Z', 'G' };
+	static const struct {
+		uint64_t start, end;
+	} broken_dvs74_ranges[] = {
+		{ .start = 42000000, .end = 48999999 },
+		{ .start = 55000000, .end = 58999999 },
+	};
+#define NUM_BROKEN_RANGES (sizeof(broken_dvs74_ranges)/sizeof(broken_dvs74_ranges[0]))
+	const unsigned char *val;
+	uint64_t serial = 0;
+	unsigned int i;
+
+	/* check that object ID is for the serial number */
+	if (!l->obj_name || l->obj_name->len != sizeof(dzg_serial_oid) ||
+	    memcmp(l->obj_name->str, dzg_serial_oid, sizeof(dzg_serial_oid)))
+		return false;
+
+	/* check that it's an octet string of the right length */
+	if (!l->value || l->value->type != SML_TYPE_OCTET_STRING ||
+	    l->value->data.bytes->len != DZG_SERIAL_LENGTH)
+		return false;
+
+	val = l->value->data.bytes->str;
+
+	/* check that it's a DZG meter at all */
+	if (memcmp(val, dzg_serial_start, sizeof(dzg_serial_start)))
+		return false;
+
+	/* convert remainder of serial number to integer */
+	for (i = sizeof(dzg_serial_start); i < DZG_SERIAL_LENGTH; i++) {
+		serial <<= 8;
+		serial |= val[i];
+	}
+
+	/*
+	 * Check that it's in one of the affected ranges,
+	 * which means it's a DVS74 with the bug
+	 * (DVS74 with serial >= 60000000 have the bug fixed)
+	 */
+	for (i = 0; i < NUM_BROKEN_RANGES; i++) {
+		if (serial >= broken_dvs74_ranges[i].start &&
+		    serial <= broken_dvs74_ranges[i].end)
+			return true;
+	}
+
+	return false;
+}
+
 struct workarounds {
-	unsigned int old_dzg_meter : 1;
+	unsigned int old_dzg_dvs74 : 1;
 };
 
 sml_list *sml_list_entry_parse(sml_buffer *buf, struct workarounds *workarounds) {
-	static const unsigned char dzg_serial_name[] = {1, 0, 96, 1, 0, 255};
-	static const unsigned char dzg_serial_start[] = {0x0a, 0x01, 'D', 'Z', 'G', 0x00};
-	// this is "1 DZG 00 60000000" in the hex encoding, see comment below
-	static const unsigned char dzg_serial_fixed[] =
-		{0x0a, 0x01, 'D', 'Z', 'G', 0x00, 0x03, 0x93, 0x87, 0x00};
 	static const unsigned char dzg_power_name[] = {1, 0, 16, 7, 0, 255};
 	u8 value_tl, value_len_more;
 	sml_list *l = NULL;
@@ -172,8 +220,9 @@ sml_list *sml_list_entry_parse(sml_buffer *buf, struct workarounds *workarounds)
 		goto error;
 
 	/*
-	 * Work around DZG meters before serial numbers starting with
-	 * 6 (in decimal) - they encode the consumption wrongly:
+	 * Work around DZG DVS74 meters in the serial number ranges listed
+	 * in detect_buggy_dzg_dvs74() above - they encode the consumption
+	 * incorrectly:
 	 * The value uses a scaler of -2, so e.g. 328.05 should be
 	 * encoded as an unsigned int with 2 bytes (called Unsigned16 in the standard):
 	 *   63 80 25 (0x8025 == 32805 corresponds to 328.05W)
@@ -197,14 +246,9 @@ sml_list *sml_list_entry_parse(sml_buffer *buf, struct workarounds *workarounds)
 	 * Note that this will NOT work if a meter outputs negative
 	 * values compressed as well - but mine doesn't.
 	 */
-	if (l->obj_name && l->obj_name->len == sizeof(dzg_serial_name) &&
-		memcmp(l->obj_name->str, dzg_serial_name, sizeof(dzg_serial_name)) == 0 && l->value &&
-		l->value->type == SML_TYPE_OCTET_STRING &&
-		l->value->data.bytes->len >= (int)sizeof(dzg_serial_start) &&
-		memcmp(l->value->data.bytes->str, dzg_serial_start, sizeof(dzg_serial_start)) == 0 &&
-		memcmp(l->value->data.bytes->str, dzg_serial_fixed, sizeof(dzg_serial_fixed)) < 0) {
-		workarounds->old_dzg_meter = 1;
-	} else if (workarounds->old_dzg_meter && l->obj_name &&
+	if (detect_buggy_dzg_dvs74(l)) {
+		workarounds->old_dzg_dvs74 = 1;
+	} else if (workarounds->old_dzg_dvs74 && l->obj_name &&
 			   l->obj_name->len == sizeof(dzg_power_name) &&
 			   memcmp(l->obj_name->str, dzg_power_name, sizeof(dzg_power_name)) == 0 && l->value &&
 			   (value_len_more == 1 || value_len_more == 2 || value_len_more == 3)) {
