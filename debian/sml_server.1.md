@@ -25,6 +25,9 @@ given, stdin is used. This data is then displayed in human readable form.
 
 # EXAMPLES
 
+Assuming there is a meter connected to ttyUSB0 you can display the transmitted 
+data.
+
 ~~~
 $ sml_server /dev/ttyUSB0 
 129-129:199.130.3*255#ISK#
