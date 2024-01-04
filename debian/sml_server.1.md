@@ -42,9 +42,13 @@ The sml_server is intended as a tool for development and testing and as an
 example. It was not developed for production use.
 
 # COPYRIGHT
+
 The sml_server program is Copyright (C) Juri Glass, Mathias Runge, Nadim El 
 Sayed and others.
 
 # SEE ALSO
+
 [libsml-testing](https://github.com/devZer0/libsml-testing)
+is a collection of test data from real life smart meters. It also has
+usage examples.
 
