@@ -24,6 +24,7 @@ Description: Header files for libSML
 Package: libsml1
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Suggests: libsml-utils
 Multi-Arch: same
 Description: Library for the Smart Messaging Language (SML)
  libSML is a library which implements the Smart Messaging Language (SML)
