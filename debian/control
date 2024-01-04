@@ -31,10 +31,10 @@ Description: Library for the Smart Messaging Language (SML)
  It can be utilized to communicate to FNN specified Smart Meters
  or Smart Meter components (EDL/MUC).
 
-Package: smlserver
+Package: libsml-utils 
 Architecture: any
 Depends: libsml1, ${shlibs:Depends}, ${misc:Depends}
 Multi-Arch: foreign
 Description: Small tool for testing and debugging libsml
- Smlserver was originally intended as an example but is quite useful by itself.
+ sml_server was originally intended as an example but is quite useful by itself.
  
