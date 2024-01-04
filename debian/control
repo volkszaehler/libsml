@@ -1,7 +1,7 @@
 Source: libsml
 Priority: optional
 Maintainer: Joachim Zobel <jz-autosign@heute-morgen.de>
-Build-Depends: debhelper (>= 13~), uuid-dev (>= 2.16), dh-exec
+Build-Depends: debhelper (>= 13~), uuid-dev (>= 2.16), dh-exec, pandoc
 Standards-Version: 4.6.2
 Rules-Requires-Root: no
 Section: libs
@@ -30,3 +30,11 @@ Description: Library for the Smart Messaging Language (SML)
  protocol specified by VDE's Forum Netztechnik/Netzbetrieb (FNN).
  It can be utilized to communicate to FNN specified Smart Meters
  or Smart Meter components (EDL/MUC).
+
+Package: smlserver
+Architecture: any
+Depends: libsml1, ${shlibs:Depends}, ${misc:Depends}
+Multi-Arch: foreign
+Description: Small tool for testing and debugging libsml
+ Smlserver was originally intended as an example but is quite useful by itself.
+ 
