@@ -1,6 +1,6 @@
 libsml (1.1.2) unstable; urgency=medium
 
-  * Added a small package for sml_server
+  * Added the libsml-utils package for sml_server
 
  -- Joachim Zobel <jz-autosign@heute-morgen.de>  Wed, 03 Jan 2024 06:13:18 +0100
 
