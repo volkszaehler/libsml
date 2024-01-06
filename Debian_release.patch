@@ -1,0 +1,35 @@
+diff --git a/.gitattributes b/.gitattributes
+new file mode 100644
+index 0000000..9bedf0b
+--- /dev/null
++++ b/.gitattributes
+@@ -0,0 +1 @@
++debian/ export-ignore
+diff --git a/debian/compat b/debian/compat
+deleted file mode 100644
+index b1bd38b..0000000
+--- a/debian/compat
++++ /dev/null
+@@ -1 +0,0 @@
+-13
+diff --git a/debian/control b/debian/control
+index e95cb0b..a5b89a4 100644
+--- a/debian/control
++++ b/debian/control
+@@ -1,7 +1,7 @@
+ Source: libsml
+ Priority: optional
+-Maintainer: Joachim Zobel <jz-autosign@heute-morgen.de>
+-Build-Depends: debhelper (>= 13~), uuid-dev (>= 2.16), dh-exec, pandoc
++Maintainer: Joachim Zobel <jz-2017@heute-morgen.de>
++Build-Depends: debhelper-compat (= 13), uuid-dev (>= 2.16), dh-exec, pandoc
+ Standards-Version: 4.6.2
+ Rules-Requires-Root: no
+ Section: libs
+diff --git a/debian/source/format b/debian/source/format
+index 89ae9db..163aaf8 100644
+--- a/debian/source/format
++++ b/debian/source/format
+@@ -1 +1 @@
+-3.0 (native)
++3.0 (quilt)
