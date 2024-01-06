@@ -6,13 +6,14 @@ Standards-Version: 4.6.2
 Rules-Requires-Root: no
 Section: libs
 Homepage: https://github.com/volkszaehler/libsml
-Vcs-Git: https://github.com/volkszaehler/libsml.git
-Vcs-Browser: https://github.com/volkszaehler/libsml
+Vcs-Git: https://github.com/volkszaehler/libsml.git -b debian
+Vcs-Browser: https://github.com/volkszaehler/libsml/tree/debian
 
 Package: libsml-dev
 Section: libdevel
 Architecture: any
 Depends: libsml1 (= ${binary:Version}), uuid-dev (>= 2.16), ${misc:Depends}
+Multi-Arch: same
 Description: Header files for libSML
  libSML is a library which implements the Smart Messaging Language (SML)
  protocol specified by VDE's Forum Netztechnik/Netzbetrieb (FNN).
