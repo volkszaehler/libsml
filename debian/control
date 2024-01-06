@@ -25,9 +25,18 @@ Description: Header files for libSML
 Package: libsml1
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Suggests: libsml-utils
 Multi-Arch: same
 Description: Library for the Smart Messaging Language (SML)
  libSML is a library which implements the Smart Messaging Language (SML)
  protocol specified by VDE's Forum Netztechnik/Netzbetrieb (FNN).
  It can be utilized to communicate to FNN specified Smart Meters
  or Smart Meter components (EDL/MUC).
+
+Package: libsml-utils 
+Architecture: any
+Depends: libsml1, ${shlibs:Depends}, ${misc:Depends}
+Multi-Arch: foreign
+Description: Small tool for testing and debugging libsml
+ sml_server was originally intended as an example but is quite useful by itself.
+ 

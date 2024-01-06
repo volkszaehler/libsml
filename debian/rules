@@ -9,7 +9,15 @@ execute_before_dh_auto_build:
 	sed -i 's#"version":.*#"version": "${VERSION}",#' library.json 
 	sed -i 's#Version:.*#Version: ${VERSION}#' sml.pc
 
+execute_after_dh_auto_build:
+	pandoc -o sml_server.1 -s -t man debian/sml_server.1.md
+
+execute_after_dh_clean:
+	rm -f sml_server.1
+
+override_dh_auto_install:
+
 %:
 	dh $@
 
-override_dh_auto_install:
+
