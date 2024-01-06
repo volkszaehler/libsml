@@ -1,7 +1,7 @@
 UNAME := $(shell uname)
 CFLAGS += -I../sml/include/ -g -std=c99 -Wall -Wextra -pedantic
 OBJS = sml_server.o
-LIBSML = ../sml/lib/libsml.a
+LIBSML = ../sml/lib/libsml.so.1
 INSTALL = /usr/bin/install
 prefix = /usr/local
 exec_prefix = ${prefix}

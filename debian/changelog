@@ -1,8 +1,14 @@
+libsml (1.1.2) unstable; urgency=medium
+
+  * Added the libsml-utils package for sml_server
+
+ -- Joachim Zobel <jz-autosign@heute-morgen.de>  Wed, 03 Jan 2024 06:13:18 +0100
+
 libsml (1.1.1) unstable; urgency=medium
 
   * Added armel as release architecture 
 
- -- Joachim Zobel <jz-2017@heute-morgen.de>  Tue, 31 Oct 2023 12:01:50 +0100
+ -- Joachim Zobel <jz-autosign@heute-morgen.de>  Tue, 31 Oct 2023 12:01:50 +0100
 
 libsml (1.1.0) unstable; urgency=medium
 
