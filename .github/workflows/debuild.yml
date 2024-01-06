@@ -78,6 +78,8 @@ jobs:
       PBRT: /var/cache/pbuilder
       REPO: volkszaehler/volkszaehler-org-project
     steps:
+      - name: update repo information
+        run: sudo apt-get update
       - name: install pbuilder
         run: |
           sudo apt-get install pbuilder qemu-user-static \
