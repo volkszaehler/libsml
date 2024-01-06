@@ -19,6 +19,8 @@ jobs:
       - name: Set env
         # Here we are setting a variable from an expression.
         run: echo "TAG_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
+      - name: update repo information
+        run: sudo apt-get update
       - name: install devscripts
         run: sudo apt-get install equivs devscripts pipx hub
       - name: install dependencies
