@@ -3,7 +3,7 @@ Steps for creating an official Debian release
 
 1. Create a branch debian-<debian version>
 2. Apply the patch Debian_release.patch
-   patch -p1 < Debian_release.patch
+   patch -p1 < debian/Debian_release.patch
    and
    git add .gitattributes
 3. Retrieve the current changelog with 
