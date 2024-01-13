@@ -1,41 +1,35 @@
-libsml (1.1.2) unstable; urgency=medium
+libsml (1.1.2-1) unstable; urgency=medium
 
-  * Added the libsml-utils package for sml_server
+  * Added the libsml-utils package containing the sml_server utility  
 
- -- Joachim Zobel <jz-autosign@heute-morgen.de>  Wed, 03 Jan 2024 06:13:18 +0100
+ -- Joachim Zobel <jz-2017@heute-morgen.de>  Sat, 13 Jan 2024 10:53:14 +0100
 
-libsml (1.1.1) unstable; urgency=medium
+libsml (1.1.0-1) unstable; urgency=medium
 
-  * Added armel as release architecture 
+  * New Upstream release
+  * Changed to not require root during build
 
- -- Joachim Zobel <jz-autosign@heute-morgen.de>  Tue, 31 Oct 2023 12:01:50 +0100
+ -- Joachim Zobel <jz-2017@heute-morgen.de>  Thu, 03 Aug 2023 06:12:50 +0200
 
-libsml (1.1.0) unstable; urgency=medium
+libsml (1.0.2-3) unstable; urgency=medium
 
-  * renamed hexdump to sml_hexdump 
+  * Fixed Vcs-Git branch syntax 
 
- -- Joachim Zobel <jz-autosign@heute-morgen.de>  Wed, 02 Aug 2023 18:43:49 +0200
+ -- Joachim Zobel <jz-2017@heute-morgen.de>  Fri, 14 Jul 2023 09:31:22 +0200
 
-libsml (1.0.2) unstable; urgency=medium
+libsml (1.0.2-2) unstable; urgency=medium
+
+  * Added watch file and improved Vcs-* attributes 
+
+ -- Joachim Zobel <jz-2017@heute-morgen.de>  Thu, 13 Jul 2023 12:34:20 +0200
+
+libsml (1.0.2-1) unstable; urgency=medium
 
   * Actually releases the fix that (Closes: #946525), see below.
   * Maintainer changed (Closes: #1034250) 
-
- -- Joachim Zobel <jz-autosign@heute-morgen.de>  Fri, 21 Apr 2023 06:29:38 +0200
-
-libsml (1.0.1) unstable; urgency=medium
-
-  * Added github release action to build debian packages
-  * Use version from debian changelog
   * Moved to the volkszaehler repo 
 
- -- Joachim Zobel <jz-autosign@heute-morgen.de>  Thu, 05 Jan 2023 20:58:31 +0100
-
-libsml (0.1.1+git20200409-1) UNRELEASED; urgency=medium
-
-  * New upstream snapshot
-
- -- Andreas Moog <andreas.moog@warperbbs.de>  Sat, 30 May 2020 15:27:24 +0200
+ -- Joachim Zobel <jz-2017@heute-morgen.de>  Mon, 10 Jul 2023 10:44:57 +0200
 
 libsml (0.1.1+git20191213-1) UNRELEASED; urgency=medium
 
