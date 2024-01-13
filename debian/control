@@ -1,7 +1,7 @@
 Source: libsml
 Priority: optional
-Maintainer: Joachim Zobel <jz-autosign@heute-morgen.de>
-Build-Depends: debhelper (>= 13~), uuid-dev (>= 2.16), dh-exec, pandoc
+Maintainer: Joachim Zobel <jz-2017@heute-morgen.de>
+Build-Depends: debhelper-compat (= 13), uuid-dev (>= 2.16), dh-exec, pandoc
 Standards-Version: 4.6.2
 Rules-Requires-Root: no
 Section: libs
