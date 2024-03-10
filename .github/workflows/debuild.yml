@@ -70,18 +70,21 @@ jobs:
     needs: debuild
     strategy:
       matrix:
-        os: [debian]
-        architecture: [armel, armhf, arm64, amd64]
+        os: [debian, raspbian]
         distribution: [trixie, bookworm, bullseye]
-        include: 
-            - os: raspbian
-              architecture: armhf
-            - mirrorsite: http://ftp2.de.debian.org/debian/
-            - mirrorsite: http://mirror.netcologne.de/raspbian/raspbian/
-              os: raspbian
-            - keyring: debian-archive-keyring
-            - keyring: raspbian-archive-keyring
-              os: raspbian 
+        architecture: [armhf, arm64, amd64]
+        exclude:
+          - os: raspbian
+            architecture: arm64
+          - os: raspbian
+            architecture: amd64
+        include:
+          - mirrorsite: http://ftp2.de.debian.org/debian/
+          - mirrorsite: http://mirror.netcologne.de/raspbian/raspbian/
+            os: raspbian
+          - keyring: debian-archive-keyring
+          - keyring: raspbian-archive-keyring
+            os: raspbian
     runs-on: ubuntu-latest
     environment: main
     env:
