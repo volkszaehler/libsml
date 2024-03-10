@@ -149,6 +149,9 @@ jobs:
           if [[ "${{ matrix.distribution }}" != trixie ]]; then
             exit
           fi
+          if [ "${{ matrix.architecture }}" == armhf ] && [ "${{ matrix.os }}" == debian ]; then
+            exit
+          fi
           assets=()
           for asset in $PBRT/result/libsml*_${{ matrix.architecture }}.{deb,changes,buildinfo}; do
             assets+=("-a" "$asset")
