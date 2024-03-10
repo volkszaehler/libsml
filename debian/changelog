@@ -1,3 +1,10 @@
+libsml (1.1.3) unstable; urgency=medium
+
+  * Added build for Raspbian.
+  * Removed armel architecture.
+
+ -- Joachim Zobel <jz-autosign@heute-morgen.de>  Sun, 10 Mar 2024 15:59:59 +0100
+
 libsml (1.1.2) unstable; urgency=medium
 
   * Added the libsml-utils package for sml_server
