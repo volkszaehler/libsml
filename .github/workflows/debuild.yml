@@ -135,7 +135,8 @@ jobs:
                  --distribution ${{ matrix.distribution }} \
                  --basetgz $PBRT/current.tgz \
                  --debootstrapopts \
-                     --keyring=/usr/share/keyrings/${{ matrix.keyring }}.gpg
+                     --keyring=/usr/share/keyrings/${{ matrix.keyring }}.gpg \
+                 --debootstrapopts --exclude=usrmerge
       - name: pbuild ${{ matrix.os }} ${{ matrix.architecture }} ${{ matrix.distribution }}
         run: |
           VERSION="${GITHUB_REF##*/v}"
