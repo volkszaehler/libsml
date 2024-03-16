@@ -133,7 +133,6 @@ jobs:
         run: |
           sudo pbuilder create --architecture ${{ matrix.architecture }} \
                  --distribution ${{ matrix.distribution }} \
-                 --debootstrap qemu-debootstrap \
                  --basetgz $PBRT/current.tgz \
                  --debootstrapopts \
                      --keyring=/usr/share/keyrings/${{ matrix.keyring }}.gpg
