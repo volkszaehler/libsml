@@ -78,6 +78,8 @@ jobs:
             architecture: arm64
           - os: raspbian
             architecture: amd64
+          - os: raspbian
+            distribution: trixie
         include:
           - mirrorsite: http://ftp2.de.debian.org/debian/
           - mirrorsite: http://mirror.netcologne.de/raspbian/raspbian/
