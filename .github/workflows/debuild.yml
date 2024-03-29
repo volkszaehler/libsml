@@ -103,7 +103,7 @@ jobs:
           fi
       - name: install pbuilder
         run: |
-          sudo apt-get install pbuilder qemu-user-static pipx hub
+          sudo apt-get install pbuilder mmdebstrap qemu-user-static pipx hub
         # Needed for the release download
       - uses: actions/checkout@v2
       - name: Set env
@@ -134,6 +134,7 @@ jobs:
           sudo pbuilder create --architecture ${{ matrix.architecture }} \
                  --distribution ${{ matrix.distribution }} \
                  --basetgz $PBRT/current.tgz \
+                 --debootstrap mmdebstrap \
                  --debootstrapopts \
                      --keyring=/usr/share/keyrings/${{ matrix.keyring }}.gpg
       - name: pbuild ${{ matrix.os }} ${{ matrix.architecture }} ${{ matrix.distribution }}
