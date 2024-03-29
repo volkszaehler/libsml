@@ -31,10 +31,9 @@ for armhf as part of our releases. Unfortunately Debian armhf packages do not
 run on Raspberry Pi 1 although the architecture on the RPi is named armhf. 
 Using Raspian armhf packages fixes that.
 
-The ones attached to the release are meant for trixie. In case of the armhf
-architecture the attached package is build for Raspbian. These and packages for
-bookworm and bullseye are also provided through a repository graciously provided
-by [Cloudsmith](https://cloudsmith.com).
+The ones attached to the release are meant for debian trixie. These and 
+packages for bookworm and bullseye are also provided through a repository 
+graciously provided by [Cloudsmith](https://cloudsmith.com).
 
 The setup of the repository is also 
 [explained by Cloudsmith](https://cloudsmith.io/~volkszaehler/repos/volkszaehler-org-project/setup/#formats-deb).
