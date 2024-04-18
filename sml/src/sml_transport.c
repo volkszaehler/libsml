@@ -90,6 +90,17 @@ size_t sml_transport_read(int fd, unsigned char *buffer, size_t max_len) {
 			return 0;
 		}
 
+		for (int i=1;i<4;i++){
+			if (len>i && memcmp(&buf[len-i], esc_seq, 4) == 0){
+				if (buf[len-i+4] == 0x1a) {
+					fprintf(stderr, "libsml: warning: unaligned end esc sequence found in data, stream desynced?\n");
+				} else if (buf[len-i+4] == 0x01) {
+					fprintf(stderr, "libsml: warning: unaligned (likely) start esc sequence found in data, stream desynced?\n");
+				} else {
+					fprintf(stderr, "libsml: warning: unaligned esc sequence found in data, stream desynced?\n");
+				}
+			}
+		}
 		if (memcmp(&buf[len], esc_seq, 4) == 0) {
 			// found esc sequence
 			len += 4;
