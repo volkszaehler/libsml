@@ -1,4 +1,5 @@
 libsml.so.1 libsml1 #MINVER#
+* Build-Depends-Package: libsml-dev
  c2ptoi@Base 0.1.1
  c2toi@Base 0.1.1
  ctoi@Base 0.1.1

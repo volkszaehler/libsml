@@ -1,5 +1,5 @@
 UNAME := $(shell uname)
-CFLAGS += -I./include/ -fPIC -fno-stack-protector -g -std=c99 -Wall -Wextra -pedantic
+CFLAGS += -I./include/ -fPIC -g -std=c99 -Wall -Wextra -pedantic
 
 # Available Flags:
 # SML_NO_UUID_LIB - compile without uuid lib
