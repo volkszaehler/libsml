@@ -1,13 +1,13 @@
 #!/usr/bin/make -f
 
-# Build with all available hardening options
-export DEB_BUILD_MAINT_OPTIONS = hardening=+all
-
-VERSION=$(shell dpkg-parsechangelog --show-field Version 2>/dev/null | cut -f1 -d-)
+DEB_BUILD_MAINT_OPTIONS = hardening=+all
+DPKG_EXPORT_BUILDFLAGS = 1
+include /usr/share/dpkg/buildflags.mk
+include /usr/share/dpkg/pkg-info.mk
 
 execute_before_dh_auto_build:
-	sed -i 's#"version":.*#"version": "${VERSION}",#' library.json 
-	sed -i 's#Version:.*#Version: ${VERSION}#' sml.pc
+	sed -i 's#"version":.*#"version": "${DEB_VERSION_UPSTREAM}",#' library.json 
+	sed -i 's#Version:.*#Version: ${DEB_VERSION_UPSTREAM}#' sml.pc
 
 execute_after_dh_auto_build:
 	pandoc -o sml_server.1 -s -t man debian/sml_server.1.md
