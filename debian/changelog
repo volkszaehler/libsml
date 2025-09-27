@@ -1,4 +1,11 @@
-libsml (1.1.4) UNRELEASED; urgency=medium
+libsml (1.1.5) unstable; urgency=medium
+
+  * Applied patch from Helmuth Grohne, see
+    https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1135296 
+
+ -- Joachim Zobel <jz-autosign@heute-morgen.de>  Tue, 12 May 2026 05:46:42 +0200
+
+libsml (1.1.4) unstable; urgency=medium
 
   * Removed -fno-stack-protector from CFLAGS
   * Fixed all lintian hardening info messages
