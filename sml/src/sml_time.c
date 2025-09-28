@@ -21,6 +21,63 @@
 #include <sml/sml_time.h>
 #include <stdio.h>
 
+sml_timestamp_local *sml_timestamp_local_init() {
+	sml_timestamp_local *t = (sml_timestamp_local *)malloc(sizeof(sml_timestamp_local));
+	*t = (sml_timestamp_local){.timestamp = NULL, .local_offset = NULL, .season_time_offset = NULL};
+	return t;
+}
+
+sml_timestamp_local *sml_timestamp_local_parse(sml_buffer *buf) {
+	if (sml_buf_optional_is_skipped(buf)) {
+		return NULL;
+	}
+
+	if (sml_buf_get_next_length(buf) != 3) {
+		buf->error = 1;
+		goto error;
+	}
+
+	sml_timestamp_local *time = sml_timestamp_local_init();
+
+	time->timestamp = sml_u32_parse(buf);
+	if (sml_buf_has_errors(buf))
+		goto error;
+
+	time->local_offset = sml_i16_parse(buf);
+	if (sml_buf_has_errors(buf))
+		goto error;
+
+	time->season_time_offset = sml_i16_parse(buf);
+	if (sml_buf_has_errors(buf))
+		goto error;
+
+	return time;
+
+error:
+	sml_timestamp_local_free(time);
+	return NULL;
+}
+
+void sml_timestamp_local_write(sml_timestamp_local *time, sml_buffer *buf) {
+	if (time == 0) {
+		sml_buf_optional_write(buf);
+		return;
+	}
+
+	sml_u32_write(time->timestamp, buf);
+	sml_i16_write(time->local_offset, buf);
+	sml_i16_write(time->season_time_offset, buf);
+}
+
+void sml_timestamp_local_free(sml_timestamp_local *time) {
+	if (time) {
+		sml_number_free(time->timestamp);
+		sml_number_free(time->local_offset);
+		sml_number_free(time->season_time_offset);
+		free(time);
+	}
+}
+
 sml_time *sml_time_init() {
 	sml_time *t = (sml_time *)malloc(sizeof(sml_time));
 	*t = (sml_time){.tag = NULL, .data.sec_index = NULL};
@@ -67,44 +124,9 @@ sml_time *sml_time_parse(sml_buffer *buf) {
 			goto error;
 		break;
 	case SML_TYPE_LIST:
-		// Some meters (e.g. FROETEC Multiflex ZG22) giving not one uint32
-		// as timestamp, but a list of 3 values.
-		// Ignoring these values, so that parsing does not fail.
-		sml_buf_get_next_length(buf); // should we check the length here?
-		u32 *t1 = sml_u32_parse(buf);
-		if (sml_buf_has_errors(buf)) {
-			if (t1)
-				sml_number_free(t1);
+		tme->data.local_timestamp = sml_timestamp_local_parse(buf);
+		if (sml_buf_has_errors(buf))
 			goto error;
-		}
-		i16 *t2 = sml_i16_parse(buf);
-		if (sml_buf_has_errors(buf)) {
-			if (t1)
-				sml_number_free(t1);
-			if (t2)
-				sml_number_free(t2);
-			goto error;
-		}
-		i16 *t3 = sml_i16_parse(buf);
-		if (sml_buf_has_errors(buf)) {
-			if (t1)
-				sml_number_free(t1);
-			if (t2)
-				sml_number_free(t2);
-			if (t3)
-				sml_number_free(t3);
-			goto error;
-		}
-		fprintf(
-			stderr,
-			"libsml: error: sml_time as list[3]: ignoring value[0]=%u value[1]=%d value[2]=%d\n",
-			t1 ? *t1 : 0, t2 ? *t2 : 0, t3 ? *t3 : 0);
-		if (t1)
-			sml_number_free(t1);
-		if (t2)
-			sml_number_free(t2);
-		if (t3)
-			sml_number_free(t3);
 		break;
 	default:
 		goto error;
@@ -125,13 +147,26 @@ void sml_time_write(sml_time *t, sml_buffer *buf) {
 
 	sml_buf_set_type_and_length(buf, SML_TYPE_LIST, 2);
 	sml_u8_write(t->tag, buf);
-	sml_u32_write(t->data.timestamp, buf);
+	if (*t->tag == SML_TIME_LOCAL_TIMESTAMP) {
+		sml_buf_set_type_and_length(buf, SML_TYPE_LIST, 3);
+		sml_timestamp_local_write(t->data.local_timestamp, buf);
+	} else {
+		sml_u32_write(t->data.timestamp, buf);
+	}
 }
 
 void sml_time_free(sml_time *tme) {
 	if (tme) {
+		if (tme->tag) {
+			switch (*tme->tag) {
+			case SML_TIME_LOCAL_TIMESTAMP:
+				sml_timestamp_local_free(tme->data.local_timestamp);
+				break;
+			default:
+				sml_number_free(tme->data.timestamp);
+			}
+		}
 		sml_number_free(tme->tag);
-		sml_number_free(tme->data.timestamp);
 		free(tme);
 	}
 }
