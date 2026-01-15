@@ -35,6 +35,7 @@ static void runAllTests() {
 	RUN_TEST_GROUP(sml_get_profile_pack_request);
 	RUN_TEST_GROUP(sml_message);
 	RUN_TEST_GROUP(sml_file);
+	RUN_TEST_GROUP(sml_error);
 }
 
 int main(int argc, char * argv[]) {

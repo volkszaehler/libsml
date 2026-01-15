@@ -49,7 +49,7 @@ sml_file *sml_file_parse(unsigned char *buffer, size_t buffer_len) {
 		msg = sml_message_parse(buf);
 
 		if (sml_buf_has_errors(buf)) {
-			fprintf(stderr, "libsml: warning: could not read the whole file\n");
+			sml_error("warning: could not read the whole file");
 			break;
 		}
 

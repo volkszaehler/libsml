@@ -134,7 +134,7 @@ double sml_value_to_double(sml_value *value) {
 		break;
 
 	default:
-		fprintf(stderr, "libsml: error: unknown type %d in %s\n", value->type, __func__);
+		sml_error("error: unknown type %d in %s", value->type, __func__);
 		return 0;
 	}
 }

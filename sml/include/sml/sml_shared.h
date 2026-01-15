@@ -109,6 +109,16 @@ int sml_buf_optional_is_skipped(sml_buffer *buf);
 // Prints arbitrarily byte string to stdout with printf
 void sml_hexdump(unsigned char *buffer, size_t buffer_len);
 
+// Allow user to intercept error messages
+extern void (*sml_error)(const char *format, ...)
+	// http://gcc.gnu.org/onlinedocs/gcc/Function-Attributes.html
+	__attribute__((format(printf, 1, 2)));
+
+// default sml_error function, prints message to stderr as before
+void sml_error_default(const char *format, ...)
+	// http://gcc.gnu.org/onlinedocs/gcc/Function-Attributes.html
+	__attribute__((format(printf, 1, 2)));
+
 #ifdef __cplusplus
 }
 #endif

@@ -24,7 +24,8 @@ OBJS = \
 	src/sml_file_test.o \
 	src/sml_open_request_test.o \
 	src/sml_get_profile_pack_request_test.o \
-	src/sml_message_test.o
+	src/sml_message_test.o \
+	src/sml_error_test.o
 
 test_run: libsml test
 	@./test
